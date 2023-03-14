@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 public class PlayerInventory : MonoBehaviour
 {
     PlayerMovement movement;
-    Light2D light;
+    new Light2D light;
     SoundManager soundManager;
     LevelManager levelManager;
 
@@ -36,8 +36,8 @@ public class PlayerInventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (movement.state == PlayerState.MOVE_TO_TARGET) { InventoryFollowPlayer(); }
-        else if (movement.state == PlayerState.IDLE) { InventoryCirclePlayer(); }
+        if (movement.state == PlayerState.MOVING) { InventoryFollowPlayer(); }
+        else { InventoryCirclePlayer(); }
 
         // raise light intensity with more items
         light.intensity = (inventory.Count * 0.1f) + 0.7f;
@@ -57,21 +57,39 @@ public class PlayerInventory : MonoBehaviour
         // Play Sound
         if (item.type == ItemType.LIGHT)
         {
-            soundManager.PlayRandomEffectFromList(soundManager.lightOrbPickups);
+            soundManager.Play(soundManager.lightPickupSound);
         }
-        else if (item.type == ItemType.DARKLIGHT)
+    }
+
+    public GameObject StealItem(GameObject item)
+    {
+        if (inventory.Contains(item))
         {
-            soundManager.Play(soundManager.darklightOrbPickup);
-        }
-        else if (item.type == ItemType.GOLDEN)
-        {
-            soundManager.Play(soundManager.goldenOrbPickup);
-        }
-        else if (item.type == ItemType.ETHEREAL)
-        {
-            soundManager.Play(soundManager.etherealOrbPickup);
+            item.transform.parent = null;
+            inventory.Remove(item);
+            item.GetComponent<Item>().state = ItemState.STOLEN;
+
+            return item;
         }
 
+        return null;
+    }
+
+    public GameObject GetMostExpensiveItem()
+    {
+        if (inventory.Count == 0) { return null; }
+
+        int largestLifeForce = -1000;
+        GameObject expensiveItem = inventory[0];
+
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i] == null) { continue; }
+            Item item = inventory[i].GetComponent<Item>();
+            if (item.lifeForce > largestLifeForce) { expensiveItem = item.gameObject; }
+        }
+
+        return expensiveItem;
     }
 
     public void InventoryFollowPlayer()

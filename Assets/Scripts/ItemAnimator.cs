@@ -5,8 +5,7 @@ using UnityEngine;
 public class ItemAnimator : MonoBehaviour
 {
     public bool rotate;
-    public Vector2 rotationSpeed = new Vector2(-20, 20);
-    private float speed;
+    public float speed = 20;
 
     // Start is called before the first frame update
     void Start()
@@ -15,8 +14,6 @@ public class ItemAnimator : MonoBehaviour
         {
             // init with random rotation
             transform.rotation = Quaternion.Euler(Vector3.forward * Random.Range(0, 360));
-
-            speed = Random.Range(rotationSpeed.x, rotationSpeed.y);
         }
     }
 

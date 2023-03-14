@@ -28,7 +28,6 @@ public class LevelManager : MonoBehaviour
 
 
     [Header("Game Values")]
-    [Space(10)]
     private float startTime;
     public float timer;
     public float levelEndTime;
@@ -61,7 +60,8 @@ public class LevelManager : MonoBehaviour
     public bool death;
     public List<string> deathMessages;
 
-
+    [Header("Environment")]
+    public List<GameObject> roomTiles = new List<GameObject>();
 
     void Awake()
     {
@@ -76,10 +76,11 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    private void Start()
+    public void Start()
     {
-        soundManager.PlayMusic(soundManager.darkTheme);
+        roomTiles = new List<GameObject>(GameObject.FindGameObjectsWithTag("Room"));
     }
+
 
     // Update is called once per frame
     void Update()

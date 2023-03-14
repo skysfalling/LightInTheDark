@@ -80,6 +80,7 @@ public class SubmitItemObject : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     public virtual IEnumerator SubmitItem()
     {
         canSubmit = false;
