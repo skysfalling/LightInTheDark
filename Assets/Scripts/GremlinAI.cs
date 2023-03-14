@@ -134,10 +134,10 @@ public class GremlinAI : MonoBehaviour
                     targetItem.transform.parent = itemHolderParent;
                     heldItemObj = targetItem;
 
-                    state = GremlinState.STUN_PLAYER;
+                    state = GremlinState.TARGET_SAFE_ZONE;
+
                 }
 
-                state = GremlinState.TARGET_SAFE_ZONE;
 
                 break;
             case GremlinState.TARGET_SAFE_ZONE:
@@ -196,6 +196,9 @@ public class GremlinAI : MonoBehaviour
             Item item = heldItemObj.GetComponent<Item>();
             item.transform.parent = null;
             item.state = ItemState.FREE;
+
+            heldItemObj = null;
+
         }
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState { IDLE , MOVING , STUNNED}
+public enum PlayerState { IDLE , MOVING , CHARGING, STUNNED}
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Inputs()
     {
-        // clamp velocity when button is down
+        // clamp velocity when button is pressed down
         if (Input.GetMouseButtonDown(0))
         {
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
@@ -95,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
 
             case PlayerState.IDLE:
 
+                // check for charging
                 if (!isCharging && inputIsDown)
                 {
                     StartCoroutine(ChargeFlash(chargeFlashActivateDuration));

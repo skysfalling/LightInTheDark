@@ -129,6 +129,7 @@ MonoBehaviour:
   death: 0
   deathMessages:
   - f(you forgot me ... )
+  roomTiles: []
 --- !u!114 &7294106325404593260
 MonoBehaviour:
   m_ObjectHideFlags: 0

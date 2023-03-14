@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 public class PlayerInventory : MonoBehaviour
 {
     PlayerMovement movement;
-    new Light2D light;
+    Light2D light;
     SoundManager soundManager;
     LevelManager levelManager;
 
@@ -21,6 +21,11 @@ public class PlayerInventory : MonoBehaviour
     public float circleSpeed = 1f; // Speed of rotation
     public float circleSpacing = 1f; // Spacing between objects
     public float circleRadius = 1f; // Radius of circle
+
+    [Space(10)]
+    public float chargeCircleSpeed = 10f;
+    public float chargeCircleTargetRadius;
+    public float chargeLightIntensity = 3;
 
 
 
@@ -122,5 +127,13 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
+    public void InventoryMoveToCircleRadius(float targetRadius, float targetSpeed)
+    {
+
+
+
+
+
+    }
 
 }
