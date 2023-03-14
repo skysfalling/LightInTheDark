@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerInventory : MonoBehaviour
 {
     PlayerMovement movement;
-    private Vector3 previousTargetPos; // Previous target position
-
+    Light2D light;
+    SoundManager soundManager;
+    LevelManager levelManager;
 
     public List<GameObject> inventory;
 
@@ -25,7 +27,10 @@ public class PlayerInventory : MonoBehaviour
     void Start()
     {
         movement = GetComponent<PlayerMovement>();
-        previousTargetPos = movement.moveTarget; // Set initial previous target position to target position
+        light = GetComponent<Light2D>();
+
+        levelManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelManager>();
+        soundManager = levelManager.soundManager;
     }
 
     // Update is called once per frame
@@ -33,6 +38,39 @@ public class PlayerInventory : MonoBehaviour
     {
         if (movement.state == PlayerState.MOVE_TO_TARGET) { InventoryFollowPlayer(); }
         else if (movement.state == PlayerState.IDLE) { InventoryCirclePlayer(); }
+
+        // raise light intensity with more items
+        light.intensity = (inventory.Count * 0.1f) + 0.7f;
+
+    }
+
+    public void NewItem(GameObject itemObject)
+    {
+        itemObject.transform.parent = transform;
+        Item item = itemObject.GetComponent<Item>();
+
+        inventory.Add(itemObject);
+
+        Debug.Log("Player picked up " + this.gameObject, itemObject);
+
+
+        // Play Sound
+        if (item.type == ItemType.LIGHT)
+        {
+            soundManager.PlayRandomEffectFromList(soundManager.lightOrbPickups);
+        }
+        else if (item.type == ItemType.DARKLIGHT)
+        {
+            soundManager.Play(soundManager.darklightOrbPickup);
+        }
+        else if (item.type == ItemType.GOLDEN)
+        {
+            soundManager.Play(soundManager.goldenOrbPickup);
+        }
+        else if (item.type == ItemType.ETHEREAL)
+        {
+            soundManager.Play(soundManager.etherealOrbPickup);
+        }
 
     }
 

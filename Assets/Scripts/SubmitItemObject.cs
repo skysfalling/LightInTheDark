@@ -4,18 +4,27 @@ using UnityEngine;
 
 public class SubmitItemObject : MonoBehaviour
 {
-    LifeFlower lifeFlower;
-    PlayerInventory player;
+    [HideInInspector]
+    public LevelManager gameManager;
+    [HideInInspector]
+    public GameConsole gameConsole;
+    [HideInInspector]
+    public PlayerInventory player;
 
+    public Transform triggerParent;
     public bool playerInTrigger = true;
     public float triggerSize = 2f;
 
     [Header("Submission")]
+    public List<ItemType> submissionTypes;
+    [Space(10)]
+    public List<GameObject> submissionOverflow = new List<GameObject>();
+    [Space(10)]
     public bool canSubmit;
     public float submitSpeed = 10; // how fast the submitted item moves
+    public GameObject submitEffect;
 
     [Header("Circle Object")]
-    private List<GameObject> submissionOverflow = new List<GameObject>();
     private float currCircleAngle = 0f; // Current angle of rotation
     public float circleSpeed = 10f; // Speed of rotation
     public float circleSpacing = 1f; // Spacing between objects
@@ -23,62 +32,62 @@ public class SubmitItemObject : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        // << INIT VALUES >>
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
-        lifeFlower = GetComponent<LifeFlower>();
+        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelManager>();
+        gameConsole = gameManager.gameConsole;
 
         canSubmit = true;
+
+        if (triggerParent == null) { triggerParent = transform; }
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         playerInTrigger = IsPlayerInTrigger();
 
-        // << DRAIN PLAYER INVENTORY >>
-        if (playerInTrigger && player.inventory.Count > 0)
-        {
-
-            foreach (GameObject item in player.inventory)
-            {
-                item.transform.parent = transform; // set parent
-                
-                // add to overflow
-                submissionOverflow.Add(item); 
-            }
-
-            player.inventory.Clear();
-
-        }
-
-
-
-
-
-        // << OVERFLOW MANAGER >>
-        if (submissionOverflow.Count > 0)
-        {
-            // circle overflow items
-            CircleAroundTransform(submissionOverflow);
-
-            if (canSubmit && !FlowerOverflow())
-            {
-                StartCoroutine(SubmitItem());
-            }
-        }
-
-
+        // submit
+        SubmissionManager();
     }
 
-    IEnumerator SubmitItem()
+
+
+    public virtual void SubmissionManager()
+    {
+        // << REFERENCE PLAYER INVENTORY >> doesnt remove from inventory, focus on submitting one at a time
+        if (playerInTrigger && player.inventory.Count > 0)
+        {
+            List<GameObject> inventory = player.inventory;
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                Item item = inventory[i].GetComponent<Item>();
+
+                // if item type is allowed
+                if (submissionTypes.Contains(item.type) && !submissionOverflow.Contains(item.gameObject))
+                {
+                    // add to overflow
+                    submissionOverflow.Add(inventory[i]);
+                }
+            }
+        }
+
+        if (submissionOverflow.Count > 0 && canSubmit)
+        {
+            StartCoroutine(SubmitItem());
+        }
+    }
+
+    public virtual IEnumerator SubmitItem()
     {
         canSubmit = false;
 
-
         // remove from inventory
         GameObject item = submissionOverflow[0];
-        submissionOverflow.Remove(item);
+
+        item.GetComponent<Item>().state = ItemState.SUBMITTED;
 
         // << MOVE ITEM TO CENTER >>
         while (item.transform.position != transform.position)
@@ -87,27 +96,25 @@ public class SubmitItemObject : MonoBehaviour
             yield return null;
         }
 
+        Debug.Log("Submit Item", item);
+
+        // << SPAWN EFFECT >>
+        GameObject effect = Instantiate(submitEffect, transform);
+        submitEffect.GetComponent<ParticleSystem>().startColor = item.GetComponent<SpriteRenderer>().color;
+        Destroy(effect, 5);
 
         // << SUBMIT ITEM >>
         submissionOverflow.Remove(item);
 
-        // update values
-        if (lifeFlower)
-        {
-           lifeFlower.lifeForce += item.GetComponent<PickupItem>().lifeForce;
-        }
-
         // destroy item
-        Destroy(item);
-
-        yield return new WaitForSeconds(2);
-
+        player.inventory.Remove(item);
+        Destroy(item.gameObject);
         canSubmit = true;
     }
 
     public bool IsPlayerInTrigger()
     {
-        Collider2D[] overlapColliders = Physics2D.OverlapCircleAll(transform.position, triggerSize);
+        Collider2D[] overlapColliders = Physics2D.OverlapCircleAll(triggerParent.position, triggerSize);
         List<Collider2D> collidersInTrigger = new List<Collider2D>(overlapColliders);
 
         foreach (Collider2D col in collidersInTrigger)
@@ -121,23 +128,18 @@ public class SubmitItemObject : MonoBehaviour
         return false;
     }
 
-    public bool FlowerOverflow()
-    {
-        if (lifeFlower && lifeFlower.overflowing) { return true; }
-
-        return false;
-    }
-
-
     public void CircleAroundTransform(List<GameObject> items)
     {
         currCircleAngle += circleSpeed * Time.deltaTime; // Update angle of rotation
 
-        Vector3 targetPos = transform.position;
+        Vector3 targetPos = triggerParent.position;
         targetPos.z = 0f; // Ensure target position is on the same plane as objects to circle
 
         for (int i = 0; i < items.Count; i++)
         {
+
+            items[i].transform.parent = triggerParent;
+
             float angleRadians = (currCircleAngle + (360f / items.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object
             Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * circleRadius, Mathf.Sin(angleRadians) * circleRadius, 0f); // Calculate new position for object
             items[i].transform.position = Vector3.Lerp(items[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
@@ -147,6 +149,15 @@ public class SubmitItemObject : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, triggerSize);
+        if (triggerParent != null) 
+        {
+            Gizmos.DrawWireSphere(triggerParent.position, triggerSize);
+        }
+        else
+        {
+            Gizmos.DrawWireSphere(transform.position, triggerSize);
+        }
+
+
     }
 }

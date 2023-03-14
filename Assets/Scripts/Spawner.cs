@@ -15,9 +15,6 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnObjectWithDelay()
     {
-        // Wait for the specified delay
-        yield return new WaitForSeconds(spawnDelay);
-
         // Check if the object has been spawned already
         if (spawnedObject == null)
         {
@@ -27,9 +24,12 @@ public class Spawner : MonoBehaviour
         else
         {
             // check if been picked up
-            PickupItem item = spawnedObject.GetComponent<PickupItem>();
+            Item item = spawnedObject.GetComponent<Item>();
             if (item && item.state == ItemState.PLAYER_INVENTORY) { spawnedObject = null; }
         }
+
+        // Wait for the specified delay
+        yield return new WaitForSeconds(spawnDelay);
 
         // Start the coroutine again to spawn another object with delay
         StartCoroutine(SpawnObjectWithDelay());
