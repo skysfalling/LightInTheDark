@@ -746,6 +746,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1900647485, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: throwSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647485, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
       propertyPath: chargeDisabled
       value: 1
       objectReference: {fileID: 0}
@@ -754,8 +758,20 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1900647485, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: throwStateDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647485, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: throwDistMultiplier
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647485, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
       propertyPath: chargeFlashActivateDuration
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647486, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: circleRadius
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1900647486, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
       propertyPath: chargeCircleSpeed

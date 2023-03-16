@@ -23,7 +23,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Throw Ability")]
     public Transform throwParent;
     public GameObject throwObject;
-    public Vector2 throwVelocity;
+    public float throwSpeed = 20;
+    public float throwDistMultiplier = 2;
+    public float throwStateDuration = 5;
 
     [Header("Charge Flash")]
     public float chargeFlashActivateDuration = 1.5f;
@@ -158,9 +160,6 @@ public class PlayerMovement : MonoBehaviour
         {
             throwObject = inventory.RemoveItemToThrow(inventory.inventory[0]); // remove 0 index item
             throwObject.transform.parent = throwParent;
-
-            throwObject.GetComponent<SpriteRenderer>().sortingLayerName = "Player";
-            throwObject.GetComponent<SpriteRenderer>().sortingOrder = 5;
         }
     }
 
@@ -170,7 +169,7 @@ public class PlayerMovement : MonoBehaviour
         {
             throwObject.transform.parent = null;
 
-            StartCoroutine(ThrowObject(throwObject, moveDirection * 50, 100, 30));
+            StartCoroutine(ThrowObject(throwObject, moveDirection * throwDistMultiplier, throwSpeed, throwStateDuration));
 
             throwObject = null;
         }
@@ -180,12 +179,17 @@ public class PlayerMovement : MonoBehaviour
     {
         float elapsed = 0f;
         Vector2 startPos = obj.transform.position;
+
         while (elapsed < duration)
         {
             obj.transform.position = Vector2.Lerp(obj.transform.position, startPos + direction, speed * Time.deltaTime);
             elapsed += Time.deltaTime;
             yield return null;
         }
+
+        obj.GetComponent<Item>().state = ItemState.FREE;
+
+
         obj.transform.position = startPos + direction;
     }
 
