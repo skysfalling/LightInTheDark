@@ -745,6 +745,66 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1900647485, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: chargeDisabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647485, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: chargeDisableTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647485, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: chargeFlashActivateDuration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647486, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: chargeCircleSpeed
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647486, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: chargeCircleTargetRadius
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: outer_chargeColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: outer_chargeColor.b
+      value: 0.764151
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: outer_chargeColor.g
+      value: 0.764151
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: outer_chargeColor.r
+      value: 0.764151
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: inventoryRangeAddition
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: outer_chargingLightRange
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: defaultOuterLightIntensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: inventoryIntensityAddition
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: defaultPlayerLightIntensity
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1900647490, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
+      propertyPath: outer_chargingLightIntensity
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 7294106325404593249, guid: 74e77c3c52626c440bda8549bdfaae51, type: 3}
       propertyPath: m_Name
       value: '[[ LEVEL MANAGER ]]'

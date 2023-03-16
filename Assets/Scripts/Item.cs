@@ -8,11 +8,18 @@ public enum ItemState { FREE, PLAYER_INVENTORY, SUBMITTED, STOLEN }
 
 public class Item : MonoBehaviour
 {
+    Rigidbody2D rb;
+
+
     public ItemType type;
     public ItemState state = ItemState.FREE;
     public float triggerSize = 0.75f;
     public int lifeForce = 10;
 
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     // Update is called once per frame
     void Update()

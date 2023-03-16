@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1079612418134888735}
   - component: {fileID: 5303280037172311773}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: gremlin1_hand1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6090103346181210658}
   - component: {fileID: 7972883713787457807}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: gremlin1_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6017917769594818912}
   - component: {fileID: 4099418800635277259}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: gremlin1_hand2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7164422754024555614}
   - component: {fileID: 3389454966016080425}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +318,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1166301631947048290}
   - component: {fileID: 2296239246204170794}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: gremlin1_head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 1283278705518591809}
   - component: {fileID: 5885595107389502670}
   - component: {fileID: 7907575297298026076}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: gremlin1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,7 +421,7 @@ Transform:
   m_GameObject: {fileID: 7352116017459935470}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -175.9, y: -100, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7164422754024555614}
@@ -441,13 +441,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  moveSpeed: 30
+  moveSpeed: 50
   distToPlayer: 0
-  interactionRadius: 5
+  interactionRadius: 7
   chaseRadius: 30
   stunAmount: 2
   itemHolderParent: {fileID: 5318114384725162481}
-  currHeldObject: {fileID: 0}
+  heldItemObj: {fileID: 0}
   carryMoveSpeed: 25
   safeZone: {fileID: 0}
   safeZoneRadius: 5

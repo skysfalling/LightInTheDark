@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D rb;
     PlayerAnimator animator;
+    PlayerInventory inventory;
 
     public PlayerState state = PlayerState.IDLE;
     public bool inputIsDown;
@@ -19,9 +20,17 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 moveDirection;
     public float distToTarget;
 
+    [Header("Throw Ability")]
+    public Transform throwParent;
+    public GameObject throwObject;
+    public Vector2 throwVelocity;
+
     [Header("Charge Flash")]
     public float chargeFlashActivateDuration = 1.5f;
-    public bool isCharging;
+    public bool chargeDisabled;
+    public float chargeDisableTime = 1;
+    public float chargeLightIntensity = 3;
+
 
     [Header("Interaction")]
     public float interactionRange = 5;
@@ -33,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<PlayerAnimator>();
+        inventory = GetComponent<PlayerInventory>();
         moveTarget = transform.position;
     }
 
@@ -49,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Inputs()
     {
+        // << MOVE >>
         // clamp velocity when button is pressed down
         if (Input.GetMouseButtonDown(0))
         {
@@ -62,6 +73,20 @@ public class PlayerMovement : MonoBehaviour
             NewMoveTarget();
         }
         else { inputIsDown = false; }
+
+
+        // << THROW >>
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (throwObject == null)
+            {
+                NewThrowObject();
+            }
+            else
+            {
+                ThrowObject();
+            }
+        }
     }
 
     public void StateMachine()
@@ -77,12 +102,17 @@ public class PlayerMovement : MonoBehaviour
             state = PlayerState.MOVING;
         }
 
+        // throw object move to parent
+        if (throwObject)
+        {
+            Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, Time.deltaTime);
+            throwObject.transform.position = newDirection;
+        }
+
 
         switch (state)
         {
             case PlayerState.MOVING:
-
-                isCharging = false;
 
                 // update movement
                 Vector3 newDirection = Vector3.MoveTowards(transform.position, moveTarget, speed * Time.deltaTime);
@@ -95,10 +125,10 @@ public class PlayerMovement : MonoBehaviour
 
             case PlayerState.IDLE:
 
-                // check for charging
-                if (!isCharging && inputIsDown)
+                // << CHARGE STATE >>
+                if (state != PlayerState.CHARGING && inputIsDown && !chargeDisabled)
                 {
-                    StartCoroutine(ChargeFlash(chargeFlashActivateDuration));
+                    StartCoroutine(ChargeCoroutine(chargeFlashActivateDuration));
                 }
                 break;
 
@@ -122,6 +152,43 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = (moveTarget - transform.position).normalized;
     }
 
+    public void NewThrowObject()
+    {
+        if (inventory.inventory.Count > 0)
+        {
+            throwObject = inventory.RemoveItemToThrow(inventory.inventory[0]); // remove 0 index item
+            throwObject.transform.parent = throwParent;
+
+            throwObject.GetComponent<SpriteRenderer>().sortingLayerName = "Player";
+            throwObject.GetComponent<SpriteRenderer>().sortingOrder = 5;
+        }
+    }
+
+    public void ThrowObject()
+    {
+        if (throwObject != null)
+        {
+            throwObject.transform.parent = null;
+
+            StartCoroutine(ThrowObject(throwObject, moveDirection * 50, 100, 30));
+
+            throwObject = null;
+        }
+    }
+
+    public IEnumerator ThrowObject(GameObject obj, Vector2 direction, float speed, float duration)
+    {
+        float elapsed = 0f;
+        Vector2 startPos = obj.transform.position;
+        while (elapsed < duration)
+        {
+            obj.transform.position = Vector2.Lerp(obj.transform.position, startPos + direction, speed * Time.deltaTime);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        obj.transform.position = startPos + direction;
+    }
+
 
     // <<<< STUN STATE >>>>
     public void Stun(float time)
@@ -130,20 +197,34 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    private IEnumerator ChargeFlash(float activateDuration)
+
+
+
+    private IEnumerator ChargeCoroutine(float activateDuration)
     {
         float elapsedTime = 0f;
 
         Debug.Log("Charging....");
-        isCharging = true;
+        state = PlayerState.CHARGING;
 
+        // iterate until time is reached
         while (elapsedTime < activateDuration && inputIsDown)
         {
             yield return null;
+
+
             elapsedTime += Time.deltaTime;
+
+
         }
 
         Debug.Log("Boom");
+        state = PlayerState.IDLE;
+        chargeDisabled = true;
+
+        yield return new WaitForSeconds(chargeDisableTime);
+        chargeDisabled = false;
+
     }
 
     public IEnumerator StunCoroutine(float time)

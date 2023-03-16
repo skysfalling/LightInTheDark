@@ -6,7 +6,6 @@ using UnityEngine.Rendering.Universal;
 public class PlayerInventory : MonoBehaviour
 {
     PlayerMovement movement;
-    Light2D light;
     SoundManager soundManager;
     LevelManager levelManager;
 
@@ -24,28 +23,25 @@ public class PlayerInventory : MonoBehaviour
 
     [Space(10)]
     public float chargeCircleSpeed = 10f;
-    public float chargeCircleTargetRadius;
-    public float chargeLightIntensity = 3;
+    public float chargeCircleRadius;
 
 
 
     void Start()
     {
         movement = GetComponent<PlayerMovement>();
-        light = GetComponent<Light2D>();
 
         levelManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelManager>();
         soundManager = levelManager.soundManager;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (movement.state == PlayerState.MOVING) { InventoryFollowPlayer(); }
+        // << STATE MACHINE >>
+        //if (movement.state == PlayerState.MOVING) { InventoryFollowPlayer(); }
+        if (movement.state == PlayerState.CHARGING) { InventoryChargeRadius(); }
         else { InventoryCirclePlayer(); }
-
-        // raise light intensity with more items
-        light.intensity = (inventory.Count * 0.1f) + 0.7f;
 
     }
 
@@ -73,6 +69,33 @@ public class PlayerInventory : MonoBehaviour
             item.transform.parent = null;
             inventory.Remove(item);
             item.GetComponent<Item>().state = ItemState.STOLEN;
+
+            return item;
+        }
+
+        return null;
+    }
+
+    public GameObject RemoveItem(GameObject item)
+    {
+        if (inventory.Contains(item))
+        {
+            item.transform.parent = null;
+            inventory.Remove(item);
+            item.GetComponent<Item>().state = ItemState.FREE;
+
+            return item;
+        }
+
+        return null;
+    }
+
+    public GameObject RemoveItemToThrow(GameObject item)
+    {
+        if (inventory.Contains(item))
+        {
+            item.transform.parent = null;
+            inventory.Remove(item);
 
             return item;
         }
@@ -108,6 +131,8 @@ public class PlayerInventory : MonoBehaviour
             Vector3 newPos = prevFollowerPos - (direction * spacing); // Calculate new follower position in opposite direction of target movement
             obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, speed * Time.deltaTime); // Move follower towards new position using Lerp
 
+
+
             prevFollowerPos = obj.transform.position; // Update previous follower position to current follower position
         }
     }
@@ -127,13 +152,19 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    public void InventoryMoveToCircleRadius(float targetRadius, float targetSpeed)
+    public void InventoryChargeRadius()
     {
+        currCircleAngle += chargeCircleSpeed * Time.deltaTime; // Update angle of rotation
 
+        Vector3 targetPos = transform.position;
+        targetPos.z = 0f; // Ensure target position is on the same plane as objects to circle
 
-
-
-
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            float angleRadians = (currCircleAngle + (360f / inventory.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object
+            Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * chargeCircleRadius, Mathf.Sin(angleRadians) * chargeCircleRadius, 0f); // Calculate new position for object
+            inventory[i].transform.position = Vector3.Lerp(inventory[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
+        }
     }
 
 }
