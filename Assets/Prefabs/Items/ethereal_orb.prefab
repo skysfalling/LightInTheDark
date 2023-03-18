@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 4472947926902900862}
   - component: {fileID: 608279412456706059}
   - component: {fileID: 869769412996703536}
+  - component: {fileID: 5963002832823024925}
   m_Layer: 0
   m_Name: ethereal_orb
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,6 +104,12 @@ MonoBehaviour:
   state: 0
   triggerSize: 1.78
   lifeForce: 30
+  default_lightRange: 5
+  default_lightIntensity: 5
+  inventory_lightRange: 5
+  inventory_lightIntensity: 5
+  thrown_lightRange: 5
+  thrown_lightIntensity: 5
 --- !u!114 &608279412456706059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,7 +144,7 @@ MonoBehaviour:
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 67aeb8fe000000006757c9a7
+  m_ApplyToSortingLayers: 67aeb8fe000000006757c9a7f9c5a3372ba473bf
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -733,3 +740,19 @@ MonoBehaviour:
   - {x: -0.07811594, y: -2.067583, z: 0}
   - {x: 0.9113512, y: 0.010825157, z: 0}
   - {x: 0.0114097595, y: 2.0008783, z: 0}
+--- !u!70 &5963002832823024925
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4472947926902900863}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.81, y: 4.02}
+  m_Direction: 0

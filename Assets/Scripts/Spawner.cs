@@ -25,7 +25,7 @@ public class Spawner : MonoBehaviour
         {
             // check if been picked up
             Item item = spawnedObject.GetComponent<Item>();
-            if (item && item.state == ItemState.PLAYER_INVENTORY) { spawnedObject = null; }
+            if (item && item.state != ItemState.FREE) { spawnedObject = null; }
         }
 
         // Wait for the specified delay

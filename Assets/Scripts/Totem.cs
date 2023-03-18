@@ -1,28 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
-public class SubmitItemObject : MonoBehaviour
+public class Totem : MonoBehaviour
 {
-    [HideInInspector]
-    public LevelManager gameManager;
-    [HideInInspector]
-    public GameConsole gameConsole;
     [HideInInspector]
     public PlayerInventory player;
 
     public Transform triggerParent;
-    public bool playerInTrigger = true;
+    public bool playerInTrigger;
+    public bool playerIsCollecting;
     public float triggerSize = 2f;
+
+    [Space(10)]
+    public bool playerInCenter;
+    public float playerCenterRange = 2;
 
     [Header("Submission")]
     public List<ItemType> submissionTypes;
     [Space(10)]
     public List<GameObject> submissionOverflow = new List<GameObject>();
-    [Space(10)]
-    public bool canSubmit;
-    public float submitSpeed = 10; // how fast the submitted item moves
-    public GameObject submitEffect;
 
     [Header("Circle Object")]
     private float currCircleAngle = 0f; // Current angle of rotation
@@ -30,88 +28,89 @@ public class SubmitItemObject : MonoBehaviour
     public float circleSpacing = 1f; // Spacing between objects
     public float circleRadius = 1f; // Radius of circle
 
-
-    // Start is called before the first frame update
-    public void Start()
+    private void Start()
     {
         // << INIT VALUES >>
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
-        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelManager>();
-        gameConsole = gameManager.gameConsole;
-
-        canSubmit = true;
-
-        if (triggerParent == null) { triggerParent = transform; }
     }
 
-    // Update is called once per frame
-    public void Update()
+
+    // Update is called once per frame 
+    void Update()
     {
         playerInTrigger = IsPlayerInTrigger();
 
-        CollectFreeItemsInTrigger();
 
-        // submit
-        SubmissionManager();
+        // if player is in center, collect all items
+        if (Vector2.Distance(player.transform.position, triggerParent.position) < playerCenterRange)
+        {
+            playerIsCollecting = true;
+
+            // move all submission objects to player
+            foreach (GameObject obj in submissionOverflow)
+            {
+                obj.transform.parent = null;
+
+                player.AddItemToInventory(obj);
+            }
+
+            submissionOverflow.Clear();
+        }
+        else
+        {
+            SubmissionManager();
+        }
+
     }
 
-
-
-    public virtual void SubmissionManager()
+    public void SubmissionManager()
     {
-        // << REFERENCE PLAYER INVENTORY >> doesnt remove from inventory, focus on submitting one at a time
-        if (playerInTrigger && player.inventory.Count > 0)
+        // << DRAIN PLAYERS ENTIRE INVENTORY >>
+        if (playerInTrigger && player.inventory.Count > 0 && !playerIsCollecting)
         {
             List<GameObject> inventory = player.inventory;
             for (int i = 0; i < inventory.Count; i++)
             {
-                Item item = inventory[i].GetComponent<Item>();
-
                 // if item type is allowed
-                if (submissionTypes.Contains(item.type) && !submissionOverflow.Contains(item.gameObject))
+                if (submissionTypes.Contains(inventory[i].GetComponent<Item>().type) && !submissionOverflow.Contains(inventory[i]))
                 {
                     // add to overflow
                     submissionOverflow.Add(inventory[i]);
+
+                    // change item state
+                    inventory[i].GetComponent<Item>().state = ItemState.FREE;
+
+                    player.inventory.Remove(inventory[i]);
                 }
             }
         }
-
-        if (submissionOverflow.Count > 0 && canSubmit)
+        else if (playerInTrigger && player.inventory.Count <= 0)
         {
-            StartCoroutine(SubmitItem());
+            playerIsCollecting = true;
         }
-    }
-
-    public virtual IEnumerator SubmitItem()
-    {
-        canSubmit = false;
-
-        // remove from inventory
-        GameObject item = submissionOverflow[0];
-
-        item.GetComponent<Item>().state = ItemState.SUBMITTED;
-
-        // << MOVE ITEM TO CENTER >>
-        while (item.transform.position != transform.position)
+        else if (!playerInTrigger)
         {
-            item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, submitSpeed * Time.deltaTime);
-            yield return null;
+            playerIsCollecting = false;
         }
 
-        Debug.Log("Submit Item", item);
+        // << REMOVE NOT FREE STATE ITEMS >>
+        for (int i = 0; i < submissionOverflow.Count; i++)
+        {
+            if (submissionOverflow[i].GetComponent<Item>().state != ItemState.FREE)
+            {
+                submissionOverflow.Remove(submissionOverflow[i]);
+            }
+        }
 
-        // << SPAWN EFFECT >>
-        GameObject effect = Instantiate(submitEffect, transform);
-        //submitEffect.GetComponent<ParticleSystem>().startColor = item.GetComponent<SpriteRenderer>().color;
-        Destroy(effect, 5);
+        // collect all free items in trigger
+        CollectFreeItemsInTrigger();
 
-        // << SUBMIT ITEM >>
-        submissionOverflow.Remove(item);
-
-        // destroy item
-        player.inventory.Remove(item);
-        Destroy(item.gameObject);
-        canSubmit = true;
+        // << SUBMISSION OVERFLOW MANAGER >>
+        if (submissionOverflow.Count > 0)
+        {
+            // circle overflow items
+            CircleAroundTransform(submissionOverflow);
+        }
     }
 
     public bool IsPlayerInTrigger()
@@ -139,7 +138,7 @@ public class SubmitItemObject : MonoBehaviour
         {
             // if free item
 
-            if (col.tag == "Item" && col.GetComponent<Item>())
+            if (col.tag == "Item" && col.GetComponent<Item>() )
             {
                 Item item = col.GetComponent<Item>();
 
@@ -176,7 +175,7 @@ public class SubmitItemObject : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        if (triggerParent != null) 
+        if (triggerParent != null)
         {
             Gizmos.DrawWireSphere(triggerParent.position, triggerSize);
         }
@@ -185,6 +184,9 @@ public class SubmitItemObject : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, triggerSize);
         }
 
+        Gizmos.color = Color.white;
+
+        Gizmos.DrawWireSphere(triggerParent.position, playerCenterRange);
 
     }
 }

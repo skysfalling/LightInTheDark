@@ -86,6 +86,7 @@ public class LifeFlower : SubmitItemObject
 
         flowerLight.color = sprite.color;
 
+        SubmissionManager();
 
     }
 
@@ -132,10 +133,10 @@ public class LifeFlower : SubmitItemObject
 
 
         // << MOVE ITEM TO CENTER >>
-        while (Vector3.Distance(item.transform.position, transform.position) > 5f)
+        while (Vector2.Distance(item.transform.position, transform.position) > 5f)
         {
             item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, submitSpeed * Time.deltaTime);
-            yield return null;
+            //yield return null;
         }
 
         Debug.Log("Submit Item", item.gameObject);

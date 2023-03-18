@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     PlayerAnimator animator;
     PlayerInventory inventory;
 
+    Vector3 mouseWorldPos;
+
     public PlayerState state = PlayerState.IDLE;
     public bool inputIsDown;
 
@@ -26,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     public float throwSpeed = 20;
     public float throwDistMultiplier = 2;
     public float throwStateDuration = 5;
+
 
     [Header("Charge Flash")]
     public float chargeFlashActivateDuration = 1.5f;
@@ -68,6 +71,13 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
         }
 
+        var mousePos = Input.mousePosition;
+        mousePos.z = -Camera.main.transform.position.z; // select distance in units from the camera
+
+        // set move target
+        mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
+        mouseWorldPos.z = transform.position.z;
+
         // main input
         if (Input.GetMouseButton(0))
         {
@@ -105,10 +115,21 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // throw object move to parent
-        if (throwObject)
+        if (throwObject != null)
         {
+            throwParent.gameObject.SetActive(true);
+
             Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, Time.deltaTime);
             throwObject.transform.position = newDirection;
+
+            // rotate parent and UI towards throw point
+            Vector2 direction = mouseWorldPos - transform.position;
+            float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
+        }
+        else
+        {
+            throwParent.gameObject.SetActive(false);
         }
 
 
@@ -143,12 +164,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void NewMoveTarget()
     {
-        var mousePos = Input.mousePosition;
-        mousePos.z = -Camera.main.transform.position.z; // select distance in units from the camera
-
         // set move target
-        moveTarget = Camera.main.ScreenToWorldPoint(mousePos);
-        moveTarget.z = transform.position.z;
+        moveTarget = mouseWorldPos;
 
         // set move direction
         moveDirection = (moveTarget - transform.position).normalized;
@@ -169,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
         {
             throwObject.transform.parent = null;
 
-            StartCoroutine(ThrowObject(throwObject, moveDirection * throwDistMultiplier, throwSpeed, throwStateDuration));
+            StartCoroutine(ThrowObject(throwObject, (mouseWorldPos - transform.position).normalized * throwDistMultiplier, throwSpeed, throwStateDuration));
 
             throwObject = null;
         }
@@ -187,7 +204,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        obj.GetComponent<Item>().state = ItemState.FREE;
+        obj.GetComponent<Item>().state = ItemState.THROWN;
 
 
         obj.transform.position = startPos + direction;

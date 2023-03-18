@@ -9,7 +9,9 @@ public class PlayerInventory : MonoBehaviour
     SoundManager soundManager;
     LevelManager levelManager;
 
+    public int maxInventorySize = 5;
     public List<GameObject> inventory;
+
 
     [Header("Follow Player")]
     public float speed = 30;
@@ -43,14 +45,29 @@ public class PlayerInventory : MonoBehaviour
         if (movement.state == PlayerState.CHARGING) { InventoryChargeRadius(); }
         else { InventoryCirclePlayer(); }
 
+
+        // << THROW OBJECT >>
+        if (movement.throwObject)
+        {
+            ItemFollowTarget(movement.throwObject, transform);
+        }
+
     }
 
-    public void NewItem(GameObject itemObject)
+    public void AddItemToInventory(GameObject itemObject)
     {
+        if (inventory.Count >= maxInventorySize)
+        {
+            Debug.Log("Inventory is full, can't add any more items");
+            return;
+        }
+
+
         itemObject.transform.parent = transform;
         Item item = itemObject.GetComponent<Item>();
 
         inventory.Add(itemObject);
+        item.state = ItemState.PLAYER_INVENTORY;
 
         Debug.Log("Player picked up " + this.gameObject, itemObject);
 
@@ -120,6 +137,16 @@ public class PlayerInventory : MonoBehaviour
         return expensiveItem;
     }
 
+    public void ItemFollowTarget(GameObject obj, Transform target, float speed = 1, float spacing = 2)
+    {
+        Vector3 direction = movement.moveDirection; // get direction of target movement
+
+        // << move obj to new position >> 
+        Vector3 newPos = target.position - (direction * spacing); // Calculate new follower position in opposite direction of target movement
+        obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, speed * Time.deltaTime); // Move follower towards new position using Lerp
+
+    }
+
     public void InventoryFollowPlayer()
     {
         Vector3 direction = movement.moveDirection; // get direction of target movement
@@ -130,8 +157,6 @@ public class PlayerInventory : MonoBehaviour
         {
             Vector3 newPos = prevFollowerPos - (direction * spacing); // Calculate new follower position in opposite direction of target movement
             obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, speed * Time.deltaTime); // Move follower towards new position using Lerp
-
-
 
             prevFollowerPos = obj.transform.position; // Update previous follower position to current follower position
         }
