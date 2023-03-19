@@ -455,6 +455,7 @@ MonoBehaviour:
   chargeDisableTime: 1
   chargeLightIntensity: 3
   interactionRange: 5
+  struggleCount: 0
 --- !u!114 &4808257195015741773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1105,7 +1106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2211232507806206801
 Transform:
   m_ObjectHideFlags: 0

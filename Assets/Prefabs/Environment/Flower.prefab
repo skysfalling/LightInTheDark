@@ -798,7 +798,7 @@ MonoBehaviour:
   triggerParent: {fileID: 0}
   playerInTrigger: 1
   triggerSize: 15
-  submissionTypes: 0000000001000000
+  submissionTypes: 00000000010000000200000003000000
   submissionOverflow: []
   canSubmit: 0
   submitSpeed: 10

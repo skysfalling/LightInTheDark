@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState { IDLE , MOVING , CHARGING, STUNNED}
+public enum PlayerState { IDLE , MOVING , CHARGING, STUNNED, GRABBED}
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -41,6 +41,11 @@ public class PlayerMovement : MonoBehaviour
     public float interactionRange = 5;
 
 
+    [Header("Grabbed")]
+    GrabHandAI grabbedHand;
+    public int struggleCount;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +60,31 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Inputs();
+
+        // if not stunned and new position, move
+        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED && distToTarget > interactionRange)
+        {
+            state = PlayerState.MOVING;
+        }
+
+        // throw object move to parent
+        if (throwObject != null)
+        {
+            throwParent.gameObject.SetActive(true);
+
+            Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, Time.deltaTime);
+            throwObject.transform.position = newDirection;
+
+            // rotate parent and UI towards throw point
+            Vector2 direction = mouseWorldPos - transform.position;
+            float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
+        }
+        else
+        {
+            throwParent.gameObject.SetActive(false);
+        }
+
     }
 
     private void FixedUpdate()
@@ -82,7 +112,12 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             inputIsDown = true;
-            NewMoveTarget();
+
+            // choose new move target
+            if (state != PlayerState.STUNNED && state != PlayerState.GRABBED)
+            {
+                NewMoveTarget();
+            }
         }
         else { inputIsDown = false; }
 
@@ -99,6 +134,16 @@ public class PlayerMovement : MonoBehaviour
                 ThrowObject();
             }
         }
+
+        // << STRUGGLE >>
+        if (state == PlayerState.GRABBED && Input.GetMouseButtonDown(0))
+        {
+            struggleCount++;
+        }
+        else if (state != PlayerState.GRABBED)
+        {
+            struggleCount = 0;
+        }
     }
 
     public void StateMachine()
@@ -106,32 +151,6 @@ public class PlayerMovement : MonoBehaviour
         distToTarget = Vector3.Distance(transform.position, moveTarget);
 
         rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
-
-
-        // if not stunned and new position, move
-        if (state != PlayerState.STUNNED && distToTarget > interactionRange )
-        {
-            state = PlayerState.MOVING;
-        }
-
-        // throw object move to parent
-        if (throwObject != null)
-        {
-            throwParent.gameObject.SetActive(true);
-
-            Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, Time.deltaTime);
-            throwObject.transform.position = newDirection;
-
-            // rotate parent and UI towards throw point
-            Vector2 direction = mouseWorldPos - transform.position;
-            float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
-        }
-        else
-        {
-            throwParent.gameObject.SetActive(false);
-        }
-
 
         switch (state)
         {
@@ -217,9 +236,18 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(StunCoroutine(time));
     }
 
+    public IEnumerator StunCoroutine(float time)
+    {
+        state = PlayerState.STUNNED;
 
+        animator.stunEffect.SetActive(true);
 
+        yield return new WaitForSeconds(time);
 
+        animator.stunEffect.SetActive(false);
+
+        state = PlayerState.IDLE;
+    }
 
     private IEnumerator ChargeCoroutine(float activateDuration)
     {
@@ -248,18 +276,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    public IEnumerator StunCoroutine(float time)
-    {
-        state = PlayerState.STUNNED;
 
-        animator.stunEffect.SetActive(true);
-
-        yield return new WaitForSeconds(time);
-
-        animator.stunEffect.SetActive(false);
-
-        state = PlayerState.IDLE;
-    }
 
     public void OnDrawGizmos()
     {

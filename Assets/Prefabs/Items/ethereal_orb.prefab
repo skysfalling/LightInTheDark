@@ -103,13 +103,13 @@ MonoBehaviour:
   type: 3
   state: 0
   triggerSize: 1.78
-  lifeForce: 30
-  default_lightRange: 5
-  default_lightIntensity: 5
+  lifeForce: 100
+  default_lightRange: 10
+  default_lightIntensity: 2
   inventory_lightRange: 5
-  inventory_lightIntensity: 5
-  thrown_lightRange: 5
-  thrown_lightIntensity: 5
+  inventory_lightIntensity: 0.5
+  thrown_lightRange: 20
+  thrown_lightIntensity: 3
 --- !u!114 &608279412456706059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.463
   m_Color: {r: 1, g: 0.3726415, b: 0.8517154, a: 1}
-  m_Intensity: 2
+  m_Intensity: 0
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 67aeb8fe000000006757c9a7f9c5a3372ba473bf
