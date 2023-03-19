@@ -400,7 +400,7 @@ GameObject:
   - component: {fileID: 4808257195015741772}
   - component: {fileID: 4808257195015741747}
   - component: {fileID: 4808257195015741746}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -445,14 +445,17 @@ MonoBehaviour:
   moveTarget: {x: 0, y: 0, z: 0}
   moveDirection: {x: 0, y: 0}
   distToTarget: 0
+  slowed: 1
+  slowedSpeed: 25
+  slowedTimer: 0
   throwParent: {fileID: 2211232507806206801}
   throwObject: {fileID: 0}
-  throwSpeed: 20
-  throwDistMultiplier: 2
-  throwStateDuration: 5
-  chargeFlashActivateDuration: 1.5
-  chargeDisabled: 0
-  chargeDisableTime: 1
+  throwSpeed: 5
+  throwDistMultiplier: 30
+  throwStateDuration: 1
+  chargeFlashActivateDuration: 3
+  chargeDisabled: 1
+  chargeDisableTime: 3
   chargeLightIntensity: 3
   interactionRange: 5
   struggleCount: 0

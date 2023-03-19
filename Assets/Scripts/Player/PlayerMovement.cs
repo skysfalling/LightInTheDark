@@ -17,10 +17,17 @@ public class PlayerMovement : MonoBehaviour
 
     [Space(10)]
     public float speed = 10;
+    private float startSpeed;
     public float maxVelocity = 10;
     public Vector3 moveTarget;
     public Vector2 moveDirection;
     public float distToTarget;
+
+    [Space(10)]
+    public bool slowed;
+    public float slowedSpeed;
+    public float slowedTimer;
+
 
     [Header("Throw Ability")]
     public Transform throwParent;
@@ -54,6 +61,8 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<PlayerAnimator>();
         inventory = GetComponent<PlayerInventory>();
         moveTarget = transform.position;
+
+        startSpeed = speed;
     }
 
     // Update is called once per frame
@@ -151,6 +160,23 @@ public class PlayerMovement : MonoBehaviour
         distToTarget = Vector3.Distance(transform.position, moveTarget);
 
         rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
+
+
+        // << ADJUST SPEED IF SLOWED >>
+        if (slowed && slowedTimer > 0)
+        {
+            slowedTimer -= Time.deltaTime;
+
+            speed = slowedSpeed;
+        }
+        else if (slowed && slowedTimer <= 0)
+        {
+            slowedTimer = 0;
+            slowed = false;
+            speed = startSpeed;
+        }
+
+
 
         switch (state)
         {
@@ -276,7 +302,11 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-
+    public void SetSlowed(float timer)
+    {
+        slowed = true;
+        slowedTimer = timer;
+    }
 
     public void OnDrawGizmos()
     {

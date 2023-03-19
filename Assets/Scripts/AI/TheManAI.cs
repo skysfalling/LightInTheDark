@@ -8,6 +8,7 @@ public class TheManAI : MonoBehaviour
 {
     PlayerInventory player;
     PlayerMovement playerMovement;
+    Rigidbody2D rb;
     public SpriteRenderer head;
     public SpriteRenderer body;
     public GameObject deathEffect;
@@ -55,6 +56,7 @@ public class TheManAI : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
         playerMovement = player.GetComponent<PlayerMovement>();
+        rb = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
     }
 
@@ -135,21 +137,21 @@ public class TheManAI : MonoBehaviour
         switch (state)
         {
             case TheManState.IDLE:
-                transform.position = Vector2.Lerp(transform.position, startPosition, chaseSpeed * Time.deltaTime);
+                rb.MovePosition(Vector2.Lerp(transform.position, startPosition, chaseSpeed * Time.deltaTime));
                 break;
 
 
             case TheManState.CHASE:
-                
+
                 // chase player
-                transform.position = Vector2.Lerp(transform.position, player.transform.position, chaseSpeed * Time.deltaTime);
+                rb.MovePosition(Vector2.Lerp(transform.position, player.transform.position, chaseSpeed * Time.deltaTime));
                 break;
 
             case TheManState.RETREAT:
 
                 // run away from player
                 Vector3 oppositeDirection = (transform.position - player.transform.position) * -1f;
-                transform.position = Vector2.Lerp(transform.position, transform.position - oppositeDirection, retreatSpeed * Time.deltaTime);
+                rb.MovePosition(Vector2.Lerp(transform.position, transform.position - oppositeDirection, retreatSpeed * Time.deltaTime));
                 break;
         }
     }
