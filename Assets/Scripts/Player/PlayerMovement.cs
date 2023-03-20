@@ -206,7 +206,6 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-
     public void NewMoveTarget()
     {
         // set move target
@@ -242,17 +241,21 @@ public class PlayerMovement : MonoBehaviour
         float elapsed = 0f;
         Vector2 startPos = obj.transform.position;
 
-        while (elapsed < duration)
+        inventory.RemoveItemToThrow(obj);
+        obj.transform.parent = null;
+        obj.GetComponent<Item>().state = ItemState.THROWN;
+
+
+        while (elapsed < duration && obj != null)
         {
             obj.transform.position = Vector2.Lerp(obj.transform.position, startPos + direction, speed * Time.deltaTime);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        obj.GetComponent<Item>().state = ItemState.THROWN;
 
-
-        obj.transform.position = startPos + direction;
+        if (obj != null)
+            obj.transform.position = startPos + direction;
     }
 
 

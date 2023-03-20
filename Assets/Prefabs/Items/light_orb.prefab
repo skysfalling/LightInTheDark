@@ -107,9 +107,9 @@ MonoBehaviour:
   default_lightRange: 5
   default_lightIntensity: 5
   inventory_lightRange: 10
-  inventory_lightIntensity: 10
+  inventory_lightIntensity: 2
   thrown_lightRange: 20
-  thrown_lightIntensity: 20
+  thrown_lightIntensity: 10
 --- !u!114 &1426544980022318450
 MonoBehaviour:
   m_ObjectHideFlags: 0

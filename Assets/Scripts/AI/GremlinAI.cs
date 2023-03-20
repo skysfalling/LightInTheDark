@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum GremlinState
@@ -7,6 +9,7 @@ public enum GremlinState
     STUN_PLAYER,
     TARGET_ITEM,
     TARGET_SAFE_ZONE,
+    STEAL_ITEM,
     STUNNED
 }
 
@@ -37,7 +40,11 @@ public class GremlinAI : MonoBehaviour
     public Transform safeZone;
     public float safeZoneRadius = 5f;
 
-
+    [Header("Idle Zone")]
+    public bool idleMoveStarted;
+    public Transform idleZone;
+    public float idleZoneRadius = 5f;
+    public float idle_delay = 2;
 
     private void Start()
     {
@@ -69,7 +76,18 @@ public class GremlinAI : MonoBehaviour
             case GremlinState.IDLE:
 
                 anim.SetBool("idle", true);
-                rb.MovePosition(transform.position); // reset move target
+
+                // start coroutine
+                if (!idleMoveStarted) { StartCoroutine(IdleRoutine()); }
+
+
+                // target item
+                if (GetClosestThrownItem() != null)
+                {
+                    state = GremlinState.TARGET_ITEM;
+                    idleMoveStarted = false;
+                }
+
 
                 // << CHASE RANGE >>
                 if (distToPlayer < chaseRadius)
@@ -86,6 +104,13 @@ public class GremlinAI : MonoBehaviour
                 // << CHASE RANGE >>
                 if (distToPlayer < chaseRadius)
                 {
+                    // target item if found
+                    if (GetClosestThrownItem() != null)
+                    {
+                        state = GremlinState.TARGET_ITEM;
+                        idleMoveStarted = false;
+                    }
+
                     // move gremlin
                     MoveTowardsTarget(player);
 
@@ -107,18 +132,23 @@ public class GremlinAI : MonoBehaviour
 
             case GremlinState.STUN_PLAYER:
                 player.GetComponent<PlayerMovement>().Stun(stunAmount);
-                state = GremlinState.TARGET_ITEM;
+                state = GremlinState.STEAL_ITEM;
                 break;
 
-            case GremlinState.TARGET_ITEM:
+            case GremlinState.STEAL_ITEM:
 
                 PlayerInventory inventory = player.GetComponent<PlayerInventory>();
                 GameObject targetItem = inventory.GetMostExpensiveItem();
 
+                anim.SetBool("chase player", true);
+
+
                 // if no target item, run away
-                if (targetItem == null) 
+                if (targetItem == null)
                 {
-                    state = GremlinState.TARGET_SAFE_ZONE;
+                    state = GremlinState.TARGET_ITEM;
+                    anim.SetBool("chase player", false);
+
                     break;
                 }
 
@@ -129,10 +159,51 @@ public class GremlinAI : MonoBehaviour
                 // << ATTACK RANGE >>
                 if (Vector3.Distance(transform.position, targetItem.transform.position) < interactionRadius)
                 {
-                    inventory.StealItem(targetItem);
+                    inventory.StealItem(targetItem.gameObject);
+
+                    targetItem.GetComponent<Item>().state = ItemState.STOLEN;
+
 
                     targetItem.transform.parent = itemHolderParent;
-                    heldItemObj = targetItem;
+                    heldItemObj = targetItem.gameObject;
+
+                    state = GremlinState.TARGET_SAFE_ZONE;
+
+                }
+
+                break;
+
+            case GremlinState.TARGET_ITEM:
+
+                inventory = player.GetComponent<PlayerInventory>();
+                Transform targetItemTransform = GetClosestThrownItem();
+
+                anim.SetBool("chase player", true);
+
+
+                // if no target item, run away
+                if (targetItemTransform == null) 
+                {
+                    state = GremlinState.TARGET_SAFE_ZONE;
+                    anim.SetBool("chase player", false);
+
+                    break;
+                }
+
+                // else move towards target
+                MoveTowardsTarget(targetItemTransform);
+
+                // pickup item
+                // << ATTACK RANGE >>
+                if (Vector3.Distance(transform.position, targetItemTransform.transform.position) < interactionRadius)
+                {
+                    inventory.StealItem(targetItemTransform.gameObject);
+
+                    targetItemTransform.GetComponent<Item>().state = ItemState.STOLEN;
+
+
+                    targetItemTransform.parent = itemHolderParent;
+                    heldItemObj = targetItemTransform.gameObject;
 
                     state = GremlinState.TARGET_SAFE_ZONE;
 
@@ -149,6 +220,8 @@ public class GremlinAI : MonoBehaviour
                 if (Vector3.Distance(transform.position, safePoint) < interactionRadius)
                 {
                     DropItem();
+                    anim.SetBool("chase player", false);
+
                     state = GremlinState.IDLE;
                 }
 
@@ -159,8 +232,33 @@ public class GremlinAI : MonoBehaviour
         }
     }
 
+    private IEnumerator IdleRoutine()
+    {
+        idleMoveStarted = true;
+
+        // get random point in safe zone
+        Vector3 idlePoint = idleZone.position + (Vector3)Random.insideUnitCircle * idleZoneRadius;
+
+        // move to point
+        while (Vector2.Distance(transform.position, idlePoint) > interactionRadius && state == GremlinState.IDLE)
+        {
+            MoveTowardsTarget(idlePoint);
+            yield return null;
+        }
+
+
+        // delay
+        yield return new WaitForSeconds(idle_delay);
+
+
+        idleMoveStarted = false;
+    }
+
+
     private void MoveTowardsTarget(Transform target)
     {
+        if (transform == null) { Debug.LogWarning("Cannot move to null transform"); return; }
+
         Vector3 newDirection = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
         rb.MovePosition(newDirection);
 
@@ -202,11 +300,41 @@ public class GremlinAI : MonoBehaviour
         }
     }
 
+    public Transform GetClosestThrownItem()
+    {
+        Collider2D[] overlapColliders = Physics2D.OverlapCircleAll(transform.position, chaseRadius);
+        List<Collider2D> collidersInTrigger = new List<Collider2D>(overlapColliders);
+
+
+
+        Transform targetItem = null;
+        foreach (Collider2D col in collidersInTrigger)
+        {
+            // if free item
+            if (col.tag == "Item" && col.GetComponent<Item>().state == ItemState.THROWN)
+            {
+                // if no target item or item is closer than curr target item
+                if (targetItem == null || Vector2.Distance(transform.position , col.transform.position) < Vector2.Distance(transform.position, targetItem.transform.position))
+                {
+                    targetItem = col.transform;
+                }
+            }
+        }
+
+        return targetItem;
+
+    }
+
+
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, interactionRadius);
         Gizmos.DrawWireSphere(safeZone.position, safeZoneRadius);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(idleZone.position, idleZoneRadius);
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, chaseRadius);

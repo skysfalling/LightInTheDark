@@ -80,7 +80,7 @@ public class Totem : MonoBehaviour
                     // change item state
                     inventory[i].GetComponent<Item>().state = ItemState.FREE;
 
-                    player.inventory.Remove(inventory[i]);
+                    player.RemoveItem(inventory[i]);
                 }
             }
         }
@@ -149,6 +149,8 @@ public class Totem : MonoBehaviour
                     // add to overflow
                     submissionOverflow.Add(col.gameObject);
                     col.GetComponent<Item>().state = ItemState.FREE;
+
+                    if (player.inventory.Contains(col.gameObject)) { player.inventory.Remove(col.gameObject); }
                 }
             }
         }

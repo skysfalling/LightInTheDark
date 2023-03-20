@@ -51,7 +51,6 @@ public class PlayerInventory : MonoBehaviour
         {
             ItemFollowTarget(movement.throwObject, transform);
         }
-
     }
 
     public void AddItemToInventory(GameObject itemObject)

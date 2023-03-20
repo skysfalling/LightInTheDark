@@ -446,12 +446,12 @@ MonoBehaviour:
   moveDirection: {x: 0, y: 0}
   distToTarget: 0
   slowed: 1
-  slowedSpeed: 25
+  slowedSpeed: 20
   slowedTimer: 0
   throwParent: {fileID: 2211232507806206801}
   throwObject: {fileID: 0}
   throwSpeed: 5
-  throwDistMultiplier: 30
+  throwDistMultiplier: 50
   throwStateDuration: 1
   chargeFlashActivateDuration: 3
   chargeDisabled: 1

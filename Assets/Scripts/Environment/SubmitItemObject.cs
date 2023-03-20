@@ -164,6 +164,7 @@ public class SubmitItemObject : MonoBehaviour
 
         for (int i = 0; i < items.Count; i++)
         {
+            if (items[i] == null) { continue; }
 
             items[i].transform.parent = triggerParent;
 

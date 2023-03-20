@@ -10,6 +10,10 @@ public class GameConsole : MonoBehaviour
     public GameObject messagePrefab;
 
     [Space(10)]
+    public bool testMessage;
+    public string test = "testing the messages";
+
+    [Space(10)]
     public char flowerCommand = 'f';
     public Color flowerColor = Color.magenta;
 
@@ -39,6 +43,10 @@ public class GameConsole : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (testMessage)
+        {
+            NewMessage(test, Color.magenta);
+        }
     }
 
     // Update is called once per frame

@@ -124,6 +124,9 @@ public class LifeFlower : SubmitItemObject
 
     public override IEnumerator SubmitItem()
     {
+
+        if (submissionOverflow.Count == 0) { yield return null; }
+
         canSubmit = false;
 
         // get item

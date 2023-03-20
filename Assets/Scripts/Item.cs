@@ -9,6 +9,7 @@ public enum ItemState { FREE, PLAYER_INVENTORY, SUBMITTED, STOLEN, THROWN }
 
 public class Item : MonoBehaviour
 {
+    PlayerInventory playerInventory;
     Rigidbody2D rb;
     Light2D light;
 
@@ -29,6 +30,7 @@ public class Item : MonoBehaviour
 
     private void Start()
     {
+        playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
         rb = GetComponent<Rigidbody2D>();
         light = GetComponent<Light2D>();
     }
@@ -46,7 +48,7 @@ public class Item : MonoBehaviour
             {
                 if (col.tag == "Player")
                 {
-                    col.GetComponent<PlayerInventory>().AddItemToInventory(this.gameObject);
+                    playerInventory.AddItemToInventory(this.gameObject);
 
                     state = ItemState.PLAYER_INVENTORY;
                 }
@@ -56,6 +58,18 @@ public class Item : MonoBehaviour
         if (state == ItemState.PLAYER_INVENTORY) { UpdateItemLight(inventory_lightRange, inventory_lightIntensity); }
         else if (state == ItemState.THROWN) { UpdateItemLight(thrown_lightRange, thrown_lightIntensity, 2); }
         else { UpdateItemLight(default_lightRange, default_lightIntensity); }
+
+
+
+        // make sure player inventory state is valid
+        if (state == ItemState.PLAYER_INVENTORY && !playerInventory.inventory.Contains(this.gameObject))
+        {
+            transform.parent = null;
+            state = ItemState.FREE;
+        }
+
+
+
 
 
     }

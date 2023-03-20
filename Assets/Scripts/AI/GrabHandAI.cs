@@ -39,6 +39,14 @@ public class GrabHandAI : MonoBehaviour
     public int breakFree_struggleCount = 4;
 
 
+    [Header("Animation Gameobjects")]
+    public GameObject idleSprite;
+    public GameObject trackingSprite;
+    public GameObject attackSprite;
+    public GameObject grabSprite;
+    public GameObject grab_brokenSprite;
+    public GameObject player_capturedSprite;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,9 +59,12 @@ public class GrabHandAI : MonoBehaviour
         playerInTrigger = IsPlayerInTrigger();
 
         StateMachine();
+        AnimationStateMachine();
     }
 
 
+
+    #region AI STATES =======================================
     void StateMachine()
     {
 
@@ -252,4 +263,75 @@ public class GrabHandAI : MonoBehaviour
         Gizmos.DrawWireSphere(attackPoint, attackPointRange);
 
     }
+
+    #endregion
+
+    #region ANIMATION STATES =======================================
+
+    void AnimationStateMachine()
+    {
+        switch (state)
+        {
+            case HandState.IDLE:
+                SetHandState(HandState.IDLE);
+                break;
+            case HandState.TRACKING:
+                SetHandState(HandState.TRACKING);
+                break;
+            case HandState.ATTACK:
+                SetHandState(HandState.ATTACK);
+                break;
+            case HandState.GRAB:
+                SetHandState(HandState.GRAB);
+                break;
+            case HandState.GRAB_BROKEN:
+                SetHandState(HandState.GRAB_BROKEN);
+                break;
+            case HandState.PLAYER_CAPTURED:
+                SetHandState(HandState.PLAYER_CAPTURED);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    void SetHandState(HandState newState)
+    {
+        // Disable all game objects
+        idleSprite.SetActive(false);
+        trackingSprite.SetActive(false);
+        attackSprite.SetActive(false);
+        grabSprite.SetActive(false);
+        grab_brokenSprite.SetActive(false);
+        player_capturedSprite.SetActive(false);
+
+        // Enable the corresponding game object based on the newState parameter
+        switch (newState)
+        {
+            case HandState.IDLE:
+                idleSprite.SetActive(true);
+                break;
+            case HandState.TRACKING:
+                trackingSprite.SetActive(true);
+                break;
+            case HandState.ATTACK:
+                attackSprite.SetActive(true);
+                break;
+            case HandState.GRAB:
+                grabSprite.SetActive(true);
+                break;
+            case HandState.GRAB_BROKEN:
+                grab_brokenSprite.SetActive(true);
+                break;
+            case HandState.PLAYER_CAPTURED:
+                player_capturedSprite.SetActive(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    #endregion
 }
