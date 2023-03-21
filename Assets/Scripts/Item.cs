@@ -9,9 +9,14 @@ public enum ItemState { FREE, PLAYER_INVENTORY, SUBMITTED, STOLEN, THROWN }
 
 public class Item : MonoBehaviour
 {
+    PlayerMovement playerMovement;
     PlayerInventory playerInventory;
     Rigidbody2D rb;
     Light2D light;
+
+    SpriteRenderer sr;
+    string defaultSortingLayer;
+    int defaultSortingOrder;
 
     public ItemType type;
     public ItemState state = ItemState.FREE;
@@ -31,14 +36,19 @@ public class Item : MonoBehaviour
     private void Start()
     {
         playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
+        playerMovement = playerInventory.GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody2D>();
         light = GetComponent<Light2D>();
+
+        sr = GetComponent<SpriteRenderer>();
+        defaultSortingLayer = sr.sortingLayerName;
+        defaultSortingOrder = sr.sortingOrder;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (state == ItemState.FREE || state == ItemState.THROWN)
+        if ( (state == ItemState.FREE || state == ItemState.THROWN) && this.gameObject != playerMovement.throwObject)
         {
 
             Collider2D[] overlapColliders = Physics2D.OverlapCircleAll(transform.position, triggerSize);
@@ -59,19 +69,6 @@ public class Item : MonoBehaviour
         else if (state == ItemState.THROWN) { UpdateItemLight(thrown_lightRange, thrown_lightIntensity, 2); }
         else { UpdateItemLight(default_lightRange, default_lightIntensity); }
 
-
-
-        // make sure player inventory state is valid
-        if (state == ItemState.PLAYER_INVENTORY && !playerInventory.inventory.Contains(this.gameObject))
-        {
-            transform.parent = null;
-            state = ItemState.FREE;
-        }
-
-
-
-
-
     }
 
     // immediate change in light
@@ -86,6 +83,18 @@ public class Item : MonoBehaviour
     {
         light.pointLightOuterRadius = Mathf.Lerp(light.pointLightOuterRadius, outerRange, speed * Time.deltaTime);
         light.intensity = Mathf.Lerp(light.intensity, intensity, speed * Time.deltaTime); ;
+    }
+
+    public void SetSortingOrder(int order, string layerName)
+    {
+        sr.sortingLayerName = layerName;
+        sr.sortingOrder = order;
+    }
+
+    public void ResetSortingOrder()
+    {
+        sr.sortingLayerName = defaultSortingLayer;
+        sr.sortingOrder = defaultSortingOrder;
     }
 
     private void OnDrawGizmos()

@@ -5,6 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 public class PlayerInventory : MonoBehaviour
 {
+    GameManager gameManager;
     PlayerMovement movement;
     SoundManager soundManager;
     LevelManager levelManager;
@@ -33,8 +34,9 @@ public class PlayerInventory : MonoBehaviour
     {
         movement = GetComponent<PlayerMovement>();
 
-        levelManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelManager>();
-        soundManager = levelManager.soundManager;
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+        soundManager = gameManager.soundManager;
     }
 
     // Update is called once per frame
@@ -45,12 +47,6 @@ public class PlayerInventory : MonoBehaviour
         if (movement.state == PlayerState.CHARGING) { InventoryChargeRadius(); }
         else { InventoryCirclePlayer(); }
 
-
-        // << THROW OBJECT >>
-        if (movement.throwObject)
-        {
-            ItemFollowTarget(movement.throwObject, transform);
-        }
     }
 
     public void AddItemToInventory(GameObject itemObject)
@@ -58,6 +54,7 @@ public class PlayerInventory : MonoBehaviour
         if (inventory.Count >= maxInventorySize)
         {
             Debug.Log("Inventory is full, can't add any more items");
+            itemObject.GetComponent<Item>().state = ItemState.FREE;
             return;
         }
 
@@ -68,7 +65,7 @@ public class PlayerInventory : MonoBehaviour
         inventory.Add(itemObject);
         item.state = ItemState.PLAYER_INVENTORY;
 
-        Debug.Log("Player picked up " + this.gameObject, itemObject);
+        Debug.Log("Player picked up " + itemObject.name, itemObject);
 
 
         // Play Sound

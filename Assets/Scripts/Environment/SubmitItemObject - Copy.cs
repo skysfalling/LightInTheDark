@@ -36,7 +36,7 @@ public class SubmitItemObject : MonoBehaviour
     {
         // << INIT VALUES >>
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
-        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelManager>();
+        gameManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
         gameConsole = gameManager.gameConsole;
 
         canSubmit = true;
@@ -165,7 +165,6 @@ public class SubmitItemObject : MonoBehaviour
         for (int i = 0; i < items.Count; i++)
         {
             if (items[i] == null) { continue; }
-
             items[i].transform.parent = triggerParent;
 
             float angleRadians = (currCircleAngle + (360f / items.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object

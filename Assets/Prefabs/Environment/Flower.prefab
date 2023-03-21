@@ -795,7 +795,7 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   gameConsole: {fileID: 0}
   player: {fileID: 0}
-  triggerParent: {fileID: 0}
+  triggerParent: {fileID: 6605124139147720351}
   playerInTrigger: 1
   triggerSize: 15
   submissionTypes: 00000000010000000200000003000000

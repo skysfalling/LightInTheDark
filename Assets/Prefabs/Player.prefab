@@ -397,6 +397,7 @@ GameObject:
   - component: {fileID: 4808257195015741774}
   - component: {fileID: 4808257195015741773}
   - component: {fileID: 4808257195015741745}
+  - component: {fileID: 8054532143511645839}
   - component: {fileID: 4808257195015741772}
   - component: {fileID: 4808257195015741747}
   - component: {fileID: 4808257195015741746}
@@ -443,16 +444,22 @@ MonoBehaviour:
   speed: 50
   maxVelocity: 10
   moveTarget: {x: 0, y: 0, z: 0}
-  moveDirection: {x: 0, y: 0}
   distToTarget: 0
+  moveDirection: {x: 0, y: 0}
   slowed: 1
   slowedSpeed: 20
   slowedTimer: 0
+  isDashing: 0
+  dashSpeed: 80
+  dashDuration: 0.25
+  dashTimer: 0
   throwParent: {fileID: 2211232507806206801}
   throwObject: {fileID: 0}
   throwSpeed: 5
   throwDistMultiplier: 50
   throwStateDuration: 1
+  throwSortingLayer: Player
+  throwSortingOrder: 6
   chargeFlashActivateDuration: 3
   chargeDisabled: 1
   chargeDisableTime: 3
@@ -517,6 +524,104 @@ MonoBehaviour:
   outer_chargingLightIntensity: 5
   outer_chargingLightRange: 2
   player_chargingLightIntensity: 3
+--- !u!114 &8054532143511645839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4808257195015741770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700bea19ca9391d4e8e6be00351c2ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0}
+  directionAction:
+    m_Name: Direction
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 4f2a9937-5d6a-4fd7-9938-bacf94a8c7dd
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 2D Vector
+      m_Id: 1e7e4f48-01ac-4163-96d8-70eb14f5c69e
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 370cb1fd-e32f-4763-9732-7ae6cb50cb08
+      m_Path: <Keyboard>/w
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 10979009-9b9c-4ce0-bd13-2fef100b1dc1
+      m_Path: <Keyboard>/s
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 358bc0fc-18c8-46a8-8c30-679963ee6e29
+      m_Path: <Keyboard>/a
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: right
+      m_Id: ba4f4bad-b533-4459-a430-a60088ae3371
+      m_Path: <Keyboard>/d
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    m_Flags: 0
+  aInput: 0
+  aAction:
+    m_Name: A
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 33b0ca49-68ac-4cd6-bb10-bc5f30500f3c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: b8a697b0-83f4-490d-9f28-841fc47b7cb6
+      m_Path: <Keyboard>/j
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: A
+      m_Flags: 0
+    m_Flags: 0
+  bInput: 0
+  bAction:
+    m_Name: B
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1f3c4958-bfb2-4493-9a91-f40b7631f0a3
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 61b703c3-451c-4bc8-a946-ca55e5cac99c
+      m_Path: <Keyboard>/k
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: B
+      m_Flags: 0
+    m_Flags: 0
 --- !u!61 &4808257195015741772
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1118,7 +1223,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6944551800082461707}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.079, y: -0.133, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

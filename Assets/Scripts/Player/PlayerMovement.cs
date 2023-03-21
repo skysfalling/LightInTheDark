@@ -9,25 +9,32 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
     PlayerAnimator animator;
     PlayerInventory inventory;
+    CustomPlayerInput input_system;
 
-    Vector3 mouseWorldPos;
 
     public PlayerState state = PlayerState.IDLE;
     public bool inputIsDown;
 
     [Space(10)]
     public float speed = 10;
-    private float startSpeed;
+    private float defaultSpeed;
     public float maxVelocity = 10;
     public Vector3 moveTarget;
-    public Vector2 moveDirection;
     public float distToTarget;
 
     [Space(10)]
+    public Vector2 moveDirection;
+
+    [Header("Slowed Values")]
     public bool slowed;
     public float slowedSpeed;
     public float slowedTimer;
 
+    [Header("Dash Values")]
+    public bool isDashing;
+    public float dashSpeed;
+    public float dashDuration;
+    public float dashTimer;
 
     [Header("Throw Ability")]
     public Transform throwParent;
@@ -35,6 +42,10 @@ public class PlayerMovement : MonoBehaviour
     public float throwSpeed = 20;
     public float throwDistMultiplier = 2;
     public float throwStateDuration = 5;
+    private bool throwStarted;
+    [Space(5)]
+    public string throwSortingLayer = "Player";
+    public int throwSortingOrder = 5;
 
 
     [Header("Charge Flash")]
@@ -60,9 +71,12 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<PlayerAnimator>();
         inventory = GetComponent<PlayerInventory>();
+        input_system = GetComponent<CustomPlayerInput>();
+
+
         moveTarget = transform.position;
 
-        startSpeed = speed;
+        defaultSpeed = speed;
     }
 
     // Update is called once per frame
@@ -71,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
         Inputs();
 
         // if not stunned and new position, move
-        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED && distToTarget > interactionRange)
+        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED)
         {
             state = PlayerState.MOVING;
         }
@@ -81,12 +95,17 @@ public class PlayerMovement : MonoBehaviour
         {
             throwParent.gameObject.SetActive(true);
 
-            Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, Time.deltaTime);
-            throwObject.transform.position = newDirection;
+
+            // if not thrown yet, move object towards throw parent
+            if (throwObject.GetComponent<Item>().state == ItemState.PLAYER_INVENTORY)
+            {
+                Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, inventory.circleSpeed * Time.deltaTime);
+                throwObject.transform.position = newDirection;
+            }
+
 
             // rotate parent and UI towards throw point
-            Vector2 direction = mouseWorldPos - transform.position;
-            float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float rotation = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
             throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
         }
         else
@@ -103,6 +122,62 @@ public class PlayerMovement : MonoBehaviour
 
     public void Inputs()
     {
+
+        // << BASIC MOVE >>
+        // set move target
+        moveDirection = input_system.direction;
+
+        // if move input down , move
+        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED)
+        {
+            if (moveDirection != Vector2.zero)
+            {
+                state = PlayerState.MOVING;
+            }
+            else
+            {
+                state = PlayerState.IDLE;
+            }
+        }
+
+        // << THROW ACTION >>
+        input_system.aAction.started += ctx =>
+        {
+            // << THROW OBJECT >>
+            if (throwObject == null)
+            {
+                NewThrowObject();
+            }
+            else
+            {
+                ThrowObject();
+            }
+
+
+        };
+
+
+        // << DASH ACTION >>
+        input_system.bAction.started += ctx =>
+        {
+            // << START DASH >>
+            if (!isDashing) { StartDash(); }
+
+            // << STRUGGLE >>
+            if (state == PlayerState.GRABBED)
+            {
+                struggleCount++;
+            }
+            else if (state != PlayerState.GRABBED)
+            {
+                struggleCount = 0;
+            }
+        };
+
+
+
+
+        /*
         // << MOVE >>
         // clamp velocity when button is pressed down
         if (Input.GetMouseButtonDown(0))
@@ -113,20 +188,16 @@ public class PlayerMovement : MonoBehaviour
         var mousePos = Input.mousePosition;
         mousePos.z = -Camera.main.transform.position.z; // select distance in units from the camera
 
-        // set move target
-        mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
-        mouseWorldPos.z = transform.position.z;
+
+        //aimDirection = Camera.main.ScreenToWorldPoint(mousePos);
+        //aimDirection.z = transform.position.z;
 
         // main input
         if (Input.GetMouseButton(0))
         {
             inputIsDown = true;
 
-            // choose new move target
-            if (state != PlayerState.STUNNED && state != PlayerState.GRABBED)
-            {
-                NewMoveTarget();
-            }
+
         }
         else { inputIsDown = false; }
 
@@ -143,6 +214,7 @@ public class PlayerMovement : MonoBehaviour
                 ThrowObject();
             }
         }
+        
 
         // << STRUGGLE >>
         if (state == PlayerState.GRABBED && Input.GetMouseButtonDown(0))
@@ -153,14 +225,11 @@ public class PlayerMovement : MonoBehaviour
         {
             struggleCount = 0;
         }
+        */
     }
 
     public void StateMachine()
     {
-        distToTarget = Vector3.Distance(transform.position, moveTarget);
-
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
-
 
         // << ADJUST SPEED IF SLOWED >>
         if (slowed && slowedTimer > 0)
@@ -173,25 +242,34 @@ public class PlayerMovement : MonoBehaviour
         {
             slowedTimer = 0;
             slowed = false;
-            speed = startSpeed;
+            speed = defaultSpeed;
         }
 
+        // << ADJUST SPEED IF DASH >>
+        if (isDashing && dashTimer > 0)
+        {
+            dashTimer -= Time.deltaTime;
 
+            speed = dashSpeed;
+        }
+        else if (isDashing && dashTimer <= 0)
+        {
+            dashTimer = 0;
+            isDashing = false;
+            speed = defaultSpeed;
+        }
 
         switch (state)
         {
             case PlayerState.MOVING:
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
 
-                // update movement
-                Vector3 newDirection = Vector3.MoveTowards(transform.position, moveTarget, speed * Time.deltaTime);
+                rb.velocity = moveDirection * speed;
 
-                rb.MovePosition(newDirection);
-
-                // if at target, back to idle
-                if (distToTarget < 2) { state = PlayerState.IDLE; }
                 break;
 
             case PlayerState.IDLE:
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
 
                 // << CHARGE STATE >>
                 if (state != PlayerState.CHARGING && inputIsDown && !chargeDisabled)
@@ -201,18 +279,10 @@ public class PlayerMovement : MonoBehaviour
                 break;
 
             default:
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
                 break;
         }
         
-    }
-
-    public void NewMoveTarget()
-    {
-        // set move target
-        moveTarget = mouseWorldPos;
-
-        // set move direction
-        moveDirection = (moveTarget - transform.position).normalized;
     }
 
     public void NewThrowObject()
@@ -221,31 +291,39 @@ public class PlayerMovement : MonoBehaviour
         {
             throwObject = inventory.RemoveItemToThrow(inventory.inventory[0]); // remove 0 index item
             throwObject.transform.parent = throwParent;
+
+            throwObject.GetComponent<Item>().SetSortingOrder(throwSortingOrder, throwSortingLayer);
+
         }
     }
 
     public void ThrowObject()
     {
-        if (throwObject != null)
+        if (throwObject != null && !throwStarted)
         {
             throwObject.transform.parent = null;
 
-            StartCoroutine(ThrowObject(throwObject, (mouseWorldPos - transform.position).normalized * throwDistMultiplier, throwSpeed, throwStateDuration));
+            StartCoroutine(ThrowObject(throwObject, moveDirection * throwDistMultiplier, throwSpeed, throwStateDuration));
 
-            throwObject = null;
         }
     }
 
     public IEnumerator ThrowObject(GameObject obj, Vector2 direction, float speed, float duration)
     {
+        throwStarted = true;
+
         float elapsed = 0f;
         Vector2 startPos = obj.transform.position;
 
+        Debug.Log("Throw " + obj.name);
+        obj.GetComponent<Item>().state = ItemState.THROWN;
+        obj.GetComponent<Item>().ResetSortingOrder();
+
+        // remove from inventory and set state
         inventory.RemoveItemToThrow(obj);
         obj.transform.parent = null;
-        obj.GetComponent<Item>().state = ItemState.THROWN;
 
-
+        // move object 
         while (elapsed < duration && obj != null)
         {
             obj.transform.position = Vector2.Lerp(obj.transform.position, startPos + direction, speed * Time.deltaTime);
@@ -254,8 +332,18 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
+
+        // object is destroyed if submitted, so check for this
         if (obj != null)
-            obj.transform.position = startPos + direction;
+        {
+            obj.transform.position = startPos + direction; // solidify end position
+            obj.GetComponent<Item>().SetSortingOrder(throwSortingOrder, throwSortingLayer);
+
+        }
+
+        throwObject = null; // set throw object to null
+
+        throwStarted = false;
     }
 
 
@@ -309,6 +397,12 @@ public class PlayerMovement : MonoBehaviour
     {
         slowed = true;
         slowedTimer = timer;
+    }
+
+    public void StartDash()
+    {
+        isDashing = true;
+        dashTimer = dashDuration;
     }
 
     public void OnDrawGizmos()

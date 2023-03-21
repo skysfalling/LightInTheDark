@@ -69,6 +69,9 @@ public class PlayerAnimator : MonoBehaviour
     {
         AnimationStateMachine();
         LightingStateMachine();
+
+        // update body sprite
+        LeanTowardsMoveDirection();
     }
 
     public void AnimationStateMachine()
@@ -88,8 +91,7 @@ public class PlayerAnimator : MonoBehaviour
 
                 anim.SetBool("isMoving", true);
 
-                // update body sprite
-                LeanTowardsTarget(movement.moveTarget);
+
                 break;
 
             case PlayerState.STUNNED:
@@ -103,14 +105,14 @@ public class PlayerAnimator : MonoBehaviour
         }
     }
 
-    private void LeanTowardsTarget(Vector3 targetPosition)
+    private void LeanTowardsMoveDirection()
     {
         Quaternion targetRotation = Quaternion.Euler(0f, 0f, 0f);
-        if (targetPosition.x > transform.position.x + 2)
+        if (movement.moveDirection.x > 0.5f)
         {
             targetRotation = Quaternion.Euler(0f, 0f, -bodyLeanAngle);
         }
-        else if (targetPosition.x < transform.position.x - 2)
+        else if (movement.moveDirection.x < -0.5f)
         {
             targetRotation = Quaternion.Euler(0f, 0f, bodyLeanAngle);
         }

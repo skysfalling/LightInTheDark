@@ -244,11 +244,9 @@ GameObject:
   - component: {fileID: 7294106325404593251}
   - component: {fileID: 7294106325404593250}
   - component: {fileID: 7294106325404593260}
-  - component: {fileID: 7294106325404593261}
-  - component: {fileID: 7294106325404593262}
   m_Layer: 0
   m_Name: '[[ LEVEL MANAGER ]]'
-  m_TagString: GameController
+  m_TagString: LevelManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -357,49 +355,6 @@ MonoBehaviour:
   messageMoveSpeed: 1
   messageFadeDuration: 45
   message_list: []
---- !u!114 &7294106325404593261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7294106325404593249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 597d17087a88a5d4f90bd5564293caa3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lightPickupSound: event:/lightPickup
---- !u!114 &7294106325404593262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7294106325404593249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 1882599092
-      Data2: 1314803241
-      Data3: -1455926888
-      Data4: -924153032
-    Path: event:/backgroundMusic
-  Event: 
-  PlayEvent: 1
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
 --- !u!1 &7294106326035388499
 GameObject:
   m_ObjectHideFlags: 0
