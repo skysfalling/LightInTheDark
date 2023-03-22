@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnPlayerHand : MonoBehaviour
+public class PlayerSpawn_Hand : MonoBehaviour
 {
+    public bool playerSpawned;
 
+    [Space(10)]
     public GameObject spawnHand;
     public GameObject player;
 
@@ -23,21 +25,14 @@ public class SpawnPlayerHand : MonoBehaviour
     {
         handStartPos = spawnHand.transform.position;
 
-        StartCoroutine(SpawnRoutine(1));
+        StartCoroutine(FullSpawnRoutine(1));
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator FullSpawnRoutine(float spawnDelay)
     {
-        
-    }
-
-
-    IEnumerator SpawnRoutine(float spawnDelay)
-    {
-
+        playerSpawned = false;
         player.transform.parent = spawnHand.transform;
-        player.GetComponent<PlayerMovement>().state = PlayerState.GRABBED;
+        player.GetComponent<PlayerMovement>().state = PlayerState.INACTIVE;
         player.GetComponent<BoxCollider2D>().enabled = false;
 
         yield return new WaitForSeconds(spawnDelay);
@@ -64,6 +59,7 @@ public class SpawnPlayerHand : MonoBehaviour
         player.GetComponent<PlayerMovement>().moveTarget = player.transform.position;
         player.GetComponent<PlayerMovement>().state = PlayerState.IDLE;
         player.GetComponent<BoxCollider2D>().enabled = true;
+        playerSpawned = true;
 
 
         // << MOVE HAND BACK TO START >>

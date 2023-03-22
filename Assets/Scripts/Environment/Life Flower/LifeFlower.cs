@@ -5,30 +5,45 @@ using UnityEngine.Rendering.Universal;
 
 public class LifeFlower : SubmitItemObject
 {
+    [HideInInspector]
+    public LifeFlowerConsole console;
     SpriteRenderer sprite;
 
     [Header("Flower Values")]
+    public bool overflowing;
+
+    [Space(10)]
     public int lifeForce = 60;
     public int maxLifeForce = 60;
     public int deathAmount = -10;
-    public bool overflowing;
+
+    [Space(10)]
+    public bool decayActive;
     public float decay_speed = 1;
 
-    [Space(10)]
-    public Color startColor = Color.yellow;
-    public Color endColor = Color.grey;
-
-    [Space(10)]
-    public GameObject endLevelEffect;
-    public float endFadeOutDuration = 0.2f;
-
-    [Header("Lighting")]
+    [Header("Animation")]
     public Light2D flowerLight;
+    public GameObject innerHex;
+    public GameObject pentagram;
 
+    [Space(10)]
+    public Color healthyColor = Color.magenta;
+    public float healthyLightIntensity = 3;
+    public float healthyLightRadius = 75;
 
-    // << EVENT LISTENERS >>
-    private bool overflowingMessageSent;
-    private MessageEventListener begDrainEvent, midDrainEvent, nearEndEvent, endDrainEvent, deathEvent;
+    [Space(10)]
+    public Color deathColor = Color.black;
+    public float deathLightIntensity = 0;
+    public float deathLightRadius = 5;
+
+    [Space(10)]
+    public Color healedColor = Color.white;
+    public float healedLightIntensity = 5;
+    public float healedLightRadius = 500;
+
+    [Space(10)]
+    public GameObject completedLevelEffect;
+    public GameObject failedLevelEffect;
 
     // Start is called before the first frame update
     new void Start()
@@ -36,15 +51,10 @@ public class LifeFlower : SubmitItemObject
         base.Start();
 
         sprite = GetComponent<SpriteRenderer>();
+        console = GetComponent<LifeFlowerConsole>();
 
         StartCoroutine(Decay());
 
-        // << EVENT LISTENERS >>
-        begDrainEvent = gameConsole.EventMessage(lifeForce, EventValCompare.IS_LESS, maxLifeForce * 0.75f, " my light is fading ", gameConsole.flowerColor);
-        midDrainEvent = gameConsole.EventMessage(lifeForce, EventValCompare.IS_LESS, maxLifeForce * 0.5f, " help me ", gameConsole.flowerColor);
-        endDrainEvent = gameConsole.EventMessage(lifeForce, EventValCompare.IS_LESS, maxLifeForce * 0.25f, " where are you ? ", gameConsole.flowerColor);
-        nearEndEvent = gameConsole.EventMessage(lifeForce, EventValCompare.IS_LESS, maxLifeForce * 0.1f, " i'm scared ", gameConsole.flowerColor);
-        deathEvent = gameConsole.EventMessage(lifeForce, EventValCompare.IS_LESS_EQUAL, 0, " goodbye ", gameConsole.flowerColor);
     }
 
     // Update is called once per frame 
@@ -52,34 +62,42 @@ public class LifeFlower : SubmitItemObject
     {
         base.Update();
 
-        // send overflowing message
+        // << SET OVERFLOWING >>
         overflowing = lifeForce > maxLifeForce;
-        if (overflowing && !overflowingMessageSent)
-        {
-            gameConsole.NewMessage("---->> overflowing light <<", Color.grey);
-            overflowingMessageSent = true;
-        }
-        else if (lifeForce < maxLifeForce * 0.8f) { overflowingMessageSent = false; }
-
-        // << UPDATE EVENT LISTENERS >>
-        begDrainEvent.EventUpdate(lifeForce);
-        midDrainEvent.EventUpdate(lifeForce);
-        nearEndEvent.EventUpdate(lifeForce);
-        endDrainEvent.EventUpdate(lifeForce);
-        deathEvent.EventUpdate(lifeForce);
-
 
         // << FLOWER LIGHT >>
-        if (!gameManager.endOfLevel)
+        if (!levelManager.IsEndOfLevel())
         {
-            sprite.color = Color.Lerp(endColor, startColor, (float)lifeForce / (float)maxLifeForce);
+            sprite.color = Color.Lerp(deathColor, healthyColor, (float)lifeForce / (float)maxLifeForce);
+
+            // scale intensity to current flower health
+            flowerLight.pointLightOuterRadius = Mathf.Lerp(deathLightRadius, healthyLightRadius, (float)lifeForce / (float)maxLifeForce);
+            flowerLight.intensity = Mathf.Lerp(deathLightIntensity, deathLightRadius, (float)lifeForce / (float)maxLifeForce);
         }
         else
         {
-            sprite.color = Color.Lerp(sprite.color, Color.white, Time.deltaTime / endFadeOutDuration);
+            // << WIN STATE >>
+            if (levelManager.state == LevelState.COMPLETE)
+            {
+                sprite.color = Color.Lerp(sprite.color, healedColor, Time.deltaTime );
 
-            flowerLight.pointLightOuterRadius = Mathf.Lerp(flowerLight.pointLightOuterRadius, 500, Time.deltaTime / endFadeOutDuration);
-            flowerLight.intensity = Mathf.Lerp(flowerLight.intensity, 5, Time.deltaTime / endFadeOutDuration);
+                flowerLight.pointLightOuterRadius = Mathf.Lerp(flowerLight.pointLightOuterRadius, healedLightRadius, Time.deltaTime);
+                flowerLight.intensity = Mathf.Lerp(flowerLight.intensity, healedLightIntensity, Time.deltaTime);
+
+                completedLevelEffect.SetActive(true);
+            }
+
+            // << FAIL STATE >>
+            else if (levelManager.state == LevelState.FAIL)
+            {
+                sprite.color = Color.Lerp(sprite.color, deathColor, Time.deltaTime);
+
+                flowerLight.pointLightOuterRadius = Mathf.Lerp(flowerLight.pointLightOuterRadius, deathLightRadius, Time.deltaTime);
+                flowerLight.intensity = Mathf.Lerp(flowerLight.intensity, deathLightIntensity, Time.deltaTime);
+
+                failedLevelEffect.SetActive(true);
+
+            }
 
         }
 
@@ -153,15 +171,6 @@ public class LifeFlower : SubmitItemObject
         GameObject effect = Instantiate(submitEffect, transform);
         Destroy(effect, 5);
 
-        // << UPDATE GAMEMANAGER >>
-        // submitted darklight
-        if (!gameManager.submittedDarkLight && item.type == ItemType.DARKLIGHT) 
-        { 
-            gameManager.submittedDarkLight = true;
-            gameConsole.MessageList(gameManager.first_darklightSubmissionMessages, Color.white, 3f);
-        }
-
-
         // destroy item
         player.inventory.Remove(item.gameObject);
         Destroy(item.gameObject);
@@ -173,22 +182,20 @@ public class LifeFlower : SubmitItemObject
 
     public IEnumerator Decay()
     {
+        if (decay_speed <= 0) { yield return null; }
+
         yield return new WaitForSeconds(decay_speed);
 
-        lifeForce--;
+        if (decayActive)
+        {
+            lifeForce--;
+        }
 
-
-
-        if (!gameManager.endOfLevel)
+        if (!levelManager.IsEndOfLevel())
         {
             StartCoroutine(Decay());
         }
 
-    }
-
-    public void SpawnEndEffect()
-    {
-        GameObject effect = Instantiate(endLevelEffect, transform);
     }
 
 }

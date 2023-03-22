@@ -1,170 +1,100 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 
+
+public enum LevelState { INTRO, START, PHASE1, PHASE2, FAIL, COMPLETE }
 public class LevelManager : MonoBehaviour
 {
     [HideInInspector]
     public GameConsole gameConsole;
     [HideInInspector]
     public SoundManager soundManager;
-    GameObject player;
-    PlayerInventory player_inv;
-    public LifeFlower lifeFlower;
-
-    [Header("UI")]
-    public TextMeshProUGUI life_forceUI;
-    public TextMeshProUGUI timerUI;
-    [Space(10)]
-    public Image deathBackground;
-    public TextMeshProUGUI deathText;
-    public float deathUIFadeDuration = 5;
-
-    [Header("General Prefabs")]
-    public GameObject lightOrb;
-    public GameObject darklightOrb;
-
+    [HideInInspector]
+    public GameObject player;
+    [HideInInspector]
+    public PlayerMovement playerMovement;
+    [HideInInspector]
+    public PlayerInventory playerInventory;
+    [HideInInspector]
+    public PlayerAnimator playerAnim;
+    [HideInInspector]
+    public UIManager uiManager;
+    [HideInInspector]
+    public CameraManager camManager;
 
     [Header("Game Values")]
-    private float startTime;
-    public float timer;
+    public LevelState state = LevelState.START;
+
+    [Space(10)]
+    public LifeFlower lifeFlower;
+
+    [Space(10)]
+    public float currTime;
     public float levelEndTime;
+    float startTime;
 
-    [Header("First Encouters")]
-    public bool foundLightOrb;
-    public List<string> first_lightOrbMessages;
-
-    [Space(10)]
-    public bool submittedLight;
-    public List<string> first_lightSubmissionMessages;
-
-    [Space(10)]
-    public bool foundDarkLight;
-    public List<string> first_foundDarklightMessages;
-
-    [Space(10)]
-    public bool submittedDarkLight;
-    public List<string> first_darklightSubmissionMessages;
-
-    [Space(10)]
-    public bool convertedDarkLight;
-    public List<string> first_darklightConversionMessages;
-
-
-    [Header("General Messages")]
-    public bool endOfLevel;
-    public List<string> endOfLevelMessages;
-
-    public bool death;
-    public List<string> deathMessages;
-
-    [Header("Environment")]
-    public List<GameObject> roomTiles = new List<GameObject>();
-
-    void Awake()
+    public void Awake()
     {
         gameConsole = GetComponent<GameConsole>();
         soundManager = GetComponentInChildren<SoundManager>();
         player = GameObject.FindGameObjectWithTag("Player");
-        player_inv = player.GetComponent<PlayerInventory>();
+        playerMovement = player.GetComponent<PlayerMovement>();
+        playerInventory = player.GetComponent<PlayerInventory>();
+        playerAnim = player.GetComponent<PlayerAnimator>();
+        uiManager = GetComponent<UIManager>();
+        camManager = GetComponentInChildren<CameraManager>();
 
         startTime = Time.time;
-
-        gameConsole.NewMessage("---->> the flower begins to wilt <<", Color.grey);
-
     }
 
     public void Start()
     {
-        roomTiles = new List<GameObject>(GameObject.FindGameObjectsWithTag("Room"));
+        // gameConsole.NewMessage("---->> the flower begins to wilt <<", Color.grey);
     }
-
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        UpdateUI();
-
-        // << UPDATE FIRST INTERACTION BOOLS >>
-        // check inventory for item
-        List<GameObject> inventory = player_inv.inventory;
-        for (int i = 0; i < inventory.Count; i++)
-        {
-
-            Item item = inventory[i].GetComponent<Item>();
-
-            // check item type
-            switch (item.type)
-            {
-                case ItemType.LIGHT:
-                    if (!foundLightOrb) 
-                    { 
-                        foundLightOrb = true;
-                        gameConsole.MessageList(first_lightOrbMessages, Color.white, 1f);
-                    }
-                    break;
-                case ItemType.DARKLIGHT:
-                    if (!foundDarkLight) 
-                    { 
-                        foundDarkLight = true;
-                        gameConsole.MessageList(first_foundDarklightMessages, Color.white, 1f);
-                    }
-                    break;
-                    
-            }
-        }
-
-        // check life flower
-        if (lifeFlower && lifeFlower.submissionOverflow.Count > 0 && !submittedLight )
-        {
-            submittedLight = true;
-            gameConsole.MessageList(first_lightSubmissionMessages, Color.white, 2f);
-        }
-
-        // check for end of level
-        if (timer >= levelEndTime && !endOfLevel) 
-        { 
-            endOfLevel = true;
-            gameConsole.MessageList(endOfLevelMessages, Color.white, 2f);
-
-            lifeFlower.SpawnEndEffect();
-        }
-
-        // check for death
-        if (lifeFlower.lifeForce < lifeFlower.deathAmount && !death)
-        {
-            death = true;
-        }
-    }
-
-    private void UpdateUI()
-    {
-        UpdateTimer();
-
-        life_forceUI.text = "life force: " + lifeFlower.lifeForce;
-
-        if (death)
-        {
-            deathText.gameObject.SetActive(true);
-            deathBackground.gameObject.SetActive(true);
-
-            // fade alpha
-            Color backgroundFade = deathBackground.color;
-            backgroundFade.a = Mathf.Lerp(backgroundFade.a, 255f, Time.deltaTime / deathUIFadeDuration);
-
-            deathBackground.color = backgroundFade;
-        }
-
+        LevelStateMachine();
     }
 
 
-    private void UpdateTimer()
+    public virtual void LevelStateMachine()
+    {
+        
+        if (state != LevelState.INTRO) { UpdateTimer(); }
+
+        switch(state)
+        {
+            case (LevelState.START):
+                // set cam state
+                if (camManager.state != CameraState.ROOM_BASED) { camManager.state = CameraState.ROOM_BASED; }
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
+    #region HELPER FUNCTIONS ==========
+    public void UpdateTimer()
     {
         float timePassed = Time.time - startTime;
-        timer =  Mathf.Round(timePassed * 10) / 10f;
-
-        timerUI.text = "" + timer;
+        currTime =  Mathf.Round(timePassed * 10) / 10f;
     }
+
+    public bool IsEndOfLevel()
+    {
+        if (state == LevelState.FAIL || state == LevelState.COMPLETE)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    #endregion
 }

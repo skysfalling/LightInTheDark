@@ -8,6 +8,7 @@ public class PlayerAnimator : MonoBehaviour
     PlayerMovement movement;
     PlayerInventory inv_script;
     public Animator anim;
+    public GameObject spriteParent;
 
     [Header("Animation")]
     public SpriteRenderer leftEye;

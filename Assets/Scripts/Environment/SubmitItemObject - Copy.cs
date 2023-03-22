@@ -5,7 +5,7 @@ using UnityEngine;
 public class SubmitItemObject : MonoBehaviour
 {
     [HideInInspector]
-    public LevelManager gameManager;
+    public LevelManager levelManager;
     [HideInInspector]
     public GameConsole gameConsole;
     [HideInInspector]
@@ -36,8 +36,8 @@ public class SubmitItemObject : MonoBehaviour
     {
         // << INIT VALUES >>
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
-        gameManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
-        gameConsole = gameManager.gameConsole;
+        levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+        gameConsole = levelManager.gameConsole;
 
         canSubmit = true;
 

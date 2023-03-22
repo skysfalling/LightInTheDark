@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState { IDLE , MOVING , CHARGING, STUNNED, GRABBED}
+public enum PlayerState { IDLE , MOVING , CHARGING, STUNNED, GRABBED, INACTIVE}
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -84,12 +84,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Inputs();
 
-        // if not stunned and new position, move
-        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED)
-        {
-            state = PlayerState.MOVING;
-        }
-
         // throw object move to parent
         if (throwObject != null)
         {
@@ -128,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = input_system.direction;
 
         // if move input down , move
-        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED)
+        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED && state != PlayerState.INACTIVE)
         {
             if (moveDirection != Vector2.zero)
             {

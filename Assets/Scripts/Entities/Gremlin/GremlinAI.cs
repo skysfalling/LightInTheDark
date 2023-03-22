@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum GremlinState
 {
+    NONE,
     IDLE,
     CHASE_PLAYER,
     STUN_PLAYER,
@@ -17,9 +18,11 @@ public class GremlinAI : MonoBehaviour
 {
     
     Transform player;
-    Animator anim;
     Rigidbody2D rb;
 
+    public Transform sprite;
+
+    [Space(10)]
     public GremlinState state = GremlinState.IDLE;
     public float moveSpeed = 5f;
     public float distToPlayer;
@@ -37,8 +40,10 @@ public class GremlinAI : MonoBehaviour
     public float carryMoveSpeed;
 
     [Header("Safe Zone")]
+    public bool targetSafeZone;
     public Transform safeZone;
     public float safeZoneRadius = 5f;
+    public float exitSafeZoneDelay = 2;
 
     [Header("Idle Zone")]
     public bool idleMoveStarted;
@@ -49,7 +54,6 @@ public class GremlinAI : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -74,9 +78,6 @@ public class GremlinAI : MonoBehaviour
         switch (state)
         {
             case GremlinState.IDLE:
-
-                anim.SetBool("idle", true);
-
                 // start coroutine
                 if (!idleMoveStarted) { StartCoroutine(IdleRoutine()); }
 
@@ -93,18 +94,15 @@ public class GremlinAI : MonoBehaviour
                 if (distToPlayer < chaseRadius)
                 {
                     state = GremlinState.CHASE_PLAYER;
-                    anim.SetBool("idle", false);
-
                 }
                 break;
             case GremlinState.CHASE_PLAYER:
 
-                anim.SetBool("chase player", true);
 
-                // << CHASE RANGE >>
+                // << TARGET PLAYER >>
                 if (distToPlayer < chaseRadius)
                 {
-                    // target item if found
+                    // << TARGET ITEM >>
                     if (GetClosestThrownItem() != null)
                     {
                         state = GremlinState.TARGET_ITEM;
@@ -114,19 +112,16 @@ public class GremlinAI : MonoBehaviour
                     // move gremlin
                     MoveTowardsTarget(player);
 
-                    // << ATTACK RANGE >>
+                    // << ATTACK PLAYER >>
                     if (distToPlayer < interactionRadius)
                     {
                         state = GremlinState.STUN_PLAYER;
-                        anim.SetBool("chase player", false);
                     }
                 }
                 else
                 {
                     // << IDLE RANGE >>
                     state = GremlinState.IDLE;
-                    anim.SetBool("chase player", false);
-
                 }
                 break;
 
@@ -140,15 +135,10 @@ public class GremlinAI : MonoBehaviour
                 PlayerInventory inventory = player.GetComponent<PlayerInventory>();
                 GameObject targetItem = inventory.GetMostExpensiveItem();
 
-                anim.SetBool("chase player", true);
-
-
                 // if no target item, run away
                 if (targetItem == null)
                 {
                     state = GremlinState.TARGET_ITEM;
-                    anim.SetBool("chase player", false);
-
                     break;
                 }
 
@@ -178,15 +168,10 @@ public class GremlinAI : MonoBehaviour
                 inventory = player.GetComponent<PlayerInventory>();
                 Transform targetItemTransform = GetClosestThrownItem();
 
-                anim.SetBool("chase player", true);
-
-
                 // if no target item, run away
                 if (targetItemTransform == null) 
                 {
                     state = GremlinState.TARGET_SAFE_ZONE;
-                    anim.SetBool("chase player", false);
-
                     break;
                 }
 
@@ -212,6 +197,7 @@ public class GremlinAI : MonoBehaviour
 
                 break;
             case GremlinState.TARGET_SAFE_ZONE:
+
                 // get random point in safe zone
                 Vector3 safePoint = safeZone.position + (Vector3)Random.insideUnitCircle * safeZoneRadius;
                 MoveTowardsTarget(safePoint);
@@ -220,10 +206,10 @@ public class GremlinAI : MonoBehaviour
                 if (Vector3.Distance(transform.position, safePoint) < interactionRadius)
                 {
                     DropItem();
-                    anim.SetBool("chase player", false);
-
-                    state = GremlinState.IDLE;
+                    state = GremlinState.NONE;
+                    StartStateDelay(GremlinState.IDLE, 2);
                 }
+
 
                 break;
             default:
@@ -246,7 +232,6 @@ public class GremlinAI : MonoBehaviour
             yield return null;
         }
 
-
         // delay
         yield return new WaitForSeconds(idle_delay);
 
@@ -264,11 +249,11 @@ public class GremlinAI : MonoBehaviour
 
         if (target.position.x > transform.position.x)
         {
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            sprite.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
         else
         {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            sprite.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
     }
 
@@ -279,11 +264,11 @@ public class GremlinAI : MonoBehaviour
 
         if (target.x > transform.position.x)
         {
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            sprite.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
         else
         {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            sprite.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
     }
 
@@ -305,8 +290,6 @@ public class GremlinAI : MonoBehaviour
         Collider2D[] overlapColliders = Physics2D.OverlapCircleAll(transform.position, chaseRadius);
         List<Collider2D> collidersInTrigger = new List<Collider2D>(overlapColliders);
 
-
-
         Transform targetItem = null;
         foreach (Collider2D col in collidersInTrigger)
         {
@@ -325,16 +308,30 @@ public class GremlinAI : MonoBehaviour
 
     }
 
+    public void StartStateDelay(GremlinState newState, float delay)
+    {
+        StartCoroutine(StateDelay(newState, delay));
+    }
+
+    IEnumerator StateDelay(GremlinState newState, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        state = newState;
+    }
 
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, interactionRadius);
-        Gizmos.DrawWireSphere(safeZone.position, safeZoneRadius);
+        
+        if (safeZone)
+            Gizmos.DrawWireSphere(safeZone.position, safeZoneRadius);
 
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(idleZone.position, idleZoneRadius);
+        if (idleZone)
+            Gizmos.DrawWireSphere(idleZone.position, idleZoneRadius);
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, chaseRadius);

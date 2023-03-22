@@ -258,7 +258,8 @@ public class GameConsole : MonoBehaviour
 
 public class MessageEventListener
 {
-    public GameConsole console;
+    public GameConsole gameConsole;
+    public EntityConsole entityConsole;
     public Color color;
 
     public float checkValue;
@@ -275,7 +276,7 @@ public class MessageEventListener
     public MessageEventListener() { }
     public MessageEventListener(GameConsole console, float checkValue, EventValCompare comparison, float baseValue, string message, Color color)
     {
-        this.console = console;
+        this.gameConsole = console;
         this.color = color;
         this.checkValue = checkValue;
         this.baseValue = baseValue;
@@ -285,7 +286,26 @@ public class MessageEventListener
 
     public MessageEventListener(GameConsole console, bool checkBool, bool bool_switch, string message, Color color)
     {
-        this.console = console;
+        this.gameConsole = console;
+        this.color = color;
+        this.checkBool = checkBool;
+        this.bool_switch = bool_switch;
+        this.message = message;
+    }
+
+    public MessageEventListener(EntityConsole console, float checkValue, EventValCompare comparison, float baseValue, string message, Color color)
+    {
+        this.entityConsole = console;
+        this.color = color;
+        this.checkValue = checkValue;
+        this.baseValue = baseValue;
+        this.comparison = comparison;
+        this.message = message;
+    }
+
+    public MessageEventListener(EntityConsole console, bool checkBool, bool bool_switch, string message, Color color)
+    {
+        this.entityConsole = console;
         this.color = color;
         this.checkBool = checkBool;
         this.bool_switch = bool_switch;
@@ -299,7 +319,7 @@ public class MessageEventListener
             case true:
                 if (checkBool && !messageSent)
                 {
-                    console.NewMessage(message, color);
+                    SendMessageToConsole(message, color);
                     messageSent = true;
                 }
                 else if (!checkBool) { messageSent = false; }
@@ -307,14 +327,12 @@ public class MessageEventListener
             case false:
                 if (!checkBool && !messageSent)
                 {
-                    console.NewMessage(message, color);
+                    SendMessageToConsole(message, color);
                     messageSent = true;
                 }
                 else if (checkBool) { messageSent = false; }
                 break;
-
         }
-
     }
 
     public void EventUpdate(float checkValue)
@@ -326,7 +344,7 @@ public class MessageEventListener
                 {
                     if (!messageSent)
                     {
-                        console.NewMessage(message, color);
+                        SendMessageToConsole(message, color);
                         messageSent = true;
                     }
                 }
@@ -340,7 +358,7 @@ public class MessageEventListener
                 {
                     if (!messageSent)
                     {
-                        console.NewMessage(message, color);
+                        SendMessageToConsole(message, color);
                         messageSent = true;
                     }
                 }
@@ -354,7 +372,7 @@ public class MessageEventListener
                 {
                     if (!messageSent)
                     {
-                        console.NewMessage(message, color);
+                        SendMessageToConsole(message, color);
                         messageSent = true;
                     }
                 }
@@ -368,7 +386,7 @@ public class MessageEventListener
                 {
                     if (!messageSent)
                     {
-                        console.NewMessage(message, color);
+                        SendMessageToConsole(message, color);
                         messageSent = true;
                     }
                 }
@@ -382,7 +400,7 @@ public class MessageEventListener
                 {
                     if (!messageSent)
                     {
-                        console.NewMessage(message, color);
+                        SendMessageToConsole(message, color);
                         messageSent = true;
                     }
                 }
@@ -393,6 +411,20 @@ public class MessageEventListener
                 break;
             default:
                 break;
+        }
+    }
+
+
+    void SendMessageToConsole(string message, Color color)
+    {
+        if (gameConsole)
+        {
+            gameConsole.NewMessage(message, color);
+        }
+        
+        if (entityConsole)
+        {
+            entityConsole.NewMessage(message, color);
         }
     }
 

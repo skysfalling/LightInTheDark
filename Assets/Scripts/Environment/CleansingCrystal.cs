@@ -106,13 +106,6 @@ public class CleansingCrystal : SubmitItemObject
             GameObject effect = Instantiate(submitEffect, transform);
             Destroy(effect, 5);
 
-            // << UPDATE GAMEMANAGER >>
-            if (!gameManager.convertedDarkLight)
-            {
-                gameManager.convertedDarkLight = true;
-                gameConsole.MessageList(gameManager.first_darklightConversionMessages, Color.white, 2f);
-            }
-
 
             // get random point
             Vector3 randomPoint = spawnTarget.position + (Vector3)Random.insideUnitCircle * spawnTargetRadius;

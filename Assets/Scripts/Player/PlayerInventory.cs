@@ -133,6 +133,24 @@ public class PlayerInventory : MonoBehaviour
         return expensiveItem;
     }
 
+    public int GetTypeCount(ItemType type)
+    {
+        if (inventory.Count == 0) { return 0; }
+
+        int count = 0;
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i] == null) { continue; }
+
+            // add to count if matches type
+            Item item = inventory[i].GetComponent<Item>();
+            if (item.type == type) { count++; }
+        }
+
+        return count;
+    }
+
+    #region Inventory Movement ====================
     public void ItemFollowTarget(GameObject obj, Transform target, float speed = 1, float spacing = 2)
     {
         Vector3 direction = movement.moveDirection; // get direction of target movement
@@ -187,5 +205,5 @@ public class PlayerInventory : MonoBehaviour
             inventory[i].transform.position = Vector3.Lerp(inventory[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
         }
     }
-
+    #endregion
 }
