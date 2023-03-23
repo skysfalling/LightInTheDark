@@ -20,6 +20,8 @@ public class CleansingCrystal : SubmitItemObject
     public float conversionDelay = 2;
     public Transform spawnTarget;
     public float spawnTargetRadius = 5;
+    [HideInInspector]
+    public bool itemConverted;
 
     // Start is called before the first frame update
     new void Start()
@@ -94,6 +96,8 @@ public class CleansingCrystal : SubmitItemObject
             // destroy item
             Destroy(item);
             canSubmit = true;
+
+            itemConverted = true;
 
             // << CONVERSION >>
             yield return new WaitForSeconds(conversionDelay);

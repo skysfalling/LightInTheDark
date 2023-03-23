@@ -8,16 +8,19 @@ public class Level1_2 : LevelManager
     public GrabHandAI endGrabHand;
 
     private bool introComplete;
-    private bool gameStarted;
 
     public List<Spawner> spawners;
 
-    [Space(10)]
+    [Header("Room 1")]
     public Transform room1Center;
+    public Door room1HiddenDoor;
 
-    [Space(10)]
-    public Door hiddenDoor1;
-    public Door hiddenDoor2;
+    [Header("Room 2")]
+    public LifeFlower lifeFlower2;
+    public CleansingCrystal cleansingCrystal;
+    public Door room2HiddenDoor1;
+    public Door room2HiddenDoor2;
+
 
     [Header("Script Lines")]
     public float messageDelay = 2;
@@ -32,7 +35,6 @@ public class Level1_2 : LevelManager
 
         if (state == LevelState.INTRO) { StartCoroutine(Intro()); }
         else if (state == LevelState.ROOM2) { StartCoroutine(DebugRoom2()); }
-
 
     }
 
@@ -76,7 +78,7 @@ public class Level1_2 : LevelManager
 
     IEnumerator Room1()
     {
-        gameConsole.NewMessage("Level 1.2");
+        gameConsole.NewMessage("Level 1.2.1");
         state = LevelState.ROOM1;
 
         #region [[ ROOM INTRO ]]
@@ -121,10 +123,10 @@ public class Level1_2 : LevelManager
 
     IEnumerator Room2()
     {
-        gameConsole.NewMessage("Level 1.3");
+        gameConsole.NewMessage("Level 1.2.2");
 
         state = LevelState.ROOM2;
-        #region [[ UNLOCK ROOM 2 ]]
+        #region [[ UNLOCK DARKLIGHT HALLWAY ]]
         lifeFlower.state = FlowerState.HEALED;
         playerMovement.state = PlayerState.INACTIVE;
 
@@ -139,11 +141,11 @@ public class Level1_2 : LevelManager
         DestroySpawners();
 
         // open hidden door
-        hiddenDoor1.locked = false;
+        room1HiddenDoor.locked = false;
 
         // shake camera
-        camManager.ShakeCamera(hiddenDoor1.doorSpeed, 0.2f);
-        camManager.NewCustomZoomOutTarget(hiddenDoor1.transform);
+        camManager.ShakeCamera(room1HiddenDoor.doorSpeed, 0.2f);
+        camManager.NewCustomZoomOutTarget(room1HiddenDoor.transform);
         yield return new WaitForSeconds(2);
 
         camManager.NewCustomZoomInTarget(player.transform);
@@ -153,6 +155,33 @@ public class Level1_2 : LevelManager
         camManager.state = CameraState.ROOM_BASED;
         #endregion
 
+        yield return new WaitUntil(() => playerInventory.GetTypeCount(ItemType.DARKLIGHT) > 0);
+
+        gameConsole.NewMessage("Player picked up darklight");
+
+        yield return new WaitUntil(() => cleansingCrystal.playerInTrigger);
+
+        playerMovement.state = PlayerState.INACTIVE;
+        camManager.NewCustomTarget(cleansingCrystal.spawnTarget);
+
+        // move player to center of rift
+        player.transform.position = cleansingCrystal.triggerParent.position;
+
+        camManager.NewCustomTarget(cleansingCrystal.transform);
+
+        yield return new WaitUntil(() => cleansingCrystal.itemConverted);
+        yield return new WaitForSeconds(cleansingCrystal.conversionDelay + 1);
+
+        camManager.state = CameraState.ROOM_BASED;
+        playerMovement.state = PlayerState.IDLE;
+
+        yield return new WaitUntil(() => playerInventory.GetTypeCount(ItemType.GOLDEN) > 0);
+
+        // focus on new flower
+
+        // unlock hidden doors
+        room2HiddenDoor1.locked = false;
+        room2HiddenDoor1.locked = false;
 
     }
 

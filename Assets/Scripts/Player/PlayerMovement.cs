@@ -374,8 +374,6 @@ public class PlayerMovement : MonoBehaviour
 
 
             elapsedTime += Time.deltaTime;
-
-
         }
 
         Debug.Log("Boom");
