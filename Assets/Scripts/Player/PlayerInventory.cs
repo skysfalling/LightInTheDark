@@ -65,7 +65,7 @@ public class PlayerInventory : MonoBehaviour
         inventory.Add(itemObject);
         item.state = ItemState.PLAYER_INVENTORY;
 
-        Debug.Log("Player picked up " + itemObject.name, itemObject);
+        // Debug.Log("Player picked up " + itemObject.name, itemObject);
 
 
         // Play Sound
@@ -114,6 +114,16 @@ public class PlayerInventory : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void Destroy()
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            inventory[i].GetComponent<Item>().Destroy();
+        }
+
+        inventory.Clear();
     }
 
     public GameObject GetMostExpensiveItem()

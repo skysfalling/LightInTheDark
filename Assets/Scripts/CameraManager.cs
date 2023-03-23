@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum CameraState { NONE, PLAYER, ROOM_BASED, CUSTOM_TARGET }
+public enum CameraState { NONE, PLAYER, ROOM_BASED, CUSTOM_TARGET, CUSTOM_ZOOM_IN_TARGET, CUSTOM_ZOOM_OUT_TARGET }
 public class CameraManager : MonoBehaviour
 {
     LevelManager levelManager;
@@ -13,12 +14,24 @@ public class CameraManager : MonoBehaviour
     public Transform currTarget;
     public float camSpeed = 10;
 
+    [Space(5)]
+    public float zoomInCamSize = 25;
+    public float normalCamSize = 40;
+    public float zoomOutCamSize = 60;
+
+
+    [Header("Camera Shake")]
+    public float normalCamShakeDuration = 0.1f;
+    public float normalCamShakeMagnitude = 0.5f;
+
     // Start is called before the first frame update
     void Start()
     {
         levelManager = GetComponentInParent<LevelManager>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rooms = new List<GameObject>(GameObject.FindGameObjectsWithTag("Room"));
+
+        normalCamSize = Camera.main.orthographicSize;
     }
 
     // Update is called once per frame
@@ -29,25 +42,25 @@ public class CameraManager : MonoBehaviour
 
     void CameraStateMachine()
     {
+
+        // update zoom
+        if (state == CameraState.CUSTOM_ZOOM_IN_TARGET) { ZoomInCam(); }
+        else if (state == CameraState.CUSTOM_ZOOM_OUT_TARGET) { ZoomOutCam(); }
+        else { NormalCam(); }
+
         switch(state)
         {
             case (CameraState.PLAYER):
-
                 FollowTarget(player);
-
                 break;
             case (CameraState.ROOM_BASED):
-
                 MoveCamToClosestRoom();
-
                 break;
             case (CameraState.CUSTOM_TARGET):
-                
+            case (CameraState.CUSTOM_ZOOM_IN_TARGET):
+            case (CameraState.CUSTOM_ZOOM_OUT_TARGET):
                 FollowTarget(currTarget);
-
                 break;
-
-
         }
     }
 
@@ -82,5 +95,59 @@ public class CameraManager : MonoBehaviour
     {
         state = CameraState.CUSTOM_TARGET;
         currTarget = customTarget;
+    }
+
+    public void NewCustomZoomInTarget(Transform customTarget)
+    {
+        state = CameraState.CUSTOM_ZOOM_IN_TARGET;
+        currTarget = customTarget;
+    }
+
+    public void NewCustomZoomOutTarget(Transform customTarget)
+    {
+        state = CameraState.CUSTOM_ZOOM_OUT_TARGET;
+        currTarget = customTarget;
+    }
+
+    void NormalCam()
+    {
+        Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, normalCamSize, Time.deltaTime);
+    }
+
+    void ZoomInCam()
+    {
+        Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoomInCamSize, Time.deltaTime);
+    }
+    void ZoomOutCam()
+    {
+        Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoomOutCamSize, Time.deltaTime);
+    }
+
+    public void ShakeCamera()
+    {
+        StartCoroutine(CameraShake(normalCamShakeDuration, normalCamShakeMagnitude));
+    }
+
+    public void ShakeCamera(float duration, float magnitude)
+    {
+        StartCoroutine(CameraShake(duration, magnitude));
+    }
+
+    IEnumerator CameraShake(float duration, float magnitude)
+    {
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+
+            transform.localPosition = new Vector3(transform.localPosition.x + x, transform.localPosition.y + y, transform.localPosition.z);
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
     }
 }

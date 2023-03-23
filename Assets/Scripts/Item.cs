@@ -33,6 +33,9 @@ public class Item : MonoBehaviour
     public float thrown_lightRange = 5;
     public float thrown_lightIntensity = 5;
 
+    [Header("Effects")]
+    public GameObject destroyEffect;
+
     private void Start()
     {
         playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
@@ -59,8 +62,6 @@ public class Item : MonoBehaviour
                 if (col.tag == "Player")
                 {
                     playerInventory.AddItemToInventory(this.gameObject);
-
-                    state = ItemState.PLAYER_INVENTORY;
                 }
             }
         }
@@ -95,6 +96,14 @@ public class Item : MonoBehaviour
     {
         sr.sortingLayerName = defaultSortingLayer;
         sr.sortingOrder = defaultSortingOrder;
+    }
+
+    public void Destroy()
+    {
+        GameObject effect = Instantiate(destroyEffect, transform.position, Quaternion.identity);
+        Destroy(effect, 5);
+
+        Destroy(this.gameObject);
     }
 
     private void OnDrawGizmos()

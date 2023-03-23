@@ -38,6 +38,10 @@ public class GrabHandAI : MonoBehaviour
     public float grab_pullBackSpeed;
     public int breakFree_struggleCount = 4;
 
+    [Header("Player Captured")]
+    public bool playerCaptured;
+    public Transform capturePoint;
+
 
     [Header("Animation Gameobjects")]
     public GameObject idleSprite;
@@ -61,8 +65,6 @@ public class GrabHandAI : MonoBehaviour
         StateMachine();
         AnimationStateMachine();
     }
-
-
 
     #region AI STATES =======================================
     void StateMachine()
@@ -109,6 +111,15 @@ public class GrabHandAI : MonoBehaviour
 
                 break;
 
+            case HandState.PLAYER_CAPTURED:
+
+                if (!playerCaptured)
+                {
+                    StartCoroutine(PlayerCapture());
+                }
+                break;
+
+
             default:
                 break;
         }
@@ -145,8 +156,10 @@ public class GrabHandAI : MonoBehaviour
         {
             // ATTACK if player still in trigger
             state = HandState.ATTACK;
-            trackingStarted = false;
         }
+
+        trackingStarted = false;
+
     }
 
     IEnumerator Attacking(Vector2 attackPoint, float attackSpeed, float attackPointRange)
@@ -209,6 +222,25 @@ public class GrabHandAI : MonoBehaviour
 
 
     }
+
+    IEnumerator PlayerCapture()
+    {
+        playerCaptured = true;
+        player.transform.parent = transform;
+        player.transform.position = transform.position;
+
+        // move hand back to home position AND player hasn't broken free
+        while (Vector2.Distance(transform.position, capturePoint.position) > 5)
+        {
+            transform.position = Vector3.Lerp(transform.position, capturePoint.position, attackSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        playerCaptured = false;
+
+    }
+
 
     public void OverrideAttackPlayer(float attackSpeed, float attackRange)
     {

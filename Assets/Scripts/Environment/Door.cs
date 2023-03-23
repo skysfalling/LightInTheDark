@@ -5,6 +5,11 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     public bool locked;
+    public bool unlockedByPlayer;
+    public bool lockBehindPlayer;
+
+    [Space(10)]
+    public bool playerPassedThrough;
 
     [Space(10)]
     public Transform doorTrigger;
@@ -12,7 +17,10 @@ public class Door : MonoBehaviour
     public bool playerInTrigger;
 
     [Space(10)]
-    public GameObject doorObject;
+    public Transform door;
+    public Transform doorCloseTarget;
+    public Transform doorOpenTarget;
+    public float doorSpeed = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -25,11 +33,34 @@ public class Door : MonoBehaviour
     {
         playerInTrigger = IsPlayerInTrigger();
 
+        // << PLAYER UNLOCK >>
+        if (unlockedByPlayer)
+        {
+            locked = !IsPlayerInTrigger();
+        }
 
+        // << PLAYER PASS THROUGH >>
+        if (!playerPassedThrough && playerInTrigger)
+        {
+            playerPassedThrough = true;
+        }
+        else if (playerPassedThrough && !playerInTrigger && lockBehindPlayer)
+        {
+            locked = true;
+        }
+
+
+        // << LOCK MECHANIC >>
         if (!locked)
         {
-            if (playerInTrigger) { doorObject.SetActive(false); }
-            else { doorObject.SetActive(true); }
+            //open door
+            door.transform.position = Vector2.MoveTowards(door.transform.position, doorOpenTarget.transform.position, doorSpeed * Time.deltaTime);
+        }
+        else
+        {
+            // close door
+            door.transform.position = Vector2.MoveTowards(door.transform.position, doorCloseTarget.transform.position, doorSpeed * Time.deltaTime);
+
         }
     }
 

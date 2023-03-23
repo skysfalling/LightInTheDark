@@ -14,6 +14,9 @@ public class GameConsole : MonoBehaviour
     public string test = "testing the messages";
 
     [Space(10)]
+    public Color defaultColor = Color.grey;
+
+    [Space(10)]
     public char flowerCommand = 'f';
     public Color flowerColor = Color.magenta;
 
@@ -83,7 +86,7 @@ public class GameConsole : MonoBehaviour
 
     public void NewMessage(string input_text, float delay)
     {
-        StartCoroutine(MessageDelay(input_text, Color.white, delay));
+        StartCoroutine(MessageDelay(input_text, defaultColor, delay));
     }
 
     public void NewMessage(string input_text)
@@ -94,7 +97,7 @@ public class GameConsole : MonoBehaviour
         TextMeshProUGUI textUI = newMessage.GetComponent<TextMeshProUGUI>();
 
         // set colors
-        textUI.color = Color.white;
+        textUI.color = defaultColor;
         textUI.text = DecodeColorString(input_text);
 
         // fade out ui

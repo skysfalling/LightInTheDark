@@ -110,6 +110,7 @@ MonoBehaviour:
   inventory_lightIntensity: 2
   thrown_lightRange: 20
   thrown_lightIntensity: 10
+  destroyEffect: {fileID: 8245726953562445407, guid: 018be78106be4c943b623d1241dafefc, type: 3}
 --- !u!114 &1426544980022318450
 MonoBehaviour:
   m_ObjectHideFlags: 0

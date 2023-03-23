@@ -7,21 +7,36 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     LevelManager levelManager;
-    LevelState state;
+    public LevelState state;
 
-    [Header("UI")]
     public TextMeshProUGUI flowerLifeForceUI;
     public TextMeshProUGUI timerUI;
-    [Space(10)]
-    public Image deathBackground;
-    public TextMeshProUGUI deathText;
-    public float deathUIFadeDuration = 5;
 
+    [Header("Transition")]
+    public Image transition;
+
+    [Space(5)]
+    public bool startTransition;
+    public bool endTransition;
+
+    [Space(5)]
+    public float gameDissolveAmount = 0.5f;
+    public float transitionDelay = 1;
+
+    [Space(10)]
+    public TextMeshProUGUI deathText;
+    public float transitionSpeed = 5;
+
+    private void Awake()
+    {
+        transition.material.SetFloat("_Dissolve", 0);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         levelManager = GetComponent<LevelManager>();
+
     }
 
     private void Update()
@@ -35,10 +50,26 @@ public class UIManager : MonoBehaviour
     {
         switch(state)
         {
+            case (LevelState.INTRO):
+                if (!startTransition)
+                {
+                    startTransition = true;
+                    StartCoroutine(TransitionFadeOut(transitionDelay));
+                }
+                break;
             case (LevelState.COMPLETE):
+                if (!endTransition)
+                {
+                    endTransition = true;
+                    StartCoroutine(TransitionFadeIn(transitionDelay));
+                }
                 break;
             case (LevelState.FAIL):
-                DeathScreenFade();
+                if (!endTransition)
+                {
+                    endTransition = true;
+                    StartCoroutine(TransitionFadeIn(transitionDelay));
+                }
                 break;
             default:
                 flowerLifeForceUI.text = "life force: " + levelManager.lifeFlower.lifeForce;
@@ -47,15 +78,42 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void DeathScreenFade()
+
+
+
+    IEnumerator TransitionFadeOut(float delay)
     {
-        deathText.gameObject.SetActive(true);
-        deathBackground.gameObject.SetActive(true);
+        yield return new WaitForSeconds(delay);
 
-        // fade alpha
-        Color backgroundFade = deathBackground.color;
-        backgroundFade.a = Mathf.Lerp(backgroundFade.a, 255f, Time.deltaTime / deathUIFadeDuration);
+        transition.gameObject.SetActive(true);
 
-        deathBackground.color = backgroundFade;
+        // dissolve transition
+        float transitionAmount = 0;
+        while (transitionAmount < gameDissolveAmount)
+        {
+            transitionAmount = Mathf.Lerp(transitionAmount, gameDissolveAmount, Time.deltaTime * transitionSpeed);
+
+            transition.material.SetFloat("_Dissolve", transitionAmount);
+
+            yield return null;
+        }
+    }
+
+    IEnumerator TransitionFadeIn(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        transition.gameObject.SetActive(true);
+
+        // dissolve transition
+        float transitionAmount = gameDissolveAmount;
+        while (transitionAmount > 0)
+        {
+
+            transitionAmount = Mathf.Lerp(transitionAmount, 0, Time.deltaTime * transitionSpeed);
+
+            transition.material.SetFloat("_Dissolve", transitionAmount);
+            yield return null;
+        }
     }
 }

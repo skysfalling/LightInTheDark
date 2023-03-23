@@ -400,6 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 1021502490802159386}
+  spriteParent: {fileID: 0}
   leftEye: {fileID: 4526585360452482337}
   rightEye: {fileID: 2836056736904072348}
   closedEye: {fileID: -906838169, guid: 85f69863e7dab494f94970841c927a01, type: 3}
@@ -1372,7 +1373,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8003838856216049449}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -15.4, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1426,6 +1427,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd627d7790c73145b25f098b167748d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSpawned: 0
+  spawnHand: {fileID: 1537209075131999341}
+  player: {fileID: 1021502490119489219}
+  handLetGoPoint: {fileID: 6654026365476916344}
+  playerPositionTarget: {fileID: 6869621385248549138}
+  handSpeed: 5
+  playerSpeed: 3
 --- !u!1 &8655181828593169308
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,7 +1458,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8655181828593169308}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 25, z: 0}
+  m_LocalPosition: {x: 0, y: 20.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
+//                                     100 >    100-75, 74-50, 49-25,  25-0,     < -1 
+public enum FlowerState { HEALED, OVERFLOWING, HEALTHY, OKAY, SICK, NEAR_DEATH, DEAD}
 public class LifeFlower : SubmitItemObject
 {
     [HideInInspector]
     public LifeFlowerConsole console;
-    SpriteRenderer sprite;
+    [HideInInspector]
+    public LifeFlowerAnimator anim;
 
     [Header("Flower Values")]
-    public bool overflowing;
+    public FlowerState state;
 
     [Space(10)]
     public int lifeForce = 60;
@@ -21,37 +24,13 @@ public class LifeFlower : SubmitItemObject
     public bool decayActive;
     public float decay_speed = 1;
 
-    [Header("Animation")]
-    public Light2D flowerLight;
-    public GameObject innerHex;
-    public GameObject pentagram;
-
-    [Space(10)]
-    public Color healthyColor = Color.magenta;
-    public float healthyLightIntensity = 3;
-    public float healthyLightRadius = 75;
-
-    [Space(10)]
-    public Color deathColor = Color.black;
-    public float deathLightIntensity = 0;
-    public float deathLightRadius = 5;
-
-    [Space(10)]
-    public Color healedColor = Color.white;
-    public float healedLightIntensity = 5;
-    public float healedLightRadius = 500;
-
-    [Space(10)]
-    public GameObject completedLevelEffect;
-    public GameObject failedLevelEffect;
-
     // Start is called before the first frame update
     new void Start()
     {
         base.Start();
 
-        sprite = GetComponent<SpriteRenderer>();
         console = GetComponent<LifeFlowerConsole>();
+        anim = GetComponent<LifeFlowerAnimator>();
 
         StartCoroutine(Decay());
 
@@ -62,50 +41,29 @@ public class LifeFlower : SubmitItemObject
     {
         base.Update();
 
-        // << SET OVERFLOWING >>
-        overflowing = lifeForce > maxLifeForce;
-
-        // << FLOWER LIGHT >>
-        if (!levelManager.IsEndOfLevel())
-        {
-            sprite.color = Color.Lerp(deathColor, healthyColor, (float)lifeForce / (float)maxLifeForce);
-
-            // scale intensity to current flower health
-            flowerLight.pointLightOuterRadius = Mathf.Lerp(deathLightRadius, healthyLightRadius, (float)lifeForce / (float)maxLifeForce);
-            flowerLight.intensity = Mathf.Lerp(deathLightIntensity, deathLightRadius, (float)lifeForce / (float)maxLifeForce);
-        }
-        else
-        {
-            // << WIN STATE >>
-            if (levelManager.state == LevelState.COMPLETE)
-            {
-                sprite.color = Color.Lerp(sprite.color, healedColor, Time.deltaTime );
-
-                flowerLight.pointLightOuterRadius = Mathf.Lerp(flowerLight.pointLightOuterRadius, healedLightRadius, Time.deltaTime);
-                flowerLight.intensity = Mathf.Lerp(flowerLight.intensity, healedLightIntensity, Time.deltaTime);
-
-                completedLevelEffect.SetActive(true);
-            }
-
-            // << FAIL STATE >>
-            else if (levelManager.state == LevelState.FAIL)
-            {
-                sprite.color = Color.Lerp(sprite.color, deathColor, Time.deltaTime);
-
-                flowerLight.pointLightOuterRadius = Mathf.Lerp(flowerLight.pointLightOuterRadius, deathLightRadius, Time.deltaTime);
-                flowerLight.intensity = Mathf.Lerp(flowerLight.intensity, deathLightIntensity, Time.deltaTime);
-
-                failedLevelEffect.SetActive(true);
-
-            }
-
-        }
-
-
-        flowerLight.color = sprite.color;
+        FlowerStateMachine();
 
         SubmissionManager();
 
+    }
+
+    void FlowerStateMachine()
+    {
+        if (state == FlowerState.HEALED) { return; }
+
+        // << SET STATES BASED ON HEALTH >>
+        // 100 >
+        if (lifeForce > maxLifeForce) { state = FlowerState.OVERFLOWING; }
+        // 100 - 75
+        else if (lifeForce > maxLifeForce * 0.75f) { state = FlowerState.HEALTHY; }
+        // 74 - 50
+        else if (lifeForce > maxLifeForce * 0.5f) { state = FlowerState.OKAY; }
+        // 49 - 25
+        else if (lifeForce > maxLifeForce * 0.25f) { state = FlowerState.SICK; }
+        // 24 - 0
+        else if (lifeForce > 0) { state = FlowerState.NEAR_DEATH; }
+        // < 0
+        else { state = FlowerState.DEAD; }
     }
 
     public override void SubmissionManager()
@@ -133,7 +91,7 @@ public class LifeFlower : SubmitItemObject
             // circle overflow items
             CircleAroundTransform(submissionOverflow);
 
-            if (canSubmit && !overflowing)
+            if (canSubmit && state != FlowerState.OVERFLOWING)
             {
                 StartCoroutine(SubmitItem());
             }
@@ -160,7 +118,7 @@ public class LifeFlower : SubmitItemObject
             //yield return null;
         }
 
-        Debug.Log("Submit Item", item.gameObject);
+        // Debug.Log("Submit Item", item.gameObject);
         submissionOverflow.Remove(item.gameObject);
 
         // add to life force
@@ -198,4 +156,13 @@ public class LifeFlower : SubmitItemObject
 
     }
 
+    public bool IsOverflowing()
+    {
+        return state == FlowerState.OVERFLOWING;
+    }
+
+    public bool IsDead()
+    {
+        return state == FlowerState.DEAD;
+    }
 }

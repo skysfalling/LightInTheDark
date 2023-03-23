@@ -31,7 +31,6 @@ public class LevelManager : MonoBehaviour
 
     [Space(10)]
     public float currTime;
-    public float levelEndTime;
     float startTime;
 
     public void Awake()

@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IntroductionLevel : LevelManager
+public class Level1_1 : LevelManager
 {
-    public PlayerSpawn_Flower playerSpawn;
+    public PlayerSpawn_Hand playerSpawn;
+    public GrabHandAI endGrabHand;
 
-    bool introRoutineStarted;
+    bool levelRoutineStarted;
 
     [Header("Script Lines")]
     public float messageDelay = 2;
     public List<string> flower_lines1;
     public List<string> flower_lines2;
     public List<string> flower_lines3;
-
 
     public override void LevelStateMachine()
     {
@@ -24,25 +24,15 @@ public class IntroductionLevel : LevelManager
             case (LevelState.INTRO):
 
                 // start introduction routine b
-                if (!introRoutineStarted) { StartCoroutine(IntroRoutine()); }
+                if (!levelRoutineStarted) { StartCoroutine(LevelRoutine()); }
 
                 break;
-
-            case (LevelState.START):
-
-                // set cam state
-                if (camManager.state != CameraState.ROOM_BASED) { camManager.state = CameraState.ROOM_BASED; }
-                break;
-
-            default:
-                break;
-
         }
     }
 
-    IEnumerator IntroRoutine()
+    IEnumerator LevelRoutine()
     {
-        introRoutineStarted = true;
+        levelRoutineStarted = true;
         lifeFlower.console.SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
 
         // wait until spawned
@@ -56,6 +46,7 @@ public class IntroductionLevel : LevelManager
 
         // let player move
         playerMovement.state = PlayerState.IDLE;
+        gameConsole.NewMessage("use WASD to move , soul");
 
         // wait for player to pick up light orb
         while (playerInventory.GetTypeCount(ItemType.LIGHT) == 0)
@@ -68,7 +59,7 @@ public class IntroductionLevel : LevelManager
         yield return new WaitForSeconds(flower_lines2.Count * messageDelay); // wait for length of message list
 
         // wait for flower to be overflowing
-        yield return new WaitUntil(() => lifeFlower.overflowing);
+        yield return new WaitUntil(() => lifeFlower.state == FlowerState.OVERFLOWING);
 
         // [[ LINES 3 ]]
         lifeFlower.console.MessageList(flower_lines3, messageDelay);
@@ -76,22 +67,13 @@ public class IntroductionLevel : LevelManager
 
         // level is complete
         state = LevelState.COMPLETE;
+        lifeFlower.state = FlowerState.HEALED;
 
-        // wait until player is inside life flower light
-        while (Vector2.Distance(player.transform.position, lifeFlower.transform.position) > lifeFlower.healthyLightRadius)
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(3);
 
-        playerMovement.state = PlayerState.INACTIVE;
+        endGrabHand.canAttack = true;
 
-        // << MOVE PLAYER TO SPAWN POINT >>
-        while (Vector2.Distance(player.transform.position, lifeFlower.transform.position) > 2)
-        {
-            player.transform.position = Vector3.Lerp(player.transform.position, lifeFlower.transform.position, Time.deltaTime);
-
-            yield return null;
-        }
+        yield return new WaitUntil(() => endGrabHand.state == HandState.PLAYER_CAPTURED);
 
 
     }

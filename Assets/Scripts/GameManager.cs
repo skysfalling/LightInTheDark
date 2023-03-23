@@ -5,9 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager instance = null;
+
     [HideInInspector]
     public SoundManager soundManager;
-
 
     public string menuScene;
     public string tutorialScene;
@@ -15,24 +16,26 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         soundManager = GetComponent<SoundManager>();
     }
 
-    public void LoadMenu()
+    public void StartGame()
     {
         SceneManager.LoadScene(menuScene);
     }
 
-    public void LoadTutorial()
+    public void LoadScene(string scene)
     {
-        SceneManager.LoadScene(tutorialScene);
-    }
-
-
-    public void LoadLevel1()
-    {
-        SceneManager.LoadScene(level1Scene);
+        SceneManager.LoadScene(scene);
     }
 }
