@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum LevelState { INTRO, START, PHASE1, PHASE2, FAIL, COMPLETE }
+public enum LevelState { INTRO, ROOM1, ROOM2, FAIL, COMPLETE }
 public class LevelManager : MonoBehaviour
 {
     [HideInInspector]
@@ -24,7 +24,7 @@ public class LevelManager : MonoBehaviour
     public CameraManager camManager;
 
     [Header("Game Values")]
-    public LevelState state = LevelState.START;
+    public LevelState state = LevelState.INTRO;
 
     [Space(10)]
     public LifeFlower lifeFlower;
@@ -47,34 +47,17 @@ public class LevelManager : MonoBehaviour
         startTime = Time.time;
     }
 
-    public void Start()
-    {
-        // gameConsole.NewMessage("---->> the flower begins to wilt <<", Color.grey);
-    }
-
     // Update is called once per frame
     public void Update()
     {
         LevelStateMachine();
     }
 
-
     public virtual void LevelStateMachine()
     {
         
         if (state != LevelState.INTRO) { UpdateTimer(); }
 
-        switch(state)
-        {
-            case (LevelState.START):
-                // set cam state
-                if (camManager.state != CameraState.ROOM_BASED) { camManager.state = CameraState.ROOM_BASED; }
-                break;
-
-            default:
-                break;
-
-        }
     }
 
     #region HELPER FUNCTIONS ==========

@@ -7,7 +7,8 @@ public class Level1_2 : LevelManager
     public PlayerSpawn_Hand playerSpawn;
     public GrabHandAI endGrabHand;
 
-    bool levelRoutineStarted;
+    private bool introComplete;
+    private bool gameStarted;
 
     public List<Spawner> spawners;
 
@@ -25,30 +26,60 @@ public class Level1_2 : LevelManager
     public List<string> flower_lines2;
     public List<string> flower_lines3;
 
+    public void Start()
+    {
+        lifeFlower.console.SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
+
+        if (state == LevelState.INTRO) { StartCoroutine(Intro()); }
+        else if (state == LevelState.ROOM2) { StartCoroutine(DebugRoom2()); }
+
+
+    }
+
     public override void LevelStateMachine()
     {
         if (state != LevelState.INTRO) { UpdateTimer(); }
 
-        switch (state)
+    }
+
+    IEnumerator DebugRoom2()
+    {
+        StartCoroutine(Intro(true));
+
+        gameConsole.NewMessage("debug rm2");
+
+        yield return new WaitUntil(() => introComplete);
+
+        StartCoroutine(Room2());
+    }
+
+
+    IEnumerator Intro(bool debug = false)
+    {
+        introComplete = false; // dont call coroutine again
+
+        gameConsole.NewMessage("Intro");
+        state = LevelState.INTRO;
+
+        // wait until spawned
+        yield return new WaitUntil(() => playerSpawn.playerSpawned);
+
+        introComplete = true;
+
+        // if not in debug mode, continue to next room
+        if (!debug)
         {
-            case (LevelState.INTRO):
-
-                // start introduction routine b
-                if (!levelRoutineStarted) { StartCoroutine(StartLevelRoutine()); }
-
-                break;
+            StartCoroutine(Room1());
         }
     }
 
-    IEnumerator StartLevelRoutine()
-    {
-        levelRoutineStarted = true;
-        lifeFlower.console.SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
 
-        state = LevelState.INTRO;
-        #region [[ INTRO TO DECAY ROOM ]]
-        // wait until spawned
-        yield return new WaitUntil(() => playerSpawn.playerSpawned);
+    IEnumerator Room1()
+    {
+        gameConsole.NewMessage("Level 1.2");
+        state = LevelState.ROOM1;
+
+        #region [[ ROOM INTRO ]]
         playerMovement.state = PlayerState.INACTIVE;
 
         camManager.NewCustomZoomInTarget(lifeFlower.transform);
@@ -56,7 +87,7 @@ public class Level1_2 : LevelManager
 
         // << SCARE PLAYER BY STARTING FLOWER DECAY >>
         lifeFlower.decayActive = true; // start decay
-        lifeFlower.lifeForce = lifeFlower.maxLifeForce / 2; 
+        lifeFlower.lifeForce = lifeFlower.maxLifeForce / 2;
         lifeFlower.anim.SpawnAggressiveBurstEffect();
         camManager.ShakeCamera();
         lifeFlower.console.NewMessage(flowerExclamation);
@@ -66,14 +97,14 @@ public class Level1_2 : LevelManager
         camManager.NewCustomZoomInTarget(player.transform);
 
         yield return new WaitForSeconds(1);
+        #endregion
+
+        #region [[ ROOM 1 ]]
 
         camManager.state = CameraState.ROOM_BASED;
         playerMovement.state = PlayerState.IDLE;
         EnableSpawners();
-        #endregion
 
-        state = LevelState.START;
-        #region [[ ROOM 1 ]]
         // flower starting lines
         lifeFlower.console.MessageList(flower_lines1, messageDelay);
 
@@ -85,12 +116,14 @@ public class Level1_2 : LevelManager
 
         // else continue on
         else { StartCoroutine(Room2()); }
-
         #endregion
     }
 
     IEnumerator Room2()
     {
+        gameConsole.NewMessage("Level 1.3");
+
+        state = LevelState.ROOM2;
         #region [[ UNLOCK ROOM 2 ]]
         lifeFlower.state = FlowerState.HEALED;
         playerMovement.state = PlayerState.INACTIVE;
@@ -105,16 +138,12 @@ public class Level1_2 : LevelManager
         playerInventory.Destroy();
         DestroySpawners();
 
-        // open doors
+        // open hidden door
         hiddenDoor1.locked = false;
-        hiddenDoor2.locked = false;
 
         // shake camera
-        camManager.ShakeCamera(hiddenDoor1.doorSpeed * 1.5f, 0.3f);
+        camManager.ShakeCamera(hiddenDoor1.doorSpeed, 0.2f);
         camManager.NewCustomZoomOutTarget(hiddenDoor1.transform);
-        yield return new WaitForSeconds(2);
-
-        camManager.NewCustomZoomOutTarget(hiddenDoor2.transform);
         yield return new WaitForSeconds(2);
 
         camManager.NewCustomZoomInTarget(player.transform);
