@@ -147,6 +147,12 @@ public class Level1_2 : LevelManager
 
         #region [[ INTRODUCE CLEANSING ]]
         yield return new WaitUntil(() => playerInventory.GetTypeCount(ItemType.DARKLIGHT) > 0);
+
+
+        uiManager.NewGameTip("Darklight Orbs are the opposite of light orbs and will hurt your life flower.");
+        yield return new WaitForSeconds(2);
+
+        uiManager.DisableGameTip();
         yield return new WaitUntil(() => cleansingCrystal.playerInTrigger);
 
 

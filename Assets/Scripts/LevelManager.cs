@@ -7,6 +7,8 @@ public enum LevelState { INTRO, ROOM1, ROOM2, FAIL, COMPLETE }
 public class LevelManager : MonoBehaviour
 {
     [HideInInspector]
+    public GameManager gameManager;
+    [HideInInspector]
     public GameConsole gameConsole;
     [HideInInspector]
     public SoundManager soundManager;
@@ -30,7 +32,7 @@ public class LevelManager : MonoBehaviour
     public LifeFlower lifeFlower;
 
     [Header("Timer")]
-    public float gameTime;
+    public float gameClock;
     float startTime;
 
     [Header("Countdown Timer")]
@@ -40,13 +42,14 @@ public class LevelManager : MonoBehaviour
 
     public void Awake()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        uiManager = gameManager.GetComponentInChildren<UIManager>();
         gameConsole = GetComponent<GameConsole>();
         soundManager = GetComponentInChildren<SoundManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
         playerInventory = player.GetComponent<PlayerInventory>();
         playerAnim = player.GetComponent<PlayerAnimator>();
-        uiManager = GetComponent<UIManager>();
         camManager = GetComponentInChildren<CameraManager>();
 
         startTime = Time.time;
@@ -75,7 +78,7 @@ public class LevelManager : MonoBehaviour
     public void UpdateGameClock()
     {
         float timePassed = Time.time - startTime;
-        gameTime =  Mathf.Round(timePassed * 10) / 10f;
+        gameClock =  Mathf.Round(timePassed * 10) / 10f;
     }
 
     public void StartCountdown(float count)

@@ -7,25 +7,24 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     LevelManager levelManager;
-    public LevelState state;
+    LevelState state;
 
     public TextMeshProUGUI flowerLifeForceUI;
     public TextMeshProUGUI gameClockUI;
 
     [Header("Transition")]
     public Image transition;
-
-    [Space(5)]
     public bool startTransition;
     public bool endTransition;
-
-    [Space(5)]
     public float gameDissolveAmount = 0.5f;
     public float transitionDelay = 1;
-
-    [Space(10)]
     public TextMeshProUGUI deathText;
     public float transitionSpeed = 5;
+
+    [Header("Game Tip")]
+    public GameObject gameTipObject;
+    public TextMeshProUGUI gameTipText;
+
 
     private void Awake()
     {
@@ -44,6 +43,9 @@ public class UIManager : MonoBehaviour
         state = levelManager.state;
 
         UIStateManager();
+
+        gameClockUI.text = "" + levelManager.gameClock;
+        flowerLifeForceUI.text = "" + levelManager.lifeFlower.lifeForce;
     }
 
     void UIStateManager()
@@ -72,13 +74,9 @@ public class UIManager : MonoBehaviour
                 }
                 break;
             default:
-                flowerLifeForceUI.text = "life force: " + levelManager.lifeFlower.lifeForce;
-
                 break;
         }
     }
-
-
 
 
     IEnumerator TransitionFadeOut(float delay)
@@ -116,4 +114,16 @@ public class UIManager : MonoBehaviour
             yield return null;
         }
     }
+
+    public void NewGameTip(string text)
+    {
+        gameTipObject.SetActive(true);
+        gameTipText.text = text;
+    }
+
+    public void DisableGameTip()
+    {
+        gameTipObject.SetActive(false);
+    }
+
 }
