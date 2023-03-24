@@ -105,7 +105,7 @@ MonoBehaviour:
   triggerSize: 25
   playerInCenter: 0
   playerCenterRange: 4
-  submissionTypes: 00000000
+  submissionTypes: 00000000010000000200000003000000
   submissionOverflow: []
   circleSpeed: 10
   circleSpacing: 1

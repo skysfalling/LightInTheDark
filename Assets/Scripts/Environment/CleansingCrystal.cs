@@ -55,19 +55,19 @@ public class CleansingCrystal : SubmitItemObject
         canSubmit = false;
 
         // remove from inventory
-        GameObject item = submissionOverflow[0];
-        player.inventory.Remove(item);
-        item.transform.parent = transform; // set parent
+        GameObject itemObject = submissionOverflow[0];
+        player.inventory.Remove(itemObject);
+        itemObject.transform.parent = transform; // set parent
 
         // change color
-        SpriteRenderer sprite = item.GetComponent<SpriteRenderer>();
+        SpriteRenderer sprite = itemObject.GetComponent<SpriteRenderer>();
         Color startColor = sprite.color;
-        Light2D light = item.GetComponent<Light2D>();
+        Light2D light = itemObject.GetComponent<Light2D>();
 
         // << MOVE ITEM TO CENTER >>
-        while (item.transform.position != transform.position && playerInTrigger)
+        while ( Vector2.Distance(itemObject.transform.position, transform.position) > 5 && playerInTrigger)
         {
-            item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, submitSpeed * Time.deltaTime);
+            itemObject.transform.position = Vector3.MoveTowards(itemObject.transform.position, transform.position, submitSpeed * Time.deltaTime);
 
             sprite.color = Color.Lerp(sprite.color, itemColorChange, itemColorChangeSpeed * Time.deltaTime);
 
@@ -77,10 +77,10 @@ public class CleansingCrystal : SubmitItemObject
         }
 
         // if player not in trigger, add back to inventory
-        if (!playerInTrigger && item.transform.position != transform.position)
+        if (!playerInTrigger && Vector2.Distance(itemObject.transform.position, transform.position) > 5)
         {
-            player.inventory.Add(item.gameObject);
-            item.transform.parent = player.transform;
+            player.inventory.Add(itemObject);
+            itemObject.transform.parent = player.transform;
             sprite.color = startColor;
 
             canSubmit = true;
@@ -88,13 +88,13 @@ public class CleansingCrystal : SubmitItemObject
         }
         else
         {
-            Debug.Log("Submit Item", item);
+            Debug.Log("Submit Item", itemObject);
 
             // << SUBMIT ITEM >>
-            submissionOverflow.Remove(item);
+            submissionOverflow.Remove(itemObject);
 
             // destroy item
-            Destroy(item);
+            itemObject.GetComponent<Item>().Destroy();
             canSubmit = true;
 
             itemConverted = true;

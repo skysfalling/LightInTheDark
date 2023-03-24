@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7861199264636112024}
   - component: {fileID: 2198332303663516184}
   m_Layer: 0
-  m_Name: light_orb_break
+  m_Name: darklightorb_break
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.26666668, g: 0.70980394, b: 0.9294118, a: 1}
+      maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

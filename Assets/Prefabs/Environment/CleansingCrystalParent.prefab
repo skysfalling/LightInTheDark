@@ -1237,9 +1237,10 @@ MonoBehaviour:
   itemColorChange: {r: 1, g: 1, b: 1, a: 1}
   itemColorChangeSpeed: 0.5
   convertItem: {fileID: 4472947926902900863, guid: a7b59027ca5aa5a478fdd436783cc262, type: 3}
-  conversionDelay: 2
+  conversionDelay: 1
   spawnTarget: {fileID: 6773824207171636664}
   spawnTargetRadius: 20
+  itemConverted: 0
 --- !u!61 &8412741732440443556
 BoxCollider2D:
   m_ObjectHideFlags: 0

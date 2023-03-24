@@ -24,6 +24,9 @@ public class LifeFlower : SubmitItemObject
     public bool decayActive;
     public float decay_speed = 1;
 
+    [Header("Flower Lines")]
+    public List<string> damageReactions;
+
     // Start is called before the first frame update
     new void Start()
     {
@@ -124,6 +127,8 @@ public class LifeFlower : SubmitItemObject
         // add to life force
         lifeForce += item.lifeForce;
 
+        if (item.lifeForce < 0) { DamageReaction(); }
+
         // << SPAWN EFFECT >>
         submitEffect.GetComponent<ParticleSystem>().startColor = item.GetComponent<SpriteRenderer>().color;
         GameObject effect = Instantiate(submitEffect, transform);
@@ -154,6 +159,20 @@ public class LifeFlower : SubmitItemObject
             StartCoroutine(Decay());
         }
 
+    }
+
+    public void DamageReaction()
+    {
+        anim.SpawnAggressiveBurstEffect();
+        levelManager.camManager.ShakeCamera();
+        console.NewMessage(GetRandomLine(damageReactions));
+    }
+
+    public string GetRandomLine(List<string> lines)
+    {
+        if (lines.Count == 0) { return ""; }
+
+        return lines[Random.Range(0, lines.Count)];
     }
 
     public bool IsOverflowing()

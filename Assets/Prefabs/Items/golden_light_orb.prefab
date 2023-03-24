@@ -100,16 +100,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111b6e188b58a4048b043c7eeb2d22ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 2
   state: 0
   triggerSize: 1.78
-  lifeForce: 30
-  default_lightRange: 5
-  default_lightIntensity: 5
-  inventory_lightRange: 5
-  inventory_lightIntensity: 5
-  thrown_lightRange: 5
+  lifeForce: 10
+  default_lightRange: 20
+  default_lightIntensity: 2
+  inventory_lightRange: 12
+  inventory_lightIntensity: 1
+  thrown_lightRange: 30
   thrown_lightIntensity: 5
+  destroyEffect: {fileID: 8245726953562445407, guid: a682a981ad595304e80c40699d9c89d8, type: 3}
 --- !u!114 &608279412456706059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +192,7 @@ MonoBehaviour:
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 6
+  m_PointLightInnerRadius: 5
   m_PointLightOuterRadius: 20
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0

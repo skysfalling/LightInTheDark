@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     public LevelState state;
 
     public TextMeshProUGUI flowerLifeForceUI;
-    public TextMeshProUGUI timerUI;
+    public TextMeshProUGUI gameClockUI;
 
     [Header("Transition")]
     public Image transition;

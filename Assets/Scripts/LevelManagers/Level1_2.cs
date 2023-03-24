@@ -7,20 +7,20 @@ public class Level1_2 : LevelManager
     public PlayerSpawn_Hand playerSpawn;
     public GrabHandAI endGrabHand;
 
-    private bool introComplete;
-
-    public List<Spawner> spawners;
+    [Space(10)]
+    public bool introComplete;
 
     [Header("Room 1")]
     public Transform room1Center;
     public Door room1HiddenDoor;
+    public List<Spawner> room1Spawners;
+
 
     [Header("Room 2")]
     public LifeFlower lifeFlower2;
     public CleansingCrystal cleansingCrystal;
-    public Door room2HiddenDoor1;
-    public Door room2HiddenDoor2;
-
+    public List<Spawner> room2Spawners;
+    public float roomTimeCountdown = 180;
 
     [Header("Script Lines")]
     public float messageDelay = 2;
@@ -35,12 +35,6 @@ public class Level1_2 : LevelManager
 
         if (state == LevelState.INTRO) { StartCoroutine(Intro()); }
         else if (state == LevelState.ROOM2) { StartCoroutine(DebugRoom2()); }
-
-    }
-
-    public override void LevelStateMachine()
-    {
-        if (state != LevelState.INTRO) { UpdateTimer(); }
 
     }
 
@@ -87,12 +81,8 @@ public class Level1_2 : LevelManager
         camManager.NewCustomZoomInTarget(lifeFlower.transform);
         yield return new WaitForSeconds(2);
 
-        // << SCARE PLAYER BY STARTING FLOWER DECAY >>
-        lifeFlower.decayActive = true; // start decay
-        lifeFlower.lifeForce = lifeFlower.maxLifeForce / 2;
-        lifeFlower.anim.SpawnAggressiveBurstEffect();
-        camManager.ShakeCamera();
-        lifeFlower.console.NewMessage(flowerExclamation);
+        // << START FLOWER DECAY >>
+        StartFlowerDecay(lifeFlower, 0.5f, flowerExclamation);
 
         yield return new WaitForSeconds(2);
 
@@ -105,7 +95,7 @@ public class Level1_2 : LevelManager
 
         camManager.state = CameraState.ROOM_BASED;
         playerMovement.state = PlayerState.IDLE;
-        EnableSpawners();
+        EnableSpawners(room1Spawners);
 
         // flower starting lines
         lifeFlower.console.MessageList(flower_lines1, messageDelay);
@@ -138,33 +128,30 @@ public class Level1_2 : LevelManager
 
         // destroy items
         playerInventory.Destroy();
-        DestroySpawners();
+        DestroySpawners(room1Spawners);
 
         // open hidden door
         room1HiddenDoor.locked = false;
 
         // shake camera
-        camManager.ShakeCamera(room1HiddenDoor.doorSpeed, 0.2f);
+        camManager.ShakeCamera(2.5f, 0.2f);
         camManager.NewCustomZoomOutTarget(room1HiddenDoor.transform);
         yield return new WaitForSeconds(2);
 
         camManager.NewCustomZoomInTarget(player.transform);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
 
         playerMovement.state = PlayerState.IDLE;
         camManager.state = CameraState.ROOM_BASED;
         #endregion
 
+        #region [[ INTRODUCE CLEANSING ]]
         yield return new WaitUntil(() => playerInventory.GetTypeCount(ItemType.DARKLIGHT) > 0);
-
-        gameConsole.NewMessage("Player picked up darklight");
-
         yield return new WaitUntil(() => cleansingCrystal.playerInTrigger);
 
-        playerMovement.state = PlayerState.INACTIVE;
-        camManager.NewCustomTarget(cleansingCrystal.spawnTarget);
 
         // move player to center of rift
+        playerMovement.state = PlayerState.INACTIVE;
         player.transform.position = cleansingCrystal.triggerParent.position;
 
         camManager.NewCustomTarget(cleansingCrystal.transform);
@@ -176,21 +163,62 @@ public class Level1_2 : LevelManager
         playerMovement.state = PlayerState.IDLE;
 
         yield return new WaitUntil(() => playerInventory.GetTypeCount(ItemType.GOLDEN) > 0);
+        #endregion
+
+        #region [[ START ROOM 2 LOOP ]]
+
+        playerMovement.state = PlayerState.INACTIVE;
 
         // focus on new flower
+        camManager.NewCustomZoomOutTarget(lifeFlower2.transform);
 
-        // unlock hidden doors
-        room2HiddenDoor1.locked = false;
-        room2HiddenDoor1.locked = false;
+        yield return new WaitForSeconds(1);
 
+        // << START FLOWER DECAY >>
+        StartFlowerDecay(lifeFlower2, 0.75f, flowerExclamation);
+        EnableSpawners(room2Spawners);
+
+        yield return new WaitForSeconds(2);
+
+        camManager.state = CameraState.ROOM_BASED;
+        playerMovement.state = PlayerState.IDLE;
+        #endregion
+
+        StartCountdown(roomTimeCountdown);
+
+        // wait until time is up
+        yield return new WaitUntil(() => (countdownTimer <= 0 || lifeFlower2.IsDead()));
+
+        // if dead , exit routine
+        if (lifeFlower2.IsDead()) { StartCoroutine(FailedLevelRoutine()); }
+
+        // else continue on
+        else { StartCoroutine(CompletedLeveRoutine()); }
     }
 
     IEnumerator FailedLevelRoutine()
     {
+
+        gameConsole.NewMessage("Level Failed");
+
         yield return null;
     }
 
-    public void EnableSpawners()
+    IEnumerator CompletedLeveRoutine()
+    {
+        gameConsole.NewMessage("Level Completed");
+
+        yield return null;
+    }
+
+    public void StartFlowerDecay(LifeFlower lifeFlower, float healthPercent = 0.5f, string exclamation = "OW!")
+    {
+        lifeFlower.decayActive = true; // start decay
+        lifeFlower.lifeForce = Mathf.FloorToInt(lifeFlower.maxLifeForce * healthPercent);
+        lifeFlower.DamageReaction();
+    }
+
+    public void EnableSpawners(List<Spawner> spawners)
     {
         foreach (Spawner spawner in spawners)
         {
@@ -198,7 +226,7 @@ public class Level1_2 : LevelManager
         }
     }
 
-    public void DestroySpawners()
+    public void DestroySpawners(List<Spawner> spawners)
     {
         foreach (Spawner spawner in spawners)
         {

@@ -103,14 +103,14 @@ MonoBehaviour:
   type: 1
   state: 0
   triggerSize: 5
-  lifeForce: -20
+  lifeForce: -5
   default_lightRange: 5
   default_lightIntensity: 5
   inventory_lightRange: 5
   inventory_lightIntensity: 5
   thrown_lightRange: 5
   thrown_lightIntensity: 5
-  destroyEffect: {fileID: 0}
+  destroyEffect: {fileID: 8245726953562445407, guid: e75839c207030c548b07651f5a7a8945, type: 3}
 --- !u!114 &6081259053909263886
 MonoBehaviour:
   m_ObjectHideFlags: 0

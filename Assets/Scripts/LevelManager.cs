@@ -29,9 +29,14 @@ public class LevelManager : MonoBehaviour
     [Space(10)]
     public LifeFlower lifeFlower;
 
-    [Space(10)]
-    public float currTime;
+    [Header("Timer")]
+    public float gameTime;
     float startTime;
+
+    [Header("Countdown Timer")]
+    public bool countdownStarted;
+    public float countdownTimer;
+
 
     public void Awake()
     {
@@ -51,20 +56,37 @@ public class LevelManager : MonoBehaviour
     public void Update()
     {
         LevelStateMachine();
+
+        if (state != LevelState.INTRO) { UpdateGameClock(); }
+
+        if (countdownStarted && countdownTimer > 0) { UpdateCountdown(); }
+
+
     }
 
     public virtual void LevelStateMachine()
     {
         
-        if (state != LevelState.INTRO) { UpdateTimer(); }
+
 
     }
 
     #region HELPER FUNCTIONS ==========
-    public void UpdateTimer()
+    public void UpdateGameClock()
     {
         float timePassed = Time.time - startTime;
-        currTime =  Mathf.Round(timePassed * 10) / 10f;
+        gameTime =  Mathf.Round(timePassed * 10) / 10f;
+    }
+
+    public void StartCountdown(float count)
+    {
+        countdownTimer = count;
+        countdownStarted = true;
+    }
+
+    public void UpdateCountdown()
+    {
+        countdownTimer -= Time.deltaTime;
     }
 
     public bool IsEndOfLevel()

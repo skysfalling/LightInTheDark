@@ -17,7 +17,7 @@ public class Level1_1 : LevelManager
 
     public override void LevelStateMachine()
     {
-        if (state != LevelState.INTRO) { UpdateTimer(); }
+        if (state != LevelState.INTRO) { UpdateGameClock(); }
 
         switch (state)
         {
