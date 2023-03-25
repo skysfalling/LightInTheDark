@@ -279,6 +279,7 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    #region << THROW OBJECT >>
     public void NewThrowObject()
     {
         if (inventory.inventory.Count > 0)
@@ -339,10 +340,10 @@ public class PlayerMovement : MonoBehaviour
 
         throwStarted = false;
     }
+    #endregion
 
-
-    // <<<< STUN STATE >>>>
-    public void Stun(float time)
+    #region<< STUNNED >>
+    public void Stunned(float time)
     {
         StartCoroutine(StunCoroutine(time));
     }
@@ -359,6 +360,37 @@ public class PlayerMovement : MonoBehaviour
 
         state = PlayerState.IDLE;
     }
+    #endregion
+
+    #region << SET STATES >>
+
+    public void Inactive()
+    {
+        state = PlayerState.INACTIVE;
+    }
+
+    public void Idle()
+    {
+        state = PlayerState.IDLE;
+    }
+
+    public void Grabbed()
+    {
+        state = PlayerState.GRABBED;
+    }
+
+    public void Stunned()
+    {
+        state = PlayerState.STUNNED;
+    }
+
+    public void Moving()
+    {
+        state = PlayerState.MOVING;
+    }
+
+    #endregion
+
 
     private IEnumerator ChargeCoroutine(float activateDuration)
     {

@@ -25,6 +25,10 @@ public class PlayerSpawn_Hand : MonoBehaviour
     {
         handStartPos = spawnHand.transform.position;
 
+    }
+
+    public void StartSpawnRoutine()
+    {
         StartCoroutine(FullSpawnRoutine(1));
     }
 

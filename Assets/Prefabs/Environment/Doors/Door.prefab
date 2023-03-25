@@ -49,6 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   locked: 0
+  unlockedByPlayer: 0
+  lockBehindPlayer: 0
+  playerPassedThrough: 0
   doorTrigger: {fileID: 3153147500436102687}
   doorTriggerSize: {x: 25, y: 25}
   playerInTrigger: 0

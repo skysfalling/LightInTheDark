@@ -23,6 +23,7 @@ public class LifeFlower : SubmitItemObject
     [Space(10)]
     public bool decayActive;
     public float decay_speed = 1;
+    public bool darklightDamage;
 
     [Header("Flower Lines")]
     public List<string> damageReactions;
@@ -118,7 +119,7 @@ public class LifeFlower : SubmitItemObject
         while (Vector2.Distance(item.transform.position, transform.position) > 5f)
         {
             item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, submitSpeed * Time.deltaTime);
-            //yield return null;
+            yield return null;
         }
 
         // Debug.Log("Submit Item", item.gameObject);
@@ -127,7 +128,8 @@ public class LifeFlower : SubmitItemObject
         // add to life force
         lifeForce += item.lifeForce;
 
-        if (item.lifeForce < 0) { DamageReaction(); }
+        if (item.lifeForce < 0) { DamageReaction(); darklightDamage = true; }
+        else { darklightDamage = false; }
 
         // << SPAWN EFFECT >>
         submitEffect.GetComponent<ParticleSystem>().startColor = item.GetComponent<SpriteRenderer>().color;

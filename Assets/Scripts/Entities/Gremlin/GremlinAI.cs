@@ -126,7 +126,7 @@ public class GremlinAI : MonoBehaviour
                 break;
 
             case GremlinState.STUN_PLAYER:
-                player.GetComponent<PlayerMovement>().Stun(stunAmount);
+                player.GetComponent<PlayerMovement>().Stunned(stunAmount);
                 state = GremlinState.STEAL_ITEM;
                 break;
 

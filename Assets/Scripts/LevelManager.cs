@@ -13,9 +13,7 @@ public class LevelManager : MonoBehaviour
     [HideInInspector]
     public SoundManager soundManager;
     [HideInInspector]
-    public GameObject player;
-    [HideInInspector]
-    public PlayerMovement playerMovement;
+    public PlayerMovement player;
     [HideInInspector]
     public PlayerInventory playerInventory;
     [HideInInspector]
@@ -24,12 +22,15 @@ public class LevelManager : MonoBehaviour
     public UIManager uiManager;
     [HideInInspector]
     public CameraManager camManager;
+    [HideInInspector]
+    public DialogueManager dialogueManager;
 
     [Header("Game Values")]
     public LevelState state = LevelState.INTRO;
 
     [Space(10)]
-    public LifeFlower lifeFlower;
+    public LifeFlower currLifeFlower;
+    public List<LifeFlower> lifeFlowers;
 
     [Header("Timer")]
     public float gameClock;
@@ -45,15 +46,17 @@ public class LevelManager : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         uiManager = gameManager.GetComponentInChildren<UIManager>();
         camManager = gameManager.GetComponentInChildren<CameraManager>();
+        gameConsole = gameManager.gameConsole;
+        soundManager = gameManager.soundManager;
+        dialogueManager = gameManager.dialougeManager;
 
-        gameConsole = GetComponent<GameConsole>();
-        soundManager = GetComponentInChildren<SoundManager>();
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
-        playerInventory = player.GetComponent<PlayerInventory>();
-        playerAnim = player.GetComponent<PlayerAnimator>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+        playerInventory = player.gameObject.GetComponent<PlayerInventory>();
+        playerAnim = player.gameObject.GetComponent<PlayerAnimator>();
 
         startTime = Time.time;
+
+        currLifeFlower = lifeFlowers[0];
     }
 
     // Update is called once per frame
@@ -75,7 +78,72 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    #region HELPER FUNCTIONS ==========
+    #region << DIALOGUE >>
+    public void NewDialogue(string dialogue)
+    {
+        uiManager.NewDialogue(dialogue);
+    }
+
+    public void NewDialogue(List<string> dialogue)
+    {
+        uiManager.NewDialogue(dialogue);
+    }
+
+    public void NewRandomDialogue(List<string> dialogue)
+    {
+        uiManager.NewDialogue(dialogue[Random.Range(0, dialogue.Count)]);
+    }
+
+    public void NewTimedDialogue(List<string> dialogue, float sentenceDelay)
+    {
+        uiManager.TimedDialogue(dialogue, sentenceDelay);
+    }
+
+    public void NewDialogue(string dialogue, GameObject focusObject)
+    {
+        camManager.NewGameTipTarget(focusObject.transform);
+        uiManager.NewDialogue(dialogue);
+    }
+
+    public void NewDialogue(List<string> dialogue, GameObject focusObject)
+    {
+        camManager.NewGameTipTarget(focusObject.transform);
+        uiManager.NewDialogue(dialogue);
+    }
+
+    public void NewRandomDialogue(List<string> dialogue, GameObject focusObject)
+    {
+        uiManager.NewDialogue(dialogue[Random.Range(0, dialogue.Count)]);
+        camManager.NewGameTipTarget(focusObject.transform);
+    }
+    #endregion
+
+    public void StartFlowerDecay(LifeFlower lifeFlower, float healthPercent = 0.5f, string exclamation = "OW!")
+    {
+        lifeFlower.decayActive = true; // start decay
+        lifeFlower.lifeForce = Mathf.FloorToInt(lifeFlower.maxLifeForce * healthPercent);
+        lifeFlower.DamageReaction();
+    }
+
+    public void EnableSpawners(List<Spawner> spawners)
+    {
+        foreach (Spawner spawner in spawners)
+        {
+            spawner.StartSpawn();
+        }
+    }
+
+    public void DestroySpawners(List<Spawner> spawners)
+    {
+        foreach (Spawner spawner in spawners)
+        {
+            if (spawner.spawnedObject)
+            {
+                spawner.DestroyItem();
+            }
+        }
+    }
+
     public void UpdateGameClock()
     {
         float timePassed = Time.time - startTime;
@@ -93,6 +161,16 @@ public class LevelManager : MonoBehaviour
         countdownTimer -= Time.deltaTime;
     }
 
+    public void StopCountdown()
+    {
+        countdownStarted = false;
+    }
+
+    public float GetCurrentCountdown()
+    {
+        return  Mathf.Round(countdownTimer * 10) / 10f;
+    }
+
     public bool IsEndOfLevel()
     {
         if (state == LevelState.FAIL || state == LevelState.COMPLETE)
@@ -104,5 +182,5 @@ public class LevelManager : MonoBehaviour
             return false;
         }
     }
-    #endregion
+
 }

@@ -33,19 +33,19 @@ public class Level1_1 : LevelManager
     IEnumerator LevelRoutine()
     {
         levelRoutineStarted = true;
-        lifeFlower.console.SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
+        currLifeFlower.console.SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
 
         // wait until spawned
         yield return new WaitUntil(() => playerSpawn.playerSpawned);
-        playerMovement.state = PlayerState.INACTIVE;
+        player.state = PlayerState.INACTIVE;
         camManager.state = CameraState.ROOM_BASED;
 
         // [[ LINES 1 ]]
-        lifeFlower.console.MessageList(flower_lines1, messageDelay);
+        currLifeFlower.console.MessageList(flower_lines1, messageDelay);
         yield return new WaitForSeconds(flower_lines1.Count * messageDelay); // wait for length of message list
 
         // let player move
-        playerMovement.state = PlayerState.IDLE;
+        player.state = PlayerState.IDLE;
         gameConsole.NewMessage("use WASD to move , soul");
 
         // wait for player to pick up light orb
@@ -55,19 +55,19 @@ public class Level1_1 : LevelManager
         }
 
         // [[ LINES 2 ]]
-        lifeFlower.console.MessageList(flower_lines2, messageDelay);
+        currLifeFlower.console.MessageList(flower_lines2, messageDelay);
         yield return new WaitForSeconds(flower_lines2.Count * messageDelay); // wait for length of message list
 
         // wait for flower to be overflowing
-        yield return new WaitUntil(() => lifeFlower.state == FlowerState.OVERFLOWING);
+        yield return new WaitUntil(() => currLifeFlower.state == FlowerState.OVERFLOWING);
 
         // [[ LINES 3 ]]
-        lifeFlower.console.MessageList(flower_lines3, messageDelay);
+        currLifeFlower.console.MessageList(flower_lines3, messageDelay);
         yield return new WaitForSeconds(flower_lines3.Count * messageDelay); // wait for length of message list
 
         // level is complete
         state = LevelState.COMPLETE;
-        lifeFlower.state = FlowerState.HEALED;
+        currLifeFlower.state = FlowerState.HEALED;
 
         yield return new WaitForSeconds(3);
 
