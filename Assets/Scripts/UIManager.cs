@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    GameManager gameManager;
     LevelManager levelManager;
     LevelState state;
 
@@ -28,13 +29,16 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        gameManager = GetComponentInParent<GameManager>();
+
+
         transition.material.SetFloat("_Dissolve", 0);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        levelManager = GetComponent<LevelManager>();
+        levelManager = gameManager.levelManager;
 
     }
 

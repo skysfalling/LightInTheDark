@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum CameraState { NONE, PLAYER, ROOM_BASED, CUSTOM_TARGET, CUSTOM_ZOOM_IN_TARGET, CUSTOM_ZOOM_OUT_TARGET }
+public enum CameraState { NONE, PLAYER, ROOM_BASED, CUSTOM_TARGET, CUSTOM_ZOOM_IN_TARGET, CUSTOM_ZOOM_OUT_TARGET, GAMETIP_TARGET }
 public class CameraManager : MonoBehaviour
 {
     LevelManager levelManager;
@@ -19,6 +19,8 @@ public class CameraManager : MonoBehaviour
     public float normalCamSize = 40;
     public float zoomOutCamSize = 60;
 
+    [Space(10)]
+    public Vector2 gameplayTipOffset = new Vector2(-100, 0);
 
     [Header("Camera Shake")]
     public float normalCamShakeDuration = 0.1f;
@@ -44,7 +46,7 @@ public class CameraManager : MonoBehaviour
     {
 
         // update zoom
-        if (state == CameraState.CUSTOM_ZOOM_IN_TARGET) { ZoomInCam(); }
+        if (state == CameraState.CUSTOM_ZOOM_IN_TARGET || state == CameraState.GAMETIP_TARGET) { ZoomInCam(); }
         else if (state == CameraState.CUSTOM_ZOOM_OUT_TARGET) { ZoomOutCam(); }
         else { NormalCam(); }
 
@@ -60,6 +62,9 @@ public class CameraManager : MonoBehaviour
             case (CameraState.CUSTOM_ZOOM_IN_TARGET):
             case (CameraState.CUSTOM_ZOOM_OUT_TARGET):
                 FollowTarget(currTarget);
+                break;
+            case (CameraState.GAMETIP_TARGET):
+                FollowTarget(currTarget, gameplayTipOffset);
                 break;
         }
     }
@@ -91,6 +96,14 @@ public class CameraManager : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPos, camSpeed * Time.deltaTime);
     }
 
+    public void FollowTarget(Transform newTarget, Vector3 offset)
+    {
+        currTarget = newTarget;
+
+        Vector3 targetPos = new Vector3(newTarget.transform.position.x, newTarget.transform.position.y, transform.position.z);
+        transform.position = Vector3.Lerp(transform.position, targetPos + offset, camSpeed * Time.deltaTime);
+    }
+
     public void NewCustomTarget(Transform customTarget)
     {
         state = CameraState.CUSTOM_TARGET;
@@ -106,6 +119,12 @@ public class CameraManager : MonoBehaviour
     public void NewCustomZoomOutTarget(Transform customTarget)
     {
         state = CameraState.CUSTOM_ZOOM_OUT_TARGET;
+        currTarget = customTarget;
+    }
+
+    public void NewGameTipTarget(Transform customTarget)
+    {
+        state = CameraState.GAMETIP_TARGET;
         currTarget = customTarget;
     }
 

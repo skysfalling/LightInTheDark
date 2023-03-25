@@ -44,13 +44,14 @@ public class LevelManager : MonoBehaviour
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         uiManager = gameManager.GetComponentInChildren<UIManager>();
+        camManager = gameManager.GetComponentInChildren<CameraManager>();
+
         gameConsole = GetComponent<GameConsole>();
         soundManager = GetComponentInChildren<SoundManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
         playerInventory = player.GetComponent<PlayerInventory>();
         playerAnim = player.GetComponent<PlayerAnimator>();
-        camManager = GetComponentInChildren<CameraManager>();
 
         startTime = Time.time;
     }

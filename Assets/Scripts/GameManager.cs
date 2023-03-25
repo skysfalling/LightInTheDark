@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector]
     public SoundManager soundManager;
+    [HideInInspector]
+    public LevelManager levelManager;
 
     public string menuScene;
     public string tutorialScene;
@@ -26,6 +28,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
         soundManager = GetComponent<SoundManager>();
     }
 

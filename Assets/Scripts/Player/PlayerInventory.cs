@@ -160,6 +160,22 @@ public class PlayerInventory : MonoBehaviour
         return count;
     }
 
+    public GameObject GetFirstItemOfType(ItemType type)
+    {
+        if (inventory.Count == 0) { return null; }
+
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i] == null) { continue; }
+
+            // return if matches type
+            Item item = inventory[i].GetComponent<Item>();
+            if (item.type == type) { return item.gameObject; }
+        }
+
+        return null;
+    }
+
     #region Inventory Movement ====================
     public void ItemFollowTarget(GameObject obj, Transform target, float speed = 1, float spacing = 2)
     {
