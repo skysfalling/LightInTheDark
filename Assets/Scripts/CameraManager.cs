@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum CameraState { NONE, PLAYER, ROOM_BASED, CUSTOM_TARGET, CUSTOM_ZOOM_IN_TARGET, CUSTOM_ZOOM_OUT_TARGET, GAMETIP_TARGET }
+public enum CameraState { NONE, START, PLAYER, ROOM_BASED, CUSTOM_TARGET, CUSTOM_ZOOM_IN_TARGET, CUSTOM_ZOOM_OUT_TARGET, GAMETIP_TARGET }
 public class CameraManager : MonoBehaviour
 {
+    GameManager gameManager;
     LevelManager levelManager;
     Transform player;
     List<GameObject> rooms;
@@ -29,11 +30,19 @@ public class CameraManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        levelManager = GetComponentInParent<LevelManager>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        gameManager = GetComponentInParent<GameManager>();
+    }
+
+    public void NewSceneReset()
+    {
+        // get new level manager
+        levelManager = gameManager.levelManager;
+        player = levelManager.player.transform;
         rooms = new List<GameObject>(GameObject.FindGameObjectsWithTag("Room"));
 
         normalCamSize = Camera.main.orthographicSize;
+
+        state = CameraState.START;
     }
 
     // Update is called once per frame
@@ -42,9 +51,9 @@ public class CameraManager : MonoBehaviour
         CameraStateMachine();
     }
 
+
     void CameraStateMachine()
     {
-
         // update zoom
         if (state == CameraState.CUSTOM_ZOOM_IN_TARGET || state == CameraState.GAMETIP_TARGET) { ZoomInCam(); }
         else if (state == CameraState.CUSTOM_ZOOM_OUT_TARGET) { ZoomOutCam(); }
@@ -52,6 +61,9 @@ public class CameraManager : MonoBehaviour
 
         switch(state)
         {
+            case (CameraState.START):
+                FollowTarget(levelManager.camStart);
+                break;
             case (CameraState.PLAYER):
                 FollowTarget(player);
                 break;
@@ -90,6 +102,8 @@ public class CameraManager : MonoBehaviour
 
     public void FollowTarget(Transform newTarget)
     {
+        if (currTarget == null) { return; }
+
         currTarget = newTarget;
 
         Vector3 targetPos = new Vector3(newTarget.transform.position.x, newTarget.transform.position.y, transform.position.z);
@@ -98,6 +112,8 @@ public class CameraManager : MonoBehaviour
 
     public void FollowTarget(Transform newTarget, Vector3 offset)
     {
+        if (currTarget == null) { return; }
+
         currTarget = newTarget;
 
         Vector3 targetPos = new Vector3(newTarget.transform.position.x, newTarget.transform.position.y, transform.position.z);
@@ -137,6 +153,7 @@ public class CameraManager : MonoBehaviour
     {
         Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoomInCamSize, Time.deltaTime);
     }
+
     void ZoomOutCam()
     {
         Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoomOutCamSize, Time.deltaTime);
@@ -168,5 +185,11 @@ public class CameraManager : MonoBehaviour
             yield return null;
         }
 
+    }
+
+    public bool IsCamAtTarget(Transform transform, float range = 1)
+    {
+        if (Vector2.Distance(transform.position, transform.position) < range) { return true; }
+        return false;
     }
 }

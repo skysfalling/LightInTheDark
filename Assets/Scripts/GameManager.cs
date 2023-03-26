@@ -12,13 +12,29 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public LevelManager levelManager;
     [HideInInspector]
+    public CameraManager camManager;
+    [HideInInspector]
     public GameConsole gameConsole;
     [HideInInspector]
-    public DialogueManager dialougeManager;
+    public UIManager uiManager;
+    [HideInInspector]
+    public DialogueManager dialogueManager;
 
+    public bool sceneReady;
+    public LevelState levelSavePoint;
+
+    [Space(10)]
     public string menuScene;
     public string tutorialScene;
-    public string level1Scene;
+
+    [Space(10)]
+    public string level_1_1;
+    public string level_1_2;
+    public string level_1_3;
+
+    [Space(10)]
+    public string level_2;
+
 
     void Awake()
     {
@@ -32,11 +48,61 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
         soundManager = GetComponent<SoundManager>();
         gameConsole = GetComponent<GameConsole>();
-        dialougeManager = GetComponent<DialogueManager>();
+        dialogueManager = GetComponent<DialogueManager>();
+        camManager = GetComponentInChildren<CameraManager>();
+        uiManager = GetComponentInChildren<UIManager>();
     }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += NewSceneReset;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= NewSceneReset;
+    }
+
+
+    public void NewSceneReset(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("New scene loaded: " + scene.name);
+
+        StartCoroutine(SceneSetup());
+    }
+
+    IEnumerator SceneSetup()
+    {
+        sceneReady = false;
+
+        gameConsole.Clear();
+
+        // get new level manager
+        while (levelManager == null)
+        {
+            levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+            yield return null;
+        }
+
+        // set uiManager
+        uiManager.levelManager = levelManager;
+
+        // setup camera
+        camManager.NewSceneReset();
+        camManager.currTarget = levelManager.camStart;
+
+        while (!camManager.IsCamAtTarget(camManager.currTarget, 2))
+        {
+            yield return null;
+        }
+
+        levelManager.StartLevelFromPoint(levelSavePoint);
+
+        sceneReady = true;
+    }
+
 
     public void StartGame()
     {
@@ -46,5 +112,15 @@ public class GameManager : MonoBehaviour
     public void LoadScene(string scene)
     {
         SceneManager.LoadScene(scene);
+    }
+
+    public void RestartLevelFromSavePoint()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ResetLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

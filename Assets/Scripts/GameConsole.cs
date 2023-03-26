@@ -257,6 +257,17 @@ public class GameConsole : MonoBehaviour
             Destroy(text.gameObject);
         }
     }
+
+    public void Clear()
+    {
+        foreach (GameObject msg in messages)
+        {
+            Destroy(msg);
+        }
+
+        messages.Clear();
+        message_list.Clear();
+    }
 }
 
 public class MessageEventListener

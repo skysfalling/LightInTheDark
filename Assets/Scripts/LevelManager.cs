@@ -40,6 +40,11 @@ public class LevelManager : MonoBehaviour
     public bool countdownStarted;
     public float countdownTimer;
 
+    [Header("Spawn")]
+    public Transform camStart;
+    public PlayerSpawn_Hand playerSpawn;
+    public GrabHandAI endGrabHand;
+
 
     public void Awake()
     {
@@ -48,7 +53,7 @@ public class LevelManager : MonoBehaviour
         camManager = gameManager.GetComponentInChildren<CameraManager>();
         gameConsole = gameManager.gameConsole;
         soundManager = gameManager.soundManager;
-        dialogueManager = gameManager.dialougeManager;
+        dialogueManager = gameManager.dialogueManager;
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         playerInventory = player.gameObject.GetComponent<PlayerInventory>();
@@ -67,8 +72,11 @@ public class LevelManager : MonoBehaviour
         if (state != LevelState.INTRO) { UpdateGameClock(); }
 
         if (countdownStarted && countdownTimer > 0) { UpdateCountdown(); }
+    }
 
-
+    public virtual void StartLevelFromPoint(LevelState state)
+    {
+        Debug.Log("Start Level From Point is not set up");
     }
 
     public virtual void LevelStateMachine()

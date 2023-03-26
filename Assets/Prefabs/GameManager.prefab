@@ -276,11 +276,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundManager: {fileID: 0}
   levelManager: {fileID: 0}
+  camManager: {fileID: 0}
   gameConsole: {fileID: 0}
-  dialougeManager: {fileID: 0}
+  dialogueManager: {fileID: 0}
+  levelSavePoint: 0
   menuScene: Menu
   tutorialScene: TutorialScene
-  level1Scene: TestingArena
+  level_1_1: Level_1.1
+  level_1_2: Level_1.2
+  level_1_3: Level_1.3
+  level_2: 
 --- !u!114 &2093135815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,11 +341,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2aca6ba7c919914a8cc853ab1b0d3b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnParent: {fileID: 0}
+  spawnParent: {fileID: 9211773858077472801}
   messagePrefab: {fileID: 4494537454904535218, guid: f79f2cafc13481d46afbb84774ae2830, type: 3}
   testMessage: 0
   test: testing the messages
-  defaultColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
   flowerCommand: 102
   flowerColor: {r: 1, g: 0, b: 0.5764706, a: 1}
   lightCommand: 108
@@ -350,9 +355,9 @@ MonoBehaviour:
   goldCommand: 103
   goldColor: {r: 1, g: 0.69944656, b: 0.015686274, a: 1}
   maxMessages: 4
-  line_spacing: 25
+  line_spacing: 10
   messageMoveSpeed: 1
-  messageFadeDuration: 45
+  messageFadeDuration: 20
   message_list: []
 --- !u!114 &3727975432613735350
 MonoBehaviour:
@@ -366,23 +371,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7a9fbe22f2d8f45953073c5caf789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  witness_lifeFlowerTip: []
-  witness_end_1_1: []
-  witness_start_1_2: []
+  witness_lifeFlowerTip:
+  - Ah, the f(life flower). It is indeed a beautiful creation, is it not?
+  - It's delicate petals, the soft glow of its light, it all seems so precious. And
+    yet, it is but a fragile thing.
+  - You see, without the energy it gains from the l(orbs), it will wither and fade
+    away.
+  - And if the life flower perishes, well...who knows what will happen to you? It's
+    best not to take any chances, don't you agree?
+  witness_end_1_1:
+  - Do not be so quick to revel in your success. Many more f(flowers) await your
+    care, and the price for their survival will only grow steeper.
+  - Continue on, for your fate is now forever bound to theirs.
+  witness_start_1_2:
+  - Even the mere sight of you causes these delicate beings to wither and decay.
+    Fix this soul, and make up for your pitiful life.
+  witness_end_1_2:
+  - "Good, good. I\u2019m glad you\u2019re not a complete waste of my time."
   witness_darkLightTip:
   - The d(Dark Light Orb) is but a mere reflection of your own darkness, and its
-    touch corrupts the life force of the flowers.
-  - ' If you truly wish to protect them, you must g(cleanse) the orbs of their tainted
-    energy before offering them.'
+    touch corrupts the life force of the f(flowers).
+  - ' If you truly wish to protect the f(flower), you must g(cleanse) the orbs of
+    their tainted energy before offering them.'
   - But alas, your ignorance and arrogance may very well be their downfall.
-  witness_goldenOrbTip: []
-  witness_start_1_3: []
-  witness_darklightSubmit: []
-  witness_startSoulPanic: []
-  witness_end_1_3: []
+  witness_goldenOrbTip:
+  - In your search for salvation, you have obtained the precious g(Gold Orb.)
+  - With its potent light, the f(life flower) will thrive and flourish.
+  - But do not be fooled by its beauty, for its true power lies in the darkness that
+    created it.
+  - Use it wisely, for it holds the key to your survival.
+  witness_start_1_2_2:
+  - This f(life flower) will not be so easily satisfied this time.
+  - 'You will have to prove yourself - tend to it, and keep it healthy. One misstep,
+    one mistake, and the consequences will be dire. '
+  - Remember, your fate is bound to theirs, and I will not tolerate failure.
+  witness_darklightSubmit:
+  - In your foolishness, you have offered a dark light orb to the life flower, harming
+    its delicate life force. Your incompetence is astonishing.
+  witness_startSoulPanic:
+  - 'Oh, look how fragile you are, soul. The life flower''s reaction is merely a
+    consequence of your own foolishness. '
+  - You should have known better than to offer it such tainted energy. But alas,
+    it seems you have much to learn.
+  witness_end_1_2_2:
+  - 'Do not bask in this small victory for too long. '
+  - The journey ahead will only get harder, and the consequences of failure will
+    be much more dire.
+  - Keep moving forward, soul, but know that your actions have consequences.
   flowerWorry: []
   flowerExclamations: []
-  witness_onFail: []
+  witness_onFail:
+  - Your struggle was futile, your efforts in vain. You have already fallen into
+    the abyss of eternal despair.
+  - Death was inevitable. You were but a mere pawn in this grand scheme of things.
+  - Your demise only brings me closer to my ultimate goal. Your soul shall forever
+    remain in my grasp.
+  - The life flower withers and dies once more. How many times must you repeat this
+    cycle?
+  - Your carelessness has led to the death of the life flower. You are not worthy
+    of its vital energy.
 --- !u!1001 &5435931092219198031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -483,5 +530,10 @@ PrefabInstance:
 --- !u!224 &3528194235007182632 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8901056188797869415, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+  m_PrefabInstance: {fileID: 5435931092219198031}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &9211773858077472801 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3793865986702443118, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
   m_PrefabInstance: {fileID: 5435931092219198031}
   m_PrefabAsset: {fileID: 0}

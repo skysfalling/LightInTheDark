@@ -119,7 +119,6 @@ public class LifeFlower : SubmitItemObject
         while (Vector2.Distance(item.transform.position, transform.position) > 5f)
         {
             item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, submitSpeed * Time.deltaTime);
-            yield return null;
         }
 
         // Debug.Log("Submit Item", item.gameObject);

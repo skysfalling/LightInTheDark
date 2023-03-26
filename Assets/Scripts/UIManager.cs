@@ -7,16 +7,16 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     GameManager gameManager;
-    LevelManager levelManager;
-    LevelState state;
+    public LevelManager levelManager;
 
-    public TextMeshProUGUI flowerLifeForceUI;
-    public TextMeshProUGUI gameClockUI;
+    [Header("UI")]
+    public TextMeshProUGUI countdown;
+    public float UI_horzOffset = 100;
+    public bool uiMoving;
 
     [Header("Transition")]
     public Image transition;
-    public bool startTransition;
-    public bool endTransition;
+    public bool transitionFinished;
     public float gameDissolveAmount = 0.5f;
     public float transitionDelay = 1;
     public TextMeshProUGUI deathText;
@@ -34,7 +34,6 @@ public class UIManager : MonoBehaviour
     {
         gameManager = GetComponentInParent<GameManager>();
 
-
         transition.material.SetFloat("_Dissolve", 0);
     }
 
@@ -42,49 +41,18 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         levelManager = gameManager.levelManager;
-
     }
 
     private void Update()
     {
-        state = levelManager.state;
-
-        UIStateManager();
-
-        gameClockUI.text = "" + levelManager.GetCurrentCountdown();
-        flowerLifeForceUI.text = "" + levelManager.currLifeFlower.lifeForce;
-    }
-
-    void UIStateManager()
-    {
-        switch(state)
+        try
         {
-            case (LevelState.INTRO):
-                if (!startTransition)
-                {
-                    startTransition = true;
-                    StartCoroutine(TransitionFadeOut(transitionDelay));
-                }
-                break;
-            case (LevelState.COMPLETE):
-                if (!endTransition)
-                {
-                    endTransition = true;
-                    StartCoroutine(TransitionFadeIn(transitionDelay));
-                }
-                break;
-            case (LevelState.FAIL):
-                if (!endTransition)
-                {
-                    endTransition = true;
-                    StartCoroutine(TransitionFadeIn(transitionDelay));
-                }
-                break;
-            default:
-                break;
+            countdown.text = "" + levelManager.GetCurrentCountdown();
         }
+        catch { Debug.Log("Countdown UI Error"); }
     }
 
+    #region LevelTransition
     public void StartTransitionFadeOut()
     {
         StartCoroutine(TransitionFadeOut(transitionDelay));
@@ -97,6 +65,8 @@ public class UIManager : MonoBehaviour
 
     IEnumerator TransitionFadeOut(float delay)
     {
+        transitionFinished = false;
+
         yield return new WaitForSeconds(delay);
 
         transition.gameObject.SetActive(true);
@@ -105,16 +75,22 @@ public class UIManager : MonoBehaviour
         float transitionAmount = 0;
         while (transitionAmount < gameDissolveAmount)
         {
-            transitionAmount = Mathf.Lerp(transitionAmount, gameDissolveAmount, Time.deltaTime * transitionSpeed);
+            transitionAmount = Mathf.MoveTowards(transitionAmount, gameDissolveAmount, Time.deltaTime * transitionSpeed);
 
             transition.material.SetFloat("_Dissolve", transitionAmount);
 
             yield return null;
         }
+
+        transitionFinished = true;
+
     }
 
     IEnumerator TransitionFadeIn(float delay)
     {
+        transitionFinished = false;
+
+
         yield return new WaitForSeconds(delay);
 
         transition.gameObject.SetActive(true);
@@ -124,13 +100,18 @@ public class UIManager : MonoBehaviour
         while (transitionAmount > 0)
         {
 
-            transitionAmount = Mathf.Lerp(transitionAmount, 0, Time.deltaTime * transitionSpeed);
+            transitionAmount = Mathf.MoveTowards(transitionAmount, 0, Time.deltaTime * transitionSpeed);
 
             transition.material.SetFloat("_Dissolve", transitionAmount);
             yield return null;
         }
-    }
 
+        transitionFinished = true;
+
+    }
+    #endregion
+
+    #region Dialogue
     public void NewDialogue(string text)
     {
         dialogueObject.SetActive(true);
@@ -268,4 +249,6 @@ public class UIManager : MonoBehaviour
         inDialogue = false;
         DisableDialogue();
     }
+    #endregion
+
 }

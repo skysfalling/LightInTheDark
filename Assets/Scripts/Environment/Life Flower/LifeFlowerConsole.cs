@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class LifeFlowerConsole : EntityConsole
 {
     LifeFlower flower;
     MessageEventListener begDrainEvent, midDrainEvent, nearEndEvent, endDrainEvent, deathEvent;
+
+    public TextMeshProUGUI lifeForceText;
 
     private bool overflowingMessageSent;
 
@@ -27,22 +30,23 @@ public class LifeFlowerConsole : EntityConsole
     // Update is called once per frame
     void Update()
     {
+        lifeForceText.color = flower.anim.currColor;
+        lifeForceText.text = "" + flower.lifeForce;
+
         // if decay is active, send messages
         if (flower.decayActive)
         {
-            /*
             // << UPDATE EVENT LISTENERS >>
             begDrainEvent.EventUpdate(flower.lifeForce);
             midDrainEvent.EventUpdate(flower.lifeForce);
             nearEndEvent.EventUpdate(flower.lifeForce);
             endDrainEvent.EventUpdate(flower.lifeForce);
             deathEvent.EventUpdate(flower.lifeForce);
-            */
 
             // << SEND OVERFLOWING MESSAGE >>
             if (flower.state == FlowerState.OVERFLOWING && !overflowingMessageSent)
             {
-                NewMessage("overflowing light", Color.white);
+                NewMessage("i'm overflowing!", Color.white);
                 overflowingMessageSent = true;
             }
             else if (flower.lifeForce < flower.maxLifeForce * 0.8f) { overflowingMessageSent = false; }

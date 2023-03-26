@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Level1_2 : LevelManager
 {
-    public PlayerSpawn_Hand playerSpawn;
-    public GrabHandAI endGrabHand;
 
     [Space(10)]
     public bool introComplete;
@@ -14,7 +12,6 @@ public class Level1_2 : LevelManager
     public Transform room1Center;
     public Door room1HiddenDoor;
     public List<Spawner> room1Spawners;
-
 
     [Header("Room 2")]
     public CleansingCrystal cleansingCrystal;
@@ -33,42 +30,42 @@ public class Level1_2 : LevelManager
     {
         currLifeFlower = lifeFlowers[0];
         currLifeFlower.console.SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
+    }
 
-        if (state == LevelState.INTRO) { StartCoroutine(Intro()); }
-        else if (state == LevelState.ROOM2) { Room2SavePoint(); }
-
+    public override void StartLevelFromPoint(LevelState state)
+    {
+        if (state == LevelState.ROOM2) { Room2SavePoint(); }
+        else { StartCoroutine(Intro()); }
     }
 
     void Room2SavePoint()
     {
+        // spawn player at rift
         player.transform.parent = null;
         player.transform.position = cleansingCrystal.riftSprite.transform.position;
 
+        // start transition
         uiManager.StartTransitionFadeOut();
 
         StartCoroutine(Room2());
     }
 
-
-    IEnumerator Intro(bool debug = false)
+    IEnumerator Intro()
     {
-        introComplete = false; // dont call coroutine again
-
-        gameConsole.NewMessage("Intro");
         state = LevelState.INTRO;
+        player.state = PlayerState.INACTIVE;
 
-        playerSpawn.StartSpawnRoutine(); ;
+
+        uiManager.StartTransitionFadeOut(); // start transition
+
+        playerSpawn.StartSpawnRoutine();
 
         // wait until spawned
+        yield return new WaitUntil(() => uiManager.transitionFinished);
         yield return new WaitUntil(() => playerSpawn.playerSpawned);
 
-        introComplete = true;
-
-        // if not in debug mode, continue to next room
-        if (!debug)
-        {
-            StartCoroutine(Room1());
-        }
+        // continue to next room
+        StartCoroutine(Room1());
     }
 
     IEnumerator Room1()
@@ -77,19 +74,30 @@ public class Level1_2 : LevelManager
         state = LevelState.ROOM1;
 
         #region [[ ROOM INTRO ]]
-        player.state = PlayerState.INACTIVE;
+        player.state = PlayerState.IDLE;
+        camManager.state = CameraState.ROOM_BASED;
 
+        while (Vector2.Distance(player.transform.position, currLifeFlower.transform.position) > 25)
+        {
+            yield return null;
+        }
+
+        player.state = PlayerState.INACTIVE;
         camManager.NewCustomZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // << START FLOWER DECAY >>
         StartFlowerDecay(currLifeFlower, 0.5f, flowerExclamation);
-
+        currLifeFlower.decayActive = false;
         yield return new WaitForSeconds(2);
 
-        camManager.NewCustomZoomInTarget(player.transform);
+        NewDialogue(dialogueManager.witness_start_1_2);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
 
+        camManager.NewCustomZoomInTarget(player.transform);
         yield return new WaitForSeconds(1);
+
+        currLifeFlower.decayActive = true;
         #endregion
 
         #region [[ ROOM 1 ]]
@@ -114,12 +122,16 @@ public class Level1_2 : LevelManager
 
     IEnumerator Hallway()
     {
+
         #region [[ UNLOCK DARKLIGHT HALLWAY ]]
         currLifeFlower.state = FlowerState.HEALED;
         player.state = PlayerState.INACTIVE;
 
         camManager.NewCustomZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
+
+        NewDialogue(dialogueManager.witness_end_1_2);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
 
         camManager.NewCustomZoomOutTarget(room1Center.transform);
         yield return new WaitForSeconds(2);
@@ -187,8 +199,8 @@ public class Level1_2 : LevelManager
     IEnumerator Room2()
     {
         gameConsole.NewMessage("Level 1.2.2");
-
         state = LevelState.ROOM2;
+        gameManager.levelSavePoint = LevelState.ROOM2;
 
         #region [[ ROOM 2 INTRO ]]
         player.state = PlayerState.INACTIVE;
@@ -199,7 +211,7 @@ public class Level1_2 : LevelManager
         yield return new WaitForSeconds(1);
 
         // comment on flower
-        string witnessStartcomment = dialogueManager.witness_start_1_3[0];
+        string witnessStartcomment = dialogueManager.witness_start_1_2_2[0];
         NewDialogue(witnessStartcomment);
         yield return new WaitUntil(() => !uiManager.inDialogue);
         yield return new WaitForSeconds(1);
@@ -209,7 +221,7 @@ public class Level1_2 : LevelManager
         currLifeFlower.decayActive = false;
 
         // continued comment on flower
-        List<string> continuedComment = dialogueManager.witness_start_1_3;
+        List<string> continuedComment = dialogueManager.witness_start_1_2_2;
         continuedComment.RemoveAt(0);
         NewDialogue(continuedComment, currLifeFlower.gameObject);
         yield return new WaitUntil(() => !uiManager.inDialogue);
@@ -244,31 +256,46 @@ public class Level1_2 : LevelManager
         NewTimedDialogue(dialogueManager.witness_darklightSubmit, 2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
-        player.SetSlowed(5);
+        player.SetSlowed(10);
         NewTimedDialogue(dialogueManager.witness_startSoulPanic, 2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
+
+        while (state != LevelState.COMPLETE && state != LevelState.FAIL)
+        {
+            yield return new WaitUntil(() => currLifeFlower.darklightDamage == true);
+            player.SetSlowed(10);
+
+        }
 
     }
 
     IEnumerator FailedLevelRoutine()
     {
         gameConsole.NewMessage("Level Failed");
+        state = LevelState.FAIL;
+        player.Inactive();
 
         camManager.NewCustomZoomInTarget(currLifeFlower.transform);
         NewRandomDialogue(dialogueManager.witness_onFail);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
         endGrabHand.canAttack = true;
+        camManager.state = CameraState.ROOM_BASED;
+        yield return new WaitUntil(() => endGrabHand.state == HandState.GRAB);
 
-        yield return new WaitUntil(() => endGrabHand.state == HandState.PLAYER_CAPTURED);
+        uiManager.StartTransitionFadeIn();
 
-        state = LevelState.FAIL;
+        yield return new WaitUntil(() => uiManager.transitionFinished);
+        yield return new WaitForSeconds(1);
+
+        gameManager.RestartLevelFromSavePoint();
     }
 
     IEnumerator CompletedLeveRoutine()
     {
         gameConsole.NewMessage("Level Completed");
         player.Inactive();
+        state = LevelState.COMPLETE;
 
         currLifeFlower.canSubmit = false;
         currLifeFlower.state = FlowerState.HEALED;
@@ -287,7 +314,7 @@ public class Level1_2 : LevelManager
         yield return new WaitForSeconds(1);
 
         // new dialogue
-        NewDialogue(dialogueManager.witness_end_1_3);
+        NewDialogue(dialogueManager.witness_end_1_2_2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
         // open exit door
@@ -301,7 +328,11 @@ public class Level1_2 : LevelManager
         yield return new WaitUntil(() => levelExitDoor.playerInTrigger);
 
         Debug.Log("Finished Level 1.2");
-        state = LevelState.COMPLETE;
+
+        uiManager.StartTransitionFadeIn();
+
+        yield return new WaitUntil(() => uiManager.transitionFinished);
+        yield return new WaitForSeconds(1);
 
     }
 
