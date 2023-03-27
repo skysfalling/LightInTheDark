@@ -177,13 +177,13 @@ public class PlayerInventory : MonoBehaviour
     }
 
     #region Inventory Movement ====================
-    public void ItemFollowTarget(GameObject obj, Transform target, float speed = 1, float spacing = 2)
+    public void ItemFollowTarget(GameObject itemObj, Transform target, float speed = 1, float spacing = 2)
     {
         Vector3 direction = movement.moveDirection; // get direction of target movement
 
         // << move obj to new position >> 
         Vector3 newPos = target.position - (direction * spacing); // Calculate new follower position in opposite direction of target movement
-        obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, speed * Time.deltaTime); // Move follower towards new position using Lerp
+        itemObj.GetComponent<Rigidbody2D>().MovePosition(Vector3.Lerp(itemObj.transform.position, newPos, speed * Time.deltaTime)); // Move follower towards new position using Lerp
 
     }
 
@@ -196,7 +196,7 @@ public class PlayerInventory : MonoBehaviour
         foreach (GameObject obj in inventory)
         {
             Vector3 newPos = prevFollowerPos - (direction * spacing); // Calculate new follower position in opposite direction of target movement
-            obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, speed * Time.deltaTime); // Move follower towards new position using Lerp
+            obj.GetComponent<Rigidbody2D>().MovePosition(Vector3.Lerp(obj.transform.position, newPos, speed * Time.deltaTime)); // Move follower towards new position using Lerp
 
             prevFollowerPos = obj.transform.position; // Update previous follower position to current follower position
         }
@@ -213,7 +213,7 @@ public class PlayerInventory : MonoBehaviour
         {
             float angleRadians = (currCircleAngle + (360f / inventory.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object
             Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * circleRadius, Mathf.Sin(angleRadians) * circleRadius, 0f); // Calculate new position for object
-            inventory[i].transform.position = Vector3.Lerp(inventory[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
+            inventory[i].GetComponent<Rigidbody2D>().MovePosition(Vector3.Lerp(inventory[i].transform.position, newPos, Time.deltaTime)); // Move object towards new position using Lerp
         }
     }
 
@@ -228,7 +228,7 @@ public class PlayerInventory : MonoBehaviour
         {
             float angleRadians = (currCircleAngle + (360f / inventory.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object
             Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * chargeCircleRadius, Mathf.Sin(angleRadians) * chargeCircleRadius, 0f); // Calculate new position for object
-            inventory[i].transform.position = Vector3.Lerp(inventory[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
+            inventory[i].GetComponent<Rigidbody2D>().MovePosition(Vector3.Lerp(inventory[i].transform.position, newPos, Time.deltaTime)); // Move object towards new position using Lerp
         }
     }
     #endregion

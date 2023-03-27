@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState { IDLE , MOVING , CHARGING, STUNNED, GRABBED, INACTIVE}
+public enum PlayerState { IDLE , MOVING , THROWING, CHARGING, STUNNED, GRABBED, INACTIVE}
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -39,10 +39,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Throw Ability")]
     public Transform throwParent;
     public GameObject throwObject;
-    public float throwSpeed = 20;
-    public float throwDistMultiplier = 2;
-    public float throwStateDuration = 5;
-    private bool throwStarted;
+    public Vector2 aimDirection;
+    public float throwingMoveSpeed = 10;
+    public float throwForce = 20;
+    private bool inThrow;
     [Space(5)]
     public string throwSortingLayer = "Player";
     public int throwSortingOrder = 5;
@@ -84,28 +84,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Inputs();
 
-        // throw object move to parent
-        if (throwObject != null)
-        {
-            throwParent.gameObject.SetActive(true);
 
-
-            // if not thrown yet, move object towards throw parent
-            if (throwObject.GetComponent<Item>().state == ItemState.PLAYER_INVENTORY)
-            {
-                Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, inventory.circleSpeed * Time.deltaTime);
-                throwObject.transform.position = newDirection;
-            }
-
-
-            // rotate parent and UI towards throw point
-            float rotation = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
-            throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
-        }
-        else
-        {
-            throwParent.gameObject.SetActive(false);
-        }
 
     }
 
@@ -122,7 +101,8 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = input_system.direction;
 
         // if move input down , move
-        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED && state != PlayerState.INACTIVE)
+        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED
+            && state != PlayerState.INACTIVE && state != PlayerState.THROWING)
         {
             if (moveDirection != Vector2.zero)
             {
@@ -134,22 +114,36 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // << THROW ACTION >>
+
+        if (moveDirection != Vector2.zero)
+        {
+            aimDirection = moveDirection.normalized;
+        }
+
+        // << THROW ACTION DOWN >>
         input_system.aAction.started += ctx =>
         {
-            // << THROW OBJECT >>
-            if (throwObject == null)
+            // << GET THROW OBJECT >>
+            if (throwObject == null && !inThrow)
             {
                 NewThrowObject();
+                state = PlayerState.THROWING;
             }
-            else
+        };
+
+        // << THROW ACTION UP >>
+        input_system.aAction.canceled += ctx =>
+        {
+            // << THROW OBJECT >>
+            if (throwObject != null)
             {
                 ThrowObject();
             }
 
+            state = PlayerState.IDLE;
+            throwParent.gameObject.SetActive(false);
 
         };
-
 
         // << DASH ACTION >>
         input_system.bAction.started += ctx =>
@@ -272,6 +266,33 @@ public class PlayerMovement : MonoBehaviour
                 }
                 break;
 
+            case PlayerState.THROWING:
+
+                // move player at throw move speed
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
+                rb.velocity = moveDirection * throwingMoveSpeed;
+
+                // throw object move to parent
+                if (throwObject != null)
+                {
+                    throwParent.gameObject.SetActive(true);
+
+
+                    // if not thrown yet, move object towards throw parent
+                    if (throwObject.GetComponent<Item>().state == ItemState.PLAYER_INVENTORY)
+                    {
+                        Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, inventory.circleSpeed * Time.deltaTime);
+                        throwObject.transform.position = newDirection;
+                    }
+
+
+                    // rotate parent and UI towards throw point
+                    float rotation = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+                    throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
+                }
+                
+                break;
+
             default:
                 rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
                 break;
@@ -294,21 +315,18 @@ public class PlayerMovement : MonoBehaviour
 
     public void ThrowObject()
     {
-        if (throwObject != null && !throwStarted)
+        if (throwObject != null && !inThrow)
         {
             throwObject.transform.parent = null;
 
-            StartCoroutine(ThrowObject(throwObject, moveDirection * throwDistMultiplier, throwSpeed, throwStateDuration));
+            StartCoroutine(ThrowObject(throwObject, aimDirection, throwForce));
 
         }
     }
 
-    public IEnumerator ThrowObject(GameObject obj, Vector2 direction, float speed, float duration)
+    public IEnumerator ThrowObject(GameObject obj, Vector2 direction, float force)
     {
-        throwStarted = true;
-
-        float elapsed = 0f;
-        Vector2 startPos = obj.transform.position;
+        inThrow = true;
 
         Debug.Log("Throw " + obj.name);
         obj.GetComponent<Item>().state = ItemState.THROWN;
@@ -318,27 +336,14 @@ public class PlayerMovement : MonoBehaviour
         inventory.RemoveItemToThrow(obj);
         obj.transform.parent = null;
 
-        // move object 
-        while (elapsed < duration && obj != null)
-        {
-            obj.transform.position = Vector2.Lerp(obj.transform.position, startPos + direction, speed * Time.deltaTime);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+        obj.GetComponent<Item>().SetSortingOrder(throwSortingOrder, throwSortingLayer);
+        obj.GetComponent<Rigidbody2D>().AddForce(direction * force, ForceMode2D.Impulse);
 
-
-
-        // object is destroyed if submitted, so check for this
-        if (obj != null)
-        {
-            obj.transform.position = startPos + direction; // solidify end position
-            obj.GetComponent<Item>().SetSortingOrder(throwSortingOrder, throwSortingLayer);
-
-        }
-
+        yield return new WaitForSeconds(0.25f); // wait for item to get out of player's range -> to stop immediate pickup 
+ 
         throwObject = null; // set throw object to null
 
-        throwStarted = false;
+        inThrow = false;
     }
     #endregion
 

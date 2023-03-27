@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1706612825949577289}
   - component: {fileID: 5588498766445784327}
   - component: {fileID: 47953631277150866}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: light_orb
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   state: 0
-  triggerSize: 1.25
+  triggerSize: 2
   lifeForce: 2
   default_lightRange: 5
   default_lightIntensity: 5
@@ -215,11 +215,11 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.81, y: 4.02}
+  m_Offset: {x: -0.015014648, y: 0}
+  m_Size: {x: 0.9688721, y: 4.02}
   m_Direction: 0
 --- !u!50 &47953631277150866
 Rigidbody2D:
