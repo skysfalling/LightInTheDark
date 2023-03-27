@@ -61,7 +61,7 @@ public class LevelManager : MonoBehaviour
 
         startTime = Time.time;
 
-        currLifeFlower = lifeFlowers[0];
+
     }
 
     // Update is called once per frame

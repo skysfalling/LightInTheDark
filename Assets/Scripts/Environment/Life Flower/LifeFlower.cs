@@ -28,13 +28,18 @@ public class LifeFlower : SubmitItemObject
     [Header("Flower Lines")]
     public List<string> damageReactions;
 
+    public void Awake()
+    {
+        console = GetComponent<LifeFlowerConsole>();
+        anim = GetComponent<LifeFlowerAnimator>();
+    }
+
     // Start is called before the first frame update
     new void Start()
     {
         base.Start();
 
-        console = GetComponent<LifeFlowerConsole>();
-        anim = GetComponent<LifeFlowerAnimator>();
+
 
         StartCoroutine(Decay());
 

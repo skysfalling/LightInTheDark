@@ -83,6 +83,8 @@ public class CameraManager : MonoBehaviour
 
     public void MoveCamToClosestRoom()
     {
+        if (rooms.Count == 0) { return; }
+
         GameObject closestRoom = rooms[0];
         float closestDistance = Mathf.Infinity;
 

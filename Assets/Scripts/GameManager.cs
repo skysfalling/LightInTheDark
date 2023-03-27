@@ -83,8 +83,15 @@ public class GameManager : MonoBehaviour
         while (levelManager == null)
         {
             levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+
             yield return null;
         }
+
+        levelManager.gameConsole = GetComponent<GameConsole>();
+        levelManager.soundManager = GetComponent<SoundManager>();
+        levelManager.dialogueManager = GetComponent<DialogueManager>();
+        levelManager.camManager = GetComponentInChildren<CameraManager>();
+        levelManager.uiManager = GetComponentInChildren<UIManager>();
 
         // set uiManager
         uiManager.levelManager = levelManager;
