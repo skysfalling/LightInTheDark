@@ -137,6 +137,7 @@ public class LevelManager : MonoBehaviour
     {
         foreach (Spawner spawner in spawners)
         {
+            if (spawner == null) { continue; }
             spawner.StartSpawn();
         }
     }

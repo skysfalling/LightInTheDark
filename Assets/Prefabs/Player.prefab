@@ -651,8 +651,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxInventorySize: 5
   inventory: []
-  speed: 50
-  spacing: 0.5
+  speed: 20
+  spacing: 1
   circleSpeed: 100
   circleSpacing: 30
   circleRadius: 10
@@ -807,7 +807,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.006389767, y: 0.0077050775}
+  m_Offset: {x: 0.006, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -818,7 +818,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.2263611, y: 0.30474243}
+  m_Size: {x: 0.25, y: 0.4}
   m_EdgeRadius: 0
 --- !u!50 &7522916275895387746
 Rigidbody2D:

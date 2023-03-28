@@ -225,14 +225,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   triggerParent: {fileID: 6430618533842910939}
-  playerInTrigger: 1
+  playerInTrigger: 0
   playerIsCollecting: 0
-  triggerSize: 25
+  triggerSize: 10
   playerInCenter: 0
   playerCenterRange: 4
-  submissionTypes: 00000000010000000200000003000000
+  submissionTypes: 00000000
   submissionOverflow: []
-  circleSpeed: 10
+  canSubmit: 0
+  submittedAmount: 0
+  maxSubmissions: 1
+  overflowing: 0
+  mainLight: {fileID: 0}
+  glowLight: {fileID: 0}
+  glowLightIntensity: {x: 0.5, y: 2}
+  glowLightRange: {x: 10, y: 50}
+  unlockDoor: {fileID: 0}
+  circleSpeed: 100
   circleSpacing: 1
   circleRadius: 15
 --- !u!212 &6430618533842910938

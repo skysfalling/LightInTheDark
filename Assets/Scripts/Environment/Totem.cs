@@ -21,6 +21,17 @@ public class Totem : MonoBehaviour
     public List<ItemType> submissionTypes;
     [Space(10)]
     public List<GameObject> submissionOverflow = new List<GameObject>();
+    public bool canSubmit;
+    public int submittedAmount;
+    public int maxSubmissions = 1;
+    public bool overflowing;
+
+    [Header("Lights")]
+    public Light2D mainLight;
+    public Light2D glowLight;
+    public Vector2 glowLightIntensity;
+    public Vector2 glowLightRange;
+
 
     [Header("Door Unlock")]
     public Door unlockDoor;
@@ -35,6 +46,7 @@ public class Totem : MonoBehaviour
     {
         // << INIT VALUES >>
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
+        canSubmit = true;
     }
 
 
@@ -42,11 +54,6 @@ public class Totem : MonoBehaviour
     void Update()
     {
         playerInTrigger = IsPlayerInTrigger();
-
-        if (submissionOverflow.Count > 0 && unlockDoor != null)
-        {
-            unlockDoor.locked = false;
-        }
 
         // if player is in center, collect all items
         if (Vector2.Distance(player.transform.position, triggerParent.position) < playerCenterRange)
@@ -68,8 +75,19 @@ public class Totem : MonoBehaviour
             SubmissionManager();
         }
 
+        // update overflow
+        if (submittedAmount >= maxSubmissions) { overflowing = true; }
+        else { overflowing = false; }
 
+        // unlock door
+        unlockDoor.locked = !overflowing;
 
+        // target percentage + 0.1 percent
+        float targetIntensity = Mathf.Lerp(glowLightIntensity.x, glowLightIntensity.y, (float)submittedAmount / (float)maxSubmissions);
+        glowLight.intensity = Mathf.Lerp(glowLight.intensity, targetIntensity, Time.deltaTime);
+
+        float targetRange = Mathf.Lerp(glowLightRange.x, glowLightRange.y, (float)submittedAmount / (float)maxSubmissions);
+        glowLight.pointLightOuterRadius = Mathf.Lerp(glowLight.pointLightOuterRadius, targetRange, Time.deltaTime);
 
     }
 
@@ -120,7 +138,44 @@ public class Totem : MonoBehaviour
         {
             // circle overflow items
             CircleAroundTransform(submissionOverflow);
+
+            if (canSubmit && submittedAmount != maxSubmissions)
+            {
+                StartCoroutine(SubmitItem());
+            }
         }
+    }
+
+
+    public IEnumerator SubmitItem()
+    {
+
+        if (submissionOverflow.Count == 0) { yield return null; }
+
+        canSubmit = false;
+
+        // get item
+        Item item = submissionOverflow[0].GetComponent<Item>();
+
+        item.transform.parent = transform; // set parent
+
+        // << MOVE ITEM TO CENTER >>
+        while (Vector2.Distance(item.transform.position, transform.position) > 5f)
+        {
+            item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, 2 * Time.deltaTime);
+        }
+
+        submissionOverflow.Remove(item.gameObject);
+
+        submittedAmount++;
+
+        // destroy item
+        player.inventory.Remove(item.gameObject);
+        item.Destroy();
+
+        yield return new WaitForSeconds(1);
+
+        canSubmit = true;
     }
 
     public bool IsPlayerInTrigger()
@@ -181,6 +236,7 @@ public class Totem : MonoBehaviour
             float angleRadians = (currCircleAngle + (360f / items.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object
             Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * circleRadius, Mathf.Sin(angleRadians) * circleRadius, 0f); // Calculate new position for object
             items[i].transform.position = Vector3.Lerp(items[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
+
         }
     }
 

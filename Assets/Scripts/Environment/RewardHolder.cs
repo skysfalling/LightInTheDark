@@ -36,7 +36,7 @@ public class RewardHolder : MonoBehaviour
         {
             DestroyReward();
         }
-        else if (spawnedObject.GetComponent<Item>().state == ItemState.PLAYER_INVENTORY)
+        else if (spawnedObject == null || spawnedObject.GetComponent<Item>().state == ItemState.PLAYER_INVENTORY)
         {
             rewardCollected = true;
         }

@@ -8,17 +8,14 @@ public class Level1_3 : LevelManager
     [Space(10)]
     public bool introComplete;
 
+
+
     [Header("Room 1")]
-    public float room1TimeCountdown = 180;
-    public Transform room1Center;
-    public Door room1HiddenDoor;
-    public List<Spawner> room1Spawners;
+    public List<Totem> room1Totems;
 
     [Header("Room 2")]
-    public CleansingCrystal cleansingCrystal;
-    public List<Spawner> room2Spawners;
-    public float room2TimeCountdown = 180;
-    public Door levelExitDoor;
+    public Transform room2SavePoint;
+    public float room2TimeCountdown = 120;
 
     [Header("Script Lines")]
     public float messageDelay = 2;
@@ -45,7 +42,7 @@ public class Level1_3 : LevelManager
     {
         // spawn player at rift
         player.transform.parent = null;
-        player.transform.position = cleansingCrystal.riftSprite.transform.position;
+        player.transform.position = room2SavePoint.position;
 
         // start transition
         uiManager.StartTransitionFadeOut();
@@ -57,7 +54,6 @@ public class Level1_3 : LevelManager
     {
         state = LevelState.INTRO;
         player.state = PlayerState.INACTIVE;
-
 
         uiManager.StartTransitionFadeOut(); // start transition
 
@@ -75,10 +71,65 @@ public class Level1_3 : LevelManager
     {
         gameConsole.NewMessage("Level 1.3.1");
         state = LevelState.ROOM1;
+        player.state = PlayerState.INACTIVE;
 
-        #region [[ ROOM INTRO ]]
+        gameManager.levelSavePoint = LevelState.ROOM1;
+
+        // zoom in on totem
+        camManager.NewCustomZoomInTarget(room1Totems[0].transform);
+
+        // play Witness line introducing totem and throwing mechanic
+        NewDialogue(dialogueManager.witness_totem_introduction);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
+        yield return new WaitForSeconds(1);
+
+        camManager.NewCustomZoomOutTarget(room1Totems[0].transform);
+        yield return new WaitForSeconds(2);
+
+        // play Witness line introducing totem and throwing mechanic
+        NewDialogue(dialogueManager.witness_throwing_introduction);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
+
+        player.Idle();
+        camManager.state = CameraState.ROOM_BASED;
+
+        // throw orb at the totem to unlock door
+        // wait until totem is activated
+        yield return new WaitUntil(() => room1Totems[0].overflowing);
+
+        player.Inactive();
+
+        // zoom in on opening door
+        camManager.NewCustomZoomInTarget(room1Totems[0].transform);
+        yield return new WaitForSeconds(2);
+
+        // zoom in on opening door
+        camManager.NewCustomZoomInTarget(room1Totems[0].unlockDoor.transform);
+        yield return new WaitForSeconds(2);
+
+        // play Witness line demonstrating door unlocks
+        NewDialogue(dialogueManager.witness_totem_door_introduction);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
+
+        player.Idle();
+        camManager.state = CameraState.ROOM_BASED;
+
+        // move to second part
+        // wait for player to throw orbs at corresponding totems
+        yield return new WaitUntil(() => room1Totems[1].overflowing && room1Totems[2].overflowing);
+
+        // end of Room 1
+        StartCoroutine(Room2());
+    }
+
+    IEnumerator Room2()
+    {
+        state = LevelState.ROOM2;
         player.state = PlayerState.IDLE;
         camManager.state = CameraState.ROOM_BASED;
+
+        gameManager.levelSavePoint = LevelState.ROOM2;
+
 
         while (Vector2.Distance(player.transform.position, currLifeFlower.transform.position) > 25)
         {
@@ -86,163 +137,22 @@ public class Level1_3 : LevelManager
         }
 
         player.state = PlayerState.INACTIVE;
+
+        // focus on flower
         camManager.NewCustomZoomInTarget(currLifeFlower.transform);
-        yield return new WaitForSeconds(2);
 
-        // << START FLOWER DECAY >>
-        StartFlowerDecay(currLifeFlower, 0.5f, flowerExclamation);
-        currLifeFlower.decayActive = false;
-        yield return new WaitForSeconds(2);
-
-        NewDialogue(dialogueManager.witness_start_1_2);
+        // play Witness line
+        NewDialogue(dialogueManager.witness_flower_introduction);
         yield return new WaitUntil(() => !uiManager.inDialogue);
-
-        camManager.NewCustomZoomInTarget(player.transform);
-        yield return new WaitForSeconds(1);
-
-        currLifeFlower.decayActive = true;
-        #endregion
-
-        #region [[ ROOM 1 ]]
-
-        camManager.state = CameraState.ROOM_BASED;
-        player.state = PlayerState.IDLE;
-        EnableSpawners(room1Spawners);
-
-        // flower starting lines
-        currLifeFlower.console.MessageList(flower_lines1, messageDelay);
-
-        // wait until flower is overflowing 
-        yield return new WaitUntil(() => (currLifeFlower.IsOverflowing() || currLifeFlower.IsDead()) );
-
-        // if dead , exit routine
-        if (currLifeFlower.IsDead()) { StartCoroutine(FailedLevelRoutine()); }
-
-        // else continue on
-        else { StartCoroutine(Hallway()); }
-        #endregion
-    }
-
-    IEnumerator Hallway()
-    {
-
-        #region [[ UNLOCK DARKLIGHT HALLWAY ]]
-        currLifeFlower.state = FlowerState.HEALED;
-        player.state = PlayerState.INACTIVE;
-
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
-        yield return new WaitForSeconds(2);
-
-        NewDialogue(dialogueManager.witness_end_1_2);
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-
-        camManager.NewCustomZoomOutTarget(room1Center.transform);
-        yield return new WaitForSeconds(2);
-
-        // destroy items
-        playerInventory.Destroy();
-        DestroySpawners(room1Spawners);
-
-        // open hidden door
-        room1HiddenDoor.locked = false;
-
-        // shake camera
-        camManager.ShakeCamera(2.5f, 0.2f);
-        camManager.NewCustomZoomOutTarget(room1HiddenDoor.transform);
-        yield return new WaitForSeconds(2);
-
-        camManager.NewCustomZoomInTarget(player.transform);
-        yield return new WaitForSeconds(1);
 
         player.state = PlayerState.IDLE;
         camManager.state = CameraState.ROOM_BASED;
-        #endregion
+        StartFlowerDecay(currLifeFlower, 0.95f, flowerExclamation);
 
-        #region [[ INTRODUCE CLEANSING ]]
-
-        // << DARKLIGHT WITNES DIALOGUE >>
-        yield return new WaitUntil(() => playerInventory.GetTypeCount(ItemType.DARKLIGHT) > 0);
-        NewDialogue(dialogueManager.witness_darkLightTip, playerInventory.GetFirstItemOfType(ItemType.DARKLIGHT));
-        player.state = PlayerState.INACTIVE;
-
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-        player.state = PlayerState.IDLE;
-        camManager.state = CameraState.ROOM_BASED;
-
-        // << SHOW CLEANSING PROCESS >>
-        yield return new WaitUntil(() => cleansingCrystal.playerInTrigger);
-
-        // move player to center of rift
-        player.state = PlayerState.INACTIVE;
-        player.transform.position = cleansingCrystal.triggerParent.position;
-
-        // focus on crystal
-        camManager.NewCustomTarget(cleansingCrystal.transform);
-
-        // wait until conversion is finished
-        yield return new WaitUntil(() => cleansingCrystal.itemConverted);
-        yield return new WaitForSeconds(cleansingCrystal.conversionDelay + 1);
-
-        // let player move
-        camManager.state = CameraState.ROOM_BASED;
-        player.state = PlayerState.IDLE;
-
-        // golden orb dialogue
-        yield return new WaitUntil(() => playerInventory.GetTypeCount(ItemType.GOLDEN) > 0);
-        NewDialogue(dialogueManager.witness_goldenOrbTip, playerInventory.GetFirstItemOfType(ItemType.GOLDEN));
-        player.state = PlayerState.INACTIVE;
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-        yield return new WaitForSeconds(0.5f);
-
-        #endregion
-
-        StartCoroutine(Room2());
-    }
-
-    IEnumerator Room2()
-    {
-        gameConsole.NewMessage("Level 1.2.2");
-        state = LevelState.ROOM2;
-        gameManager.levelSavePoint = LevelState.ROOM2;
-
-        #region [[ ROOM 2 INTRO ]]
-        player.state = PlayerState.INACTIVE;
-
-        // << NEW LIFE FLOWER >>
-        currLifeFlower = lifeFlowers[1];
-        camManager.NewCustomZoomOutTarget(currLifeFlower.transform);
-        yield return new WaitForSeconds(1);
-
-        // comment on flower
-        string witnessStartcomment = dialogueManager.witness_start_1_2_2[0];
-        NewDialogue(witnessStartcomment);
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-        yield return new WaitForSeconds(1);
-
-        // << START FLOWER DECAY >>
-        StartFlowerDecay(currLifeFlower, 0.75f, flowerExclamation);
-        currLifeFlower.decayActive = false;
-
-        // continued comment on flower
-        List<string> continuedComment = dialogueManager.witness_start_1_2_2;
-        continuedComment.RemoveAt(0);
-        NewDialogue(continuedComment, currLifeFlower.gameObject);
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-
-        // move camera to player
-        camManager.state = CameraState.ROOM_BASED;
-        EnableSpawners(room2Spawners);
-
-        yield return new WaitForSeconds(1);
-        #endregion
-
-        currLifeFlower.decayActive = true;
-        player.state = PlayerState.IDLE;
-
+        // begin encounter and timer countdown from 120
         StartCountdown(room2TimeCountdown);
-        StartCoroutine(DamageToLifeFlowerReaction());
 
-        // wait until time is up
+        // wait until countdown == 0 to win, if flower death restart from last save
         yield return new WaitUntil(() => (countdownTimer <= 0 || currLifeFlower.IsDead()));
 
         // if dead , exit routine
@@ -311,26 +221,14 @@ public class Level1_3 : LevelManager
         camManager.NewCustomZoomOutTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
-        // destroy items
-        playerInventory.Destroy();
-        DestroySpawners(room2Spawners);
-        yield return new WaitForSeconds(1);
-
         // new dialogue
         NewDialogue(dialogueManager.witness_end_1_2_2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
-        // open exit door
-        levelExitDoor.locked = false;
-        camManager.NewCustomZoomInTarget(levelExitDoor.transform);
-        yield return new WaitForSeconds(2);
-
         camManager.state = CameraState.ROOM_BASED;
         player.Idle();
 
-        yield return new WaitUntil(() => levelExitDoor.playerInTrigger);
-
-        Debug.Log("Finished Level 1.2");
+        Debug.Log("Finished Level 1.3");
 
         uiManager.StartTransitionFadeIn();
 

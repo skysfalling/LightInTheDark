@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21e95b4771671df4ebc426cc82f56b77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canSpawn: 1
+  spawnOnStart: 0
   prefab: {fileID: 7063588652522643066, guid: e872c7e8e97db2942aed451f22747e85, type: 3}
   spawnedObject: {fileID: 0}
   spawnDelay: 20
@@ -118,8 +120,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1479977113
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 589773182, guid: f4a73572ac3118f4ca80561d7f514938, type: 3}
   m_Color: {r: 0.3729716, g: 0.19339621, b: 1, a: 1}

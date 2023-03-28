@@ -20,6 +20,10 @@ public class DialogueManager : MonoBehaviour
     public List<string> witness_end_1_2_2;
 
     [Header(" ==== Level 1.3 ==== ")]
+    public List<string> witness_totem_introduction;
+    public List<string> witness_throwing_introduction;
+    public List<string> witness_totem_door_introduction;
+    public List<string> witness_flower_introduction;
 
 
     [Header("General")]

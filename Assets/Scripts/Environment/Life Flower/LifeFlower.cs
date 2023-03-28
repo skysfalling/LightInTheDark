@@ -142,7 +142,7 @@ public class LifeFlower : SubmitItemObject
 
         // destroy item
         player.inventory.Remove(item.gameObject);
-        Destroy(item.gameObject);
+        item.Destroy();
 
         yield return new WaitForSeconds(1);
 
