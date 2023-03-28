@@ -22,6 +22,9 @@ public class Totem : MonoBehaviour
     [Space(10)]
     public List<GameObject> submissionOverflow = new List<GameObject>();
 
+    [Header("Door Unlock")]
+    public Door unlockDoor;
+
     [Header("Circle Object")]
     private float currCircleAngle = 0f; // Current angle of rotation
     public float circleSpeed = 10f; // Speed of rotation
@@ -40,6 +43,10 @@ public class Totem : MonoBehaviour
     {
         playerInTrigger = IsPlayerInTrigger();
 
+        if (submissionOverflow.Count > 0 && unlockDoor != null)
+        {
+            unlockDoor.locked = false;
+        }
 
         // if player is in center, collect all items
         if (Vector2.Distance(player.transform.position, triggerParent.position) < playerCenterRange)
@@ -60,6 +67,9 @@ public class Totem : MonoBehaviour
         {
             SubmissionManager();
         }
+
+
+
 
     }
 

@@ -43,8 +43,8 @@ public class PlayerInventory : MonoBehaviour
     void FixedUpdate()
     {
         // << STATE MACHINE >>
-        //if (movement.state == PlayerState.MOVING) { InventoryFollowPlayer(); }
-        if (movement.state == PlayerState.CHARGING) { InventoryChargeRadius(); }
+        if (movement.state == PlayerState.MOVING) { InventoryFollowPlayer(); }
+        else if (movement.state == PlayerState.CHARGING) { InventoryChargeRadius(); }
         else { InventoryCirclePlayer(); }
 
     }
