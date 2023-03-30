@@ -162,9 +162,9 @@ public class Totem : MonoBehaviour
 
         yield return new WaitForSeconds(decay_speed);
 
-
         lifeForce--;
-        
+
+        StartCoroutine(Decay());
     }
 
     public IEnumerator SubmitItem()

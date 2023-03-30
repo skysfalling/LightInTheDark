@@ -111,6 +111,7 @@ public class LifeFlower : SubmitItemObject
     {
 
         if (submissionOverflow.Count == 0) { yield return null; }
+        if (submissionOverflow[0] == null) { yield return null; }
 
         canSubmit = false;
 
