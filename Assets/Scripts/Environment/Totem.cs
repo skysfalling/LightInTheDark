@@ -17,14 +17,21 @@ public class Totem : MonoBehaviour
     public bool playerInCenter;
     public float playerCenterRange = 2;
 
+    [Header("Life Force")]
+    public bool overflowing;
+    public int lifeForce = 60;
+    public int maxLifeForce = 60;
+    public int deathAmount = -10;
+
+    [Space(10)]
+    public bool decayActive;
+    public float decay_speed = 1;
+
     [Header("Submission")]
     public List<ItemType> submissionTypes;
     [Space(10)]
     public List<GameObject> submissionOverflow = new List<GameObject>();
     public bool canSubmit;
-    public int submittedAmount;
-    public int maxSubmissions = 1;
-    public bool overflowing;
 
     [Header("Lights")]
     public Light2D mainLight;
@@ -34,7 +41,7 @@ public class Totem : MonoBehaviour
 
 
     [Header("Door Unlock")]
-    public Door unlockDoor;
+    public List<Door> unlockDoors;
 
     [Header("Circle Object")]
     private float currCircleAngle = 0f; // Current angle of rotation
@@ -47,6 +54,9 @@ public class Totem : MonoBehaviour
         // << INIT VALUES >>
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
         canSubmit = true;
+
+        StartCoroutine(Decay());
+
     }
 
 
@@ -76,17 +86,17 @@ public class Totem : MonoBehaviour
         }
 
         // update overflow
-        if (submittedAmount >= maxSubmissions) { overflowing = true; }
+        if (lifeForce > maxLifeForce) { overflowing = true; }
         else { overflowing = false; }
 
         // unlock door
-        unlockDoor.locked = !overflowing;
+        LockDoors(!overflowing);
 
         // target percentage + 0.1 percent
-        float targetIntensity = Mathf.Lerp(glowLightIntensity.x, glowLightIntensity.y, (float)submittedAmount / (float)maxSubmissions);
+        float targetIntensity = Mathf.Lerp(glowLightIntensity.x, glowLightIntensity.y, (float)lifeForce / (float)maxLifeForce);
         glowLight.intensity = Mathf.Lerp(glowLight.intensity, targetIntensity, Time.deltaTime);
 
-        float targetRange = Mathf.Lerp(glowLightRange.x, glowLightRange.y, (float)submittedAmount / (float)maxSubmissions);
+        float targetRange = Mathf.Lerp(glowLightRange.x, glowLightRange.y, (float)lifeForce / (float)maxLifeForce);
         glowLight.pointLightOuterRadius = Mathf.Lerp(glowLight.pointLightOuterRadius, targetRange, Time.deltaTime);
 
     }
@@ -139,13 +149,23 @@ public class Totem : MonoBehaviour
             // circle overflow items
             CircleAroundTransform(submissionOverflow);
 
-            if (canSubmit && submittedAmount != maxSubmissions)
+            if (canSubmit && !overflowing)
             {
                 StartCoroutine(SubmitItem());
             }
         }
     }
 
+    public IEnumerator Decay()
+    {
+        if (decay_speed <= 0) { yield return null; }
+
+        yield return new WaitForSeconds(decay_speed);
+
+
+        lifeForce--;
+        
+    }
 
     public IEnumerator SubmitItem()
     {
@@ -167,7 +187,7 @@ public class Totem : MonoBehaviour
 
         submissionOverflow.Remove(item.gameObject);
 
-        submittedAmount++;
+        lifeForce += item.lifeForce;
 
         // destroy item
         player.inventory.Remove(item.gameObject);
@@ -176,6 +196,15 @@ public class Totem : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         canSubmit = true;
+    }
+
+    public void LockDoors(bool enabled)
+    {
+        foreach (Door door in unlockDoors)
+        {
+            if (door == null) { continue; }
+            door.locked = enabled;
+        }
     }
 
     public bool IsPlayerInTrigger()

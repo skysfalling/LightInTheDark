@@ -89,7 +89,7 @@ public class LifeFlower : SubmitItemObject
                     // add to overflow
                     submissionOverflow.Add(inventory[i]);
 
-                    player.inventory.Remove(inventory[i]);
+                    player.RemoveItem(inventory[i]);
                 }
             }
         }

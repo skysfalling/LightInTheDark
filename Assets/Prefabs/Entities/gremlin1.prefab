@@ -248,7 +248,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -373167607, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
@@ -332,7 +332,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_Sprite: {fileID: 1969495153, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -416,7 +416,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 2
   m_Sprite: {fileID: -406729819, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
@@ -556,7 +556,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_Sprite: {fileID: 1882086940, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -649,18 +649,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be2be498d789c5545bae64e53fe647de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageObject: {fileID: 7374348900795424138}
+  messageParent: {fileID: 7374348900795424138}
   textMesh: {fileID: 1287719572018211289}
-  testMessage: 1
-  test: testing the messages
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  msgFadeInDuration: 1
+  msgStayDuration: 1
+  msgFadeOutDuration: 5
+  flowerCommand: 102
+  flowerColor: {r: 1, g: 0, b: 1, a: 1}
   lightCommand: 108
   lightColor: {r: 0, g: 1, b: 1, a: 1}
   darkCommand: 100
   darkColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  maxMessages: 1
-  line_spacing: 10
-  messageMoveSpeed: 1
-  messageFadeDuration: 5
+  goldCommand: 103
+  goldColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   generalMessageList: []
   saidChaseQuip: 0
   chase_quips:
@@ -843,7 +845,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4494537454904535216, guid: 1518c3ba06b54ec4b8726fc951de19f5, type: 3}
       propertyPath: m_fontSize
-      value: 8
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4494537454904535216, guid: 1518c3ba06b54ec4b8726fc951de19f5, type: 3}
       propertyPath: m_margin.z

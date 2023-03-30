@@ -72,6 +72,8 @@ public class SubmitItemObject : MonoBehaviour
                 {
                     // add to overflow
                     submissionOverflow.Add(inventory[i]);
+
+                    player.RemoveItem(item.gameObject);
                 }
             }
         }

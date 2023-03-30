@@ -104,7 +104,7 @@ public class Level1_3 : LevelManager
         yield return new WaitForSeconds(2);
 
         // zoom in on opening door
-        camManager.NewCustomZoomInTarget(room1Totems[0].unlockDoor.transform);
+        camManager.NewCustomZoomInTarget(room1Totems[0].unlockDoors[0].transform);
         yield return new WaitForSeconds(2);
 
         // play Witness line demonstrating door unlocks

@@ -5,7 +5,7 @@ using TMPro;
 
 public class EntityConsole : MonoBehaviour
 {
-    public GameObject massageParent;
+    public GameObject messageParent;
     public TextMeshProUGUI textMesh;
 
     [Space(10)]
@@ -36,7 +36,7 @@ public class EntityConsole : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        massageParent.SetActive(false);
+        messageParent.SetActive(false);
     }
 
     public void NewMessage(string input_text)
@@ -129,7 +129,7 @@ public class EntityConsole : MonoBehaviour
 
     IEnumerator FadeText(TextMeshProUGUI text, float fadeInDuration, float stayDuration, float fadeOutDuration)
     {
-        massageParent.SetActive(true);
+        messageParent.SetActive(true);
 
         // Get the initial color of the text
         Color initialColor = text.color;
@@ -165,7 +165,7 @@ public class EntityConsole : MonoBehaviour
         }
 
         // Disable the text game object once it's completely faded out
-        massageParent.SetActive(false);
+        messageParent.SetActive(false);
     }
 
     // decodes color commands by checking the character before '(' => y( this turns yellow )
