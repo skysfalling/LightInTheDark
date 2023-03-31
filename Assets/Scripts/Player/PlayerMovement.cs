@@ -161,59 +161,7 @@ public class PlayerMovement : MonoBehaviour
                 struggleCount = 0;
             }
         };
-
-
-
-
-        /*
-        // << MOVE >>
-        // clamp velocity when button is pressed down
-        if (Input.GetMouseButtonDown(0))
-        {
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
-        }
-
-        var mousePos = Input.mousePosition;
-        mousePos.z = -Camera.main.transform.position.z; // select distance in units from the camera
-
-
-        //aimDirection = Camera.main.ScreenToWorldPoint(mousePos);
-        //aimDirection.z = transform.position.z;
-
-        // main input
-        if (Input.GetMouseButton(0))
-        {
-            inputIsDown = true;
-
-
-        }
-        else { inputIsDown = false; }
-
-
-        // << THROW >>
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (throwObject == null)
-            {
-                NewThrowObject();
-            }
-            else
-            {
-                ThrowObject();
-            }
-        }
         
-
-        // << STRUGGLE >>
-        if (state == PlayerState.GRABBED && Input.GetMouseButtonDown(0))
-        {
-            struggleCount++;
-        }
-        else if (state != PlayerState.GRABBED)
-        {
-            struggleCount = 0;
-        }
-        */
     }
 
     public void StateMachine()
@@ -246,6 +194,11 @@ public class PlayerMovement : MonoBehaviour
             isDashing = false;
             speed = defaultSpeed;
         }
+
+        // << DISABLE COLLIDER >>
+        if (state == PlayerState.GRABBED) { GetComponent<BoxCollider2D>().enabled = false; }
+        else { GetComponent<BoxCollider2D>().enabled = true; }
+
 
         switch (state)
         {
@@ -292,7 +245,6 @@ public class PlayerMovement : MonoBehaviour
                 }
                 
                 break;
-
             default:
                 rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
                 break;
