@@ -155,7 +155,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
@@ -261,7 +261,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_Sprite: {fileID: -6598857455131789522, guid: 03ba53e07f615b74cbbdb813b457a5ef, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -569,7 +569,7 @@ GameObject:
   - component: {fileID: 7522916275895387676}
   - component: {fileID: 7522916275895387744}
   - component: {fileID: 4979831375598504414}
-  - component: {fileID: 7522916275895387677}
+  - component: {fileID: 2526622508162495197}
   - component: {fileID: 7522916275895387746}
   - component: {fileID: 7522916275895387747}
   m_Layer: 8
@@ -651,13 +651,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxInventorySize: 5
   inventory: []
+  inventoryRange: 50
   speed: 20
   spacing: 1
   circleSpeed: 100
   circleSpacing: 30
-  circleRadius: 10
-  chargeCircleSpeed: 10
-  chargeCircleRadius: 0
+  circleRadius: 5
 --- !u!114 &7522916275895387744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -794,8 +793,8 @@ MonoBehaviour:
       m_Action: B
       m_Flags: 0
     m_Flags: 0
---- !u!61 &7522916275895387677
-BoxCollider2D:
+--- !u!70 &2526622508162495197
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -807,19 +806,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.006, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.48, y: 0.48}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.4}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0.007904052, y: 0}
+  m_Size: {x: 0.19580483, y: 0.3639567}
+  m_Direction: 0
 --- !u!50 &7522916275895387746
 Rigidbody2D:
   serializedVersion: 4
@@ -991,7 +980,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: c6a98392e3bceb7499e007413d1384ec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1075,7 +1064,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 43cdbc7104d09ff41b1dafe66c669a25, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

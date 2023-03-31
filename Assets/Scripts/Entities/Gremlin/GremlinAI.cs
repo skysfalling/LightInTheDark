@@ -332,7 +332,7 @@ public class GremlinAI : MonoBehaviour
         Gizmos.color = Color.green;
         if (idleZone)
             Gizmos.DrawWireSphere(idleZone.position, idleZoneRadius);
-
+        
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, chaseRadius);
 

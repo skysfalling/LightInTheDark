@@ -55,7 +55,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5308805662339775830}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0000009536743, y: -10.000001, z: 0}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -110,12 +110,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edd77569638bb484babb2f1a89ce81c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  locked: 1
+  locked: 0
   unlockedByPlayer: 1
   lockBehindPlayer: 0
   playerPassedThrough: 0
   doorTrigger: {fileID: 8256338138929857819}
-  doorTriggerSize: {x: 10, y: 25}
+  doorTriggerSize: {x: 20, y: 25}
   playerInTrigger: 0
   door: {fileID: 6399588271573385543}
   doorCloseTarget: {fileID: 6283228197751198008}

@@ -24,6 +24,9 @@ public class Totem : MonoBehaviour
     public int deathAmount = -10;
 
     [Space(10)]
+    public int lifeForceSubmitAmount = 1;
+
+    [Space(10)]
     public bool decayActive;
     public float decay_speed = 1;
 
@@ -90,7 +93,7 @@ public class Totem : MonoBehaviour
         else { overflowing = false; }
 
         // unlock door
-        LockDoors(!overflowing);
+        UnlockDoors(overflowing);
 
         // target percentage + 0.1 percent
         float targetIntensity = Mathf.Lerp(glowLightIntensity.x, glowLightIntensity.y, (float)lifeForce / (float)maxLifeForce);
@@ -162,7 +165,10 @@ public class Totem : MonoBehaviour
 
         yield return new WaitForSeconds(decay_speed);
 
-        lifeForce--;
+        if (lifeForce > 0)
+        {
+            lifeForce--;
+        }
 
         StartCoroutine(Decay());
     }
@@ -187,7 +193,8 @@ public class Totem : MonoBehaviour
 
         submissionOverflow.Remove(item.gameObject);
 
-        lifeForce += item.lifeForce;
+        // add to life force
+        lifeForce += lifeForceSubmitAmount;
 
         // destroy item
         player.inventory.Remove(item.gameObject);
@@ -198,12 +205,12 @@ public class Totem : MonoBehaviour
         canSubmit = true;
     }
 
-    public void LockDoors(bool enabled)
+    public void UnlockDoors(bool enabled)
     {
         foreach (Door door in unlockDoors)
         {
             if (door == null) { continue; }
-            door.locked = enabled;
+            door.locked = !enabled;
         }
     }
 

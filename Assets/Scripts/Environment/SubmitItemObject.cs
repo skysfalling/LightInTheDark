@@ -51,6 +51,8 @@ public class SubmitItemObject : MonoBehaviour
 
         CollectFreeItemsInTrigger();
 
+        RemoveNullValues(submissionOverflow);
+
         // submit
         SubmissionManager();
     }
@@ -173,6 +175,11 @@ public class SubmitItemObject : MonoBehaviour
             Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * circleRadius, Mathf.Sin(angleRadians) * circleRadius, 0f); // Calculate new position for object
             items[i].transform.position = Vector3.Lerp(items[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
         }
+    }
+
+    private void RemoveNullValues(List<GameObject> list)
+    {
+        list.RemoveAll(item => item == null);
     }
 
     private void OnDrawGizmos()

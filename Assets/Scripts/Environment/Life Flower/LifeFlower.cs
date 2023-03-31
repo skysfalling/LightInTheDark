@@ -81,10 +81,14 @@ public class LifeFlower : SubmitItemObject
         if (playerInTrigger && player.inventory.Count > 0)
         {
             List<GameObject> inventory = player.inventory;
+
+            RemoveNullValues(player.inventory);
+
             for (int i = 0; i < inventory.Count; i++)
             {
-                // if item type is allowed
-                if (submissionTypes.Contains(inventory[i].GetComponent<Item>().type))
+                // if item type is allowed and not already in overflow
+                if (submissionTypes.Contains(inventory[i].GetComponent<Item>().type) &&
+                    !submissionOverflow.Contains(inventory[i]))
                 {
                     // add to overflow
                     submissionOverflow.Add(inventory[i]);
@@ -99,6 +103,9 @@ public class LifeFlower : SubmitItemObject
         {
             // circle overflow items
             CircleAroundTransform(submissionOverflow);
+
+            // remove null values in the list
+            RemoveNullValues(submissionOverflow);
 
             if (canSubmit && state != FlowerState.OVERFLOWING)
             {
@@ -117,18 +124,15 @@ public class LifeFlower : SubmitItemObject
 
         // get item
         Item item = submissionOverflow[0].GetComponent<Item>();
+        submissionOverflow.RemoveAt(0);
 
         item.transform.parent = transform; // set parent
-
 
         // << MOVE ITEM TO CENTER >>
         while (Vector2.Distance(item.transform.position, transform.position) > 5f)
         {
             item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, submitSpeed * Time.deltaTime);
         }
-
-        // Debug.Log("Submit Item", item.gameObject);
-        submissionOverflow.Remove(item.gameObject);
 
         // add to life force
         lifeForce += item.lifeForce;
@@ -142,7 +146,6 @@ public class LifeFlower : SubmitItemObject
         Destroy(effect, 5);
 
         // destroy item
-        player.inventory.Remove(item.gameObject);
         item.Destroy();
 
         yield return new WaitForSeconds(1);
@@ -190,5 +193,10 @@ public class LifeFlower : SubmitItemObject
     public bool IsDead()
     {
         return state == FlowerState.DEAD;
+    }
+
+    private void RemoveNullValues(List<GameObject> list)
+    {
+        list.RemoveAll(item => item == null);
     }
 }

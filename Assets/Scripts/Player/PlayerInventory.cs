@@ -12,7 +12,7 @@ public class PlayerInventory : MonoBehaviour
 
     public int maxInventorySize = 5;
     public List<GameObject> inventory;
-
+    public float inventoryRange = 30; // how far away the inventory items can go before being removed
 
     [Header("Follow Player")]
     public float speed = 30;
@@ -23,10 +23,6 @@ public class PlayerInventory : MonoBehaviour
     public float circleSpeed = 1f; // Speed of rotation
     public float circleSpacing = 1f; // Spacing between objects
     public float circleRadius = 1f; // Radius of circle
-
-    [Space(10)]
-    public float chargeCircleSpeed = 10f;
-    public float chargeCircleRadius;
 
 
 
@@ -49,8 +45,12 @@ public class PlayerInventory : MonoBehaviour
         else { InventoryCirclePlayer(); }
         */
 
+        // remove null values in the inventory
+        RemoveNullValues(inventory);
+
         InventoryCirclePlayer();
 
+        UpdateRemoveByDistance(inventoryRange);
     }
 
     public void AddItemToInventory(GameObject itemObject)
@@ -65,6 +65,7 @@ public class PlayerInventory : MonoBehaviour
 
         itemObject.transform.parent = transform;
         Item item = itemObject.GetComponent<Item>();
+        item.rb.velocity = Vector2.zero; // stop velocity
 
         inventory.Add(itemObject);
         item.state = ItemState.PLAYER_INVENTORY;
@@ -180,6 +181,27 @@ public class PlayerInventory : MonoBehaviour
         return null;
     }
 
+    public void UpdateRemoveByDistance(float distance = 10)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (Vector2.Distance(transform.position, inventory[i].transform.position) > distance)
+            {
+                RemoveItem(inventory[i]);
+            }
+        }
+    }
+
+    public void DropAllItems()
+    {
+
+    }
+
+    private void RemoveNullValues(List<GameObject> list)
+    {
+        list.RemoveAll(item => item == null);
+    }
+
     #region Inventory Movement ====================
     public void ItemFollowTarget(GameObject itemObj, Transform target, float speed = 1, float spacing = 2)
     {
@@ -217,23 +239,14 @@ public class PlayerInventory : MonoBehaviour
         {
             float angleRadians = (currCircleAngle + (360f / inventory.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object
             Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * circleRadius, Mathf.Sin(angleRadians) * circleRadius, 0f); // Calculate new position for object
-            inventory[i].GetComponent<Rigidbody2D>().MovePosition(Vector3.Lerp(inventory[i].transform.position, newPos, Time.deltaTime)); // Move object towards new position using Lerp
-        }
-    }
-
-    public void InventoryChargeRadius()
-    {
-        currCircleAngle += chargeCircleSpeed * Time.deltaTime; // Update angle of rotation
-
-        Vector3 targetPos = transform.position;
-        targetPos.z = 0f; // Ensure target position is on the same plane as objects to circle
-
-        for (int i = 0; i < inventory.Count; i++)
-        {
-            float angleRadians = (currCircleAngle + (360f / inventory.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object
-            Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * chargeCircleRadius, Mathf.Sin(angleRadians) * chargeCircleRadius, 0f); // Calculate new position for object
-            inventory[i].GetComponent<Rigidbody2D>().MovePosition(Vector3.Lerp(inventory[i].transform.position, newPos, Time.deltaTime)); // Move object towards new position using Lerp
+            inventory[i].GetComponent<Rigidbody2D>().MovePosition(Vector3.Lerp(inventory[i].transform.position, newPos, speed * Time.deltaTime)); // Move object towards new position using Lerp
         }
     }
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, inventoryRange);
+    }
 }

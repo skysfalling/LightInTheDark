@@ -248,7 +248,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -373167607, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
@@ -332,7 +332,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 1
   m_Sprite: {fileID: 1969495153, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -416,7 +416,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_Sprite: {fileID: -406729819, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
@@ -556,7 +556,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 1
   m_Sprite: {fileID: 1882086940, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -584,7 +584,7 @@ GameObject:
   - component: {fileID: 5885595107389502670}
   - component: {fileID: 7907575297298026076}
   m_Layer: 7
-  m_Name: gremlin1
+  m_Name: gremlinAI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -631,11 +631,11 @@ MonoBehaviour:
   carryMoveSpeed: 25
   targetSafeZone: 0
   safeZone: {fileID: 0}
-  safeZoneRadius: 5
+  safeZoneRadius: 10
   exitSafeZoneDelay: 2
   idleMoveStarted: 0
   idleZone: {fileID: 0}
-  idleZoneRadius: 5
+  idleZoneRadius: 50
   idle_delay: 2
 --- !u!114 &5998634264669331168
 MonoBehaviour:

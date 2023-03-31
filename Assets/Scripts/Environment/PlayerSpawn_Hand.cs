@@ -37,7 +37,6 @@ public class PlayerSpawn_Hand : MonoBehaviour
         playerSpawned = false;
         player.transform.parent = spawnHand.transform;
         player.GetComponent<PlayerMovement>().state = PlayerState.INACTIVE;
-        player.GetComponent<BoxCollider2D>().enabled = false;
 
         yield return new WaitForSeconds(spawnDelay);
 
@@ -62,7 +61,6 @@ public class PlayerSpawn_Hand : MonoBehaviour
 
         player.GetComponent<PlayerMovement>().moveTarget = player.transform.position;
         player.GetComponent<PlayerMovement>().state = PlayerState.IDLE;
-        player.GetComponent<BoxCollider2D>().enabled = true;
         playerSpawned = true;
 
 

@@ -196,8 +196,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // << DISABLE COLLIDER >>
-        if (state == PlayerState.GRABBED) { GetComponent<BoxCollider2D>().enabled = false; }
-        else { GetComponent<BoxCollider2D>().enabled = true; }
+        if (state == PlayerState.GRABBED || state == PlayerState.INACTIVE) { EnableCollider(false); }
+        else { EnableCollider(true); }
 
 
         switch (state)
@@ -384,6 +384,11 @@ public class PlayerMovement : MonoBehaviour
     {
         isDashing = true;
         dashTimer = dashDuration;
+    }
+
+    public void EnableCollider(bool enabled)
+    {
+        GetComponent<CapsuleCollider2D>().enabled = enabled;
     }
 
     public void OnDrawGizmos()

@@ -65,7 +65,7 @@ public class CleansingCrystal : SubmitItemObject
         Light2D light = itemObject.GetComponent<Light2D>();
 
         // << MOVE ITEM TO CENTER >>
-        while ( Vector2.Distance(itemObject.transform.position, transform.position) > 5 && playerInTrigger)
+        while ( Vector2.Distance(itemObject.transform.position, transform.position) > 5 && playerInTrigger )
         {
             itemObject.transform.position = Vector3.MoveTowards(itemObject.transform.position, transform.position, submitSpeed * Time.deltaTime);
 
@@ -82,6 +82,8 @@ public class CleansingCrystal : SubmitItemObject
             player.inventory.Add(itemObject);
             itemObject.transform.parent = player.transform;
             sprite.color = startColor;
+
+            submissionOverflow.Clear();
 
             canSubmit = true;
             yield return null;

@@ -11,8 +11,10 @@ public class Item : MonoBehaviour
 {
     PlayerMovement playerMovement;
     PlayerInventory playerInventory;
-    Rigidbody2D rb;
-    Light2D light;
+    [HideInInspector]
+    public Rigidbody2D rb;
+    [HideInInspector]
+    public Light2D light;
 
     SpriteRenderer sr;
     string defaultSortingLayer;
@@ -66,6 +68,9 @@ public class Item : MonoBehaviour
             }
         }
 
+        if (state == ItemState.STOLEN) { EnableCollider(false); }
+        else { EnableCollider(true); }
+
         if (state == ItemState.PLAYER_INVENTORY) { UpdateItemLight(inventory_lightRange, inventory_lightIntensity); }
         else if (state == ItemState.THROWN) { UpdateItemLight(thrown_lightRange, thrown_lightIntensity, 2); }
         else { UpdateItemLight(default_lightRange, default_lightIntensity); }
@@ -100,10 +105,29 @@ public class Item : MonoBehaviour
 
     public void Destroy()
     {
+        if (state == ItemState.PLAYER_INVENTORY || state == ItemState.SUBMITTED) { return; }
+
         GameObject effect = Instantiate(destroyEffect, transform.position, Quaternion.identity);
         Destroy(effect, 5);
 
         Destroy(this.gameObject);
+    }
+
+    public void Destroy(float delay)
+    {
+        StartCoroutine(DestroyDelay(delay));
+    }
+
+    IEnumerator DestroyDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        Destroy();
+    }
+
+    public void EnableCollider(bool enabled)
+    {
+        GetComponent<CapsuleCollider2D>().enabled = enabled;
     }
 
     private void OnDrawGizmos()

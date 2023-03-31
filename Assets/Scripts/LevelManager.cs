@@ -65,7 +65,7 @@ public class LevelManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void Update()
+    public virtual void Update()
     {
         LevelStateMachine();
 
@@ -148,7 +148,7 @@ public class LevelManager : MonoBehaviour
         {
             if (spawner.spawnedObject)
             {
-                spawner.DestroyItem();
+                spawner.DestroySpawnedObject();
             }
         }
     }
@@ -178,6 +178,11 @@ public class LevelManager : MonoBehaviour
     public float GetCurrentCountdown()
     {
         return  Mathf.Round(countdownTimer * 10) / 10f;
+    }
+
+    public bool CountdownOver()
+    {
+        return countdownTimer <= 0;
     }
 
     public bool IsEndOfLevel()

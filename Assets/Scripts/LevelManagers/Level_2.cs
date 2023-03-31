@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level2 : LevelManager
+public class Level_2 : LevelManager
 {
 
     [Space(10)]

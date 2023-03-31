@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 535356735
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 1177598564, guid: f6e273a0c904c43178d5c2f7802e61ae, type: 3}
   m_Color: {r: 0, g: 0.7031789, b: 1, a: 1}
@@ -155,7 +155,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 535356735
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 352119399, guid: f6e273a0c904c43178d5c2f7802e61ae, type: 3}
   m_Color: {r: 0, g: 0.7031789, b: 1, a: 1}
@@ -281,7 +281,7 @@ Transform:
   m_GameObject: {fileID: 6430618533842910936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -208.3, y: -176.6, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 995167009867984122}
@@ -307,15 +307,16 @@ MonoBehaviour:
   triggerParent: {fileID: 6430618533842910939}
   playerInTrigger: 0
   playerIsCollecting: 0
-  triggerSize: 10
+  triggerSize: 20
   playerInCenter: 0
   playerCenterRange: 4
   overflowing: 0
-  lifeForce: 20
-  maxLifeForce: 20
+  lifeForce: 10
+  maxLifeForce: 10
   deathAmount: 0
+  lifeForceSubmitAmount: 20
   decayActive: 1
-  decay_speed: 1
+  decay_speed: 6
   submissionTypes: 00000000
   submissionOverflow: []
   canSubmit: 0
@@ -366,7 +367,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1931168647
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -991843997, guid: f6e273a0c904c43178d5c2f7802e61ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
