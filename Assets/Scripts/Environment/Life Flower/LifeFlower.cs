@@ -23,7 +23,9 @@ public class LifeFlower : SubmitItemObject
     [Space(10)]
     public bool decayActive;
     public float decay_speed = 1;
-    public bool darklightDamage;
+
+    [Space(10)]
+    public float darklightPanicTime = 5;
 
     [Header("Flower Lines")]
     public List<string> damageReactions;
@@ -137,8 +139,7 @@ public class LifeFlower : SubmitItemObject
         // add to life force
         lifeForce += item.lifeForce;
 
-        if (item.lifeForce < 0) { DamageReaction(); darklightDamage = true; }
-        else { darklightDamage = false; }
+        if (item.lifeForce < 0) { DamageReaction(); }
 
         // << SPAWN EFFECT >>
         submitEffect.GetComponent<ParticleSystem>().startColor = item.GetComponent<SpriteRenderer>().color;
@@ -176,6 +177,8 @@ public class LifeFlower : SubmitItemObject
         anim.SpawnAggressiveBurstEffect();
         levelManager.camManager.ShakeCamera();
         console.NewMessage(GetRandomLine(damageReactions));
+
+        levelManager.player.Panic(darklightPanicTime);
     }
 
     public string GetRandomLine(List<string> lines)

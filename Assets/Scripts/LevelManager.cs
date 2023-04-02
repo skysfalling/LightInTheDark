@@ -24,6 +24,8 @@ public class LevelManager : MonoBehaviour
     public CameraManager camManager;
     [HideInInspector]
     public DialogueManager dialogueManager;
+    [HideInInspector]
+    public EffectManager effectManager;
 
     [Header("Game Values")]
     public LevelState state = LevelState.INTRO;
@@ -54,14 +56,14 @@ public class LevelManager : MonoBehaviour
         gameConsole = gameManager.gameConsole;
         soundManager = gameManager.soundManager;
         dialogueManager = gameManager.dialogueManager;
+        effectManager = gameManager.effectManager;
+
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         playerInventory = player.gameObject.GetComponent<PlayerInventory>();
         playerAnim = player.gameObject.GetComponent<PlayerAnimator>();
 
         startTime = Time.time;
-
-
     }
 
     // Update is called once per frame
@@ -76,7 +78,25 @@ public class LevelManager : MonoBehaviour
 
     public virtual void StartLevelFromPoint(LevelState state)
     {
-        Debug.Log("Start Level From Point is not set up");
+        StartCoroutine(Intro());
+    }
+
+
+    public virtual IEnumerator Intro()
+    {
+        state = LevelState.INTRO;
+        player.state = PlayerState.INACTIVE;
+
+        uiManager.StartTransitionFadeOut(); // start transition
+
+        playerSpawn.StartSpawnRoutine();
+
+        // wait until spawned
+        yield return new WaitUntil(() => uiManager.transitionFinished);
+        yield return new WaitUntil(() => playerSpawn.playerSpawned);
+
+        camManager.state = CameraState.PLAYER;
+        
     }
 
     public virtual void LevelStateMachine()
@@ -126,6 +146,24 @@ public class LevelManager : MonoBehaviour
     }
     #endregion
 
+
+    public virtual IEnumerator WitnessDarklightReaction(float time)
+    {
+        /*
+        // witness dialogue
+        NewTimedDialogue(dialogueManager.witness_darklightSubmit, 2);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
+
+        // start panic
+        player.Panic(10);
+        NewTimedDialogue(dialogueManager.witness_startSoulPanic, 2);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
+        */
+
+        yield return null;
+
+    }
+
     public void StartFlowerDecay(LifeFlower lifeFlower, float healthPercent = 0.5f, string exclamation = "OW!")
     {
         lifeFlower.decayActive = true; // start decay
@@ -159,6 +197,7 @@ public class LevelManager : MonoBehaviour
         gameClock =  Mathf.Round(timePassed * 10) / 10f;
     }
 
+    #region <<<< COUNTDOWN >>>>
     public void StartCountdown(float count)
     {
         countdownTimer = count;
@@ -169,7 +208,6 @@ public class LevelManager : MonoBehaviour
     {
         countdownTimer -= Time.deltaTime;
     }
-
     public void StopCountdown()
     {
         countdownStarted = false;
@@ -184,6 +222,7 @@ public class LevelManager : MonoBehaviour
     {
         return countdownTimer <= 0;
     }
+    #endregion
 
     public bool IsEndOfLevel()
     {

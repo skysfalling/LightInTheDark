@@ -53,9 +53,12 @@ MonoBehaviour:
   zoomInCamSize: 25
   normalCamSize: 40
   zoomOutCamSize: 60
+  playerOffset: 2
   gameplayTipOffset: {x: 0, y: -10}
   normalCamShakeDuration: 0.2
   normalCamShakeMagnitude: 0.5
+  panicBreatheOffset: 1
+  panicBreatheSpeed: 8
 --- !u!20 &1159354729833526094
 Camera:
   m_ObjectHideFlags: 0
@@ -272,6 +275,84 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 3928c681c40b4c74fb6bb313cd72ecac, type: 2}
+--- !u!1 &3853799706783690047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2558531638244986471}
+  - component: {fileID: 5347462334237146501}
+  - component: {fileID: 2235007214150873417}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2558531638244986471
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3853799706783690047}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7588869258874356063}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5347462334237146501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3853799706783690047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!114 &2235007214150873417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3853799706783690047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &7588869258874356057
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +367,7 @@ GameObject:
   - component: {fileID: 2093135814}
   - component: {fileID: 7203649971232366683}
   - component: {fileID: 3727975432613735350}
+  - component: {fileID: 8605709260974255807}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -309,6 +391,7 @@ Transform:
   - {fileID: 1159354729833526193}
   - {fileID: 3528194235007182632}
   - {fileID: 1720485367082315432}
+  - {fileID: 2558531638244986471}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -330,14 +413,25 @@ MonoBehaviour:
   gameConsole: {fileID: 0}
   uiManager: {fileID: 0}
   dialogueManager: {fileID: 0}
+  effectManager: {fileID: 0}
   sceneReady: 0
   levelSavePoint: 0
-  menuScene: Menu
-  tutorialScene: TutorialScene
-  level_1_1: Level_1.1
-  level_1_2: Level_1.2
-  level_1_3: Level_1.3
-  level_2: 
+  menuScene:
+    m_SceneName: MainMenu
+  introCutscene:
+    m_SceneName: IntroCutscene
+  level_1_1:
+    m_SceneName: Level_1.1
+  level_1_2:
+    m_SceneName: Level_1.2
+  level_1_3:
+    m_SceneName: Level_1.3
+  level_2:
+    m_SceneName: Level_2
+  level_3:
+    m_SceneName: Level_3
+  witness:
+    m_SceneName: TheWitness
 --- !u!114 &2093135815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,6 +580,21 @@ MonoBehaviour:
     cycle?
   - Your carelessness has led to the death of the life flower. You are not worthy
     of its vital energy.
+--- !u!114 &8605709260974255807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7588869258874356057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db5a41ad5326bfc41abdb1471e5b1682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panicShaderMaterial: {fileID: 2100000, guid: 033cb1d100be678499bfbbb1f3438b50, type: 2}
+  panic_fullscreenIntensity: 0.05
+  panic_transitionSpeed: 2
 --- !u!1001 &5435931092219198031
 PrefabInstance:
   m_ObjectHideFlags: 0

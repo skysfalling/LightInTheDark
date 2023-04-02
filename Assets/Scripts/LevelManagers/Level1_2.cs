@@ -237,7 +237,6 @@ public class Level1_2 : LevelManager
         player.state = PlayerState.IDLE;
 
         StartCountdown(roomTimeCountdown);
-        StartCoroutine(DamageToLifeFlowerReaction());
 
         // wait until time is up
         yield return new WaitUntil(() => (countdownTimer <= 0 || currLifeFlower.IsDead()));
@@ -247,26 +246,6 @@ public class Level1_2 : LevelManager
 
         // else continue on
         else { StartCoroutine(CompletedLeveRoutine()); }
-    }
-
-    IEnumerator DamageToLifeFlowerReaction()
-    {
-        yield return new WaitUntil(() => currLifeFlower.darklightDamage == true);
-
-        NewTimedDialogue(dialogueManager.witness_darklightSubmit, 2);
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-
-        player.SetSlowed(10);
-        NewTimedDialogue(dialogueManager.witness_startSoulPanic, 2);
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-
-        while (state != LevelState.COMPLETE && state != LevelState.FAIL)
-        {
-            yield return new WaitUntil(() => currLifeFlower.darklightDamage == true);
-            player.SetSlowed(10);
-
-        }
-
     }
 
     IEnumerator FailedLevelRoutine()

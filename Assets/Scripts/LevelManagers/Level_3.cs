@@ -45,7 +45,7 @@ public class Level_3 : LevelManager
         StartCoroutine(Intro());
     }
 
-    IEnumerator Intro()
+    public override IEnumerator Intro()
     {
         state = LevelState.INTRO;
         player.state = PlayerState.INACTIVE;
@@ -83,7 +83,6 @@ public class Level_3 : LevelManager
 
         // << START FLOWER DECAY >>
         StartFlowerDecay(currLifeFlower, 0.5f, flowerExclamation);
-        StartCoroutine(DarklightPanic());
         currLifeFlower.decayActive = false;
         yield return new WaitForSeconds(2);
 
@@ -164,16 +163,4 @@ public class Level_3 : LevelManager
 
     }
 
-    IEnumerator DarklightPanic()
-    {
-        while (state != LevelState.COMPLETE && state != LevelState.FAIL)
-        {
-            yield return new WaitUntil(() => currLifeFlower.darklightDamage == true);
-            currLifeFlower.darklightDamage = false;
-            player.SetSlowed(10);
-
-            NewTimedDialogue(dialogueManager.witness_startSoulPanic, 2);
-            yield return new WaitUntil(() => !uiManager.inDialogue);
-        }
-    }
 }

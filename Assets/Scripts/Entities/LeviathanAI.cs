@@ -30,7 +30,7 @@ public class LeviathanAI : MonoBehaviour
 
         if (playerInTrigger)
         {
-            player.SetSlowed(5);
+            player.Slowed(5);
         }
     }
 

@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum CameraState { NONE, START, PLAYER, ROOM_BASED, CUSTOM_TARGET, CUSTOM_ZOOM_IN_TARGET, CUSTOM_ZOOM_OUT_TARGET, GAMETIP_TARGET }
+public enum CameraState { 
+    NONE, START, PLAYER, ROOM_BASED, 
+    CUSTOM_TARGET, CUSTOM_ZOOM_IN_TARGET, 
+    CUSTOM_ZOOM_OUT_TARGET, GAMETIP_TARGET,
+    PANIC }
 public class CameraManager : MonoBehaviour
 {
     GameManager gameManager;
@@ -21,11 +25,18 @@ public class CameraManager : MonoBehaviour
     public float zoomOutCamSize = 60;
 
     [Space(10)]
+    public float playerOffset = 2;
     public Vector2 gameplayTipOffset = new Vector2(-100, 0);
 
     [Header("Camera Shake")]
     public float normalCamShakeDuration = 0.1f;
     public float normalCamShakeMagnitude = 0.5f;
+    private Coroutine camerashake;
+
+    [Header("Panic Camera")]
+    public float panicBreatheOffset = 10;
+    public float panicBreatheSpeed = 3;
+    private bool isBreathing;
 
     // Start is called before the first frame update
     void Start()
@@ -52,32 +63,55 @@ public class CameraManager : MonoBehaviour
     }
 
 
+    #region <<<< CAMERA STATE MACHINE >>>>
+
     void CameraStateMachine()
     {
-        // update zoom
-        if (state == CameraState.CUSTOM_ZOOM_IN_TARGET || state == CameraState.GAMETIP_TARGET) { ZoomInCam(); }
-        else if (state == CameraState.CUSTOM_ZOOM_OUT_TARGET) { ZoomOutCam(); }
-        else { NormalCam(); }
-
         switch(state)
         {
             case (CameraState.START):
+                NormalCam();
                 FollowTarget(levelManager.camStart);
                 break;
             case (CameraState.PLAYER):
-                FollowTarget(player);
+                NormalCam();
+                FollowPlayer();
                 break;
             case (CameraState.ROOM_BASED):
+                NormalCam();
                 MoveCamToClosestRoom();
                 break;
             case (CameraState.CUSTOM_TARGET):
+                NormalCam();
+                FollowTarget(currTarget);
+                break;
             case (CameraState.CUSTOM_ZOOM_IN_TARGET):
+                ZoomInCam();
+                FollowTarget(currTarget);
+                break;
             case (CameraState.CUSTOM_ZOOM_OUT_TARGET):
+                ZoomOutCam();
                 FollowTarget(currTarget);
                 break;
             case (CameraState.GAMETIP_TARGET):
+                NormalCam();
                 FollowTarget(currTarget, gameplayTipOffset);
                 break;
+            case (CameraState.PANIC):
+                MoveCamToClosestRoom();
+                Shiver();
+
+                if (!isBreathing)
+                {
+                    StartCoroutine(PanicBreathingCamera());
+                }
+
+                if (gameManager.levelManager.player.state != PlayerState.PANIC)
+                {
+                    state = CameraState.PLAYER;
+                }
+                break;
+
         }
     }
 
@@ -99,7 +133,20 @@ public class CameraManager : MonoBehaviour
         }
 
         Vector3 target = new Vector3(closestRoom.transform.position.x, closestRoom.transform.position.y, transform.position.z);
+
         transform.position = Vector3.Lerp(transform.position, target, camSpeed * Time.deltaTime);
+    }
+
+    public void FollowPlayer()
+    {
+        if (currTarget == null) { return; }
+
+        currTarget = player;
+
+        Vector3 targetPos = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+        Vector3 offset = player.GetComponent<PlayerMovement>().moveDirection * playerOffset;
+
+        transform.position = Vector3.Lerp(transform.position , targetPos + offset, camSpeed * Time.deltaTime);
     }
 
     public void FollowTarget(Transform newTarget)
@@ -109,6 +156,7 @@ public class CameraManager : MonoBehaviour
         currTarget = newTarget;
 
         Vector3 targetPos = new Vector3(newTarget.transform.position.x, newTarget.transform.position.y, transform.position.z);
+
         transform.position = Vector3.Lerp(transform.position, targetPos, camSpeed * Time.deltaTime);
     }
 
@@ -163,12 +211,22 @@ public class CameraManager : MonoBehaviour
 
     public void ShakeCamera()
     {
-        StartCoroutine(CameraShake(normalCamShakeDuration, normalCamShakeMagnitude));
+        if (camerashake != null)
+        {
+            StopCoroutine(camerashake);
+        }
+            
+        camerashake = StartCoroutine(CameraShake(normalCamShakeDuration, normalCamShakeMagnitude));
     }
 
     public void ShakeCamera(float duration, float magnitude)
     {
-        StartCoroutine(CameraShake(duration, magnitude));
+        if (camerashake != null)
+        {
+            StopCoroutine(camerashake);
+        }
+            
+        camerashake = StartCoroutine(CameraShake(duration, magnitude));
     }
 
     IEnumerator CameraShake(float duration, float magnitude)
@@ -187,11 +245,103 @@ public class CameraManager : MonoBehaviour
             yield return null;
         }
 
+        camerashake = null;
+
     }
+
+    public void Shiver(float magnitude = 0.5f)
+    {
+        float x = Random.Range(-1f, 1f) * magnitude;
+
+        transform.localPosition = new Vector3(transform.localPosition.x + x, transform.localPosition.y, transform.localPosition.z);
+    }
+
+
+    IEnumerator PanicBreathingCamera()
+    {
+        // Debug.Log("Breathing Camera");
+
+        isBreathing = true;
+
+        float currentZoom = normalCamSize;
+
+        float maxZoomIn = currentZoom - panicBreatheOffset;
+        float maxZoomOut = currentZoom + panicBreatheOffset;
+
+        // move cam to beginning size
+        while (Mathf.Abs(Camera.main.orthographicSize - normalCamSize) > 0.5f)
+        {
+            Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, normalCamSize, panicBreatheSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        // Zoom in
+        while (currentZoom > maxZoomIn)
+        {
+            currentZoom -= panicBreatheSpeed * Time.deltaTime;
+            Camera.main.orthographicSize = currentZoom;
+            yield return null;
+        }
+
+        // Zoom out
+        while (currentZoom < maxZoomOut)
+        {
+            currentZoom += panicBreatheSpeed * Time.deltaTime;
+            Camera.main.orthographicSize = currentZoom;
+            yield return null;
+        }
+
+        // Normal zoom
+        while (currentZoom > normalCamSize)
+        {
+            currentZoom -= panicBreatheSpeed * Time.deltaTime;
+            Camera.main.orthographicSize = currentZoom;
+            yield return null;
+        }
+
+        isBreathing = false;
+    }
+    #endregion
 
     public bool IsCamAtTarget(Transform transform, float range = 1)
     {
         if (Vector2.Distance(transform.position, transform.position) < range) { return true; }
         return false;
     }
+
+
+    #region << SET STATES >>
+
+    public void None()
+    {
+        state = CameraState.NONE;
+    }
+
+    public void StartPoint()
+    {
+        state = CameraState.START;
+    }
+
+    public void Player()
+    {
+        state = CameraState.PLAYER;
+    }
+
+    public void RoomBased()
+    {
+        state = CameraState.ROOM_BASED;
+    }
+
+    public void Panic()
+    {
+        state = CameraState.PANIC;
+    }
+
+    public CameraState GetCurrentState()
+    {
+        return state;
+    }
+
+
+    #endregion
 }

@@ -5,6 +5,8 @@ using UnityEngine.Rendering.Universal;
 
 public class PlayerAnimator : MonoBehaviour
 {
+
+    GameManager gameManager;
     PlayerMovement movement;
     PlayerInventory inv_script;
     public Animator anim;
@@ -24,9 +26,14 @@ public class PlayerAnimator : MonoBehaviour
     public float bodyLeanAngle = 10;
     public float leanSpeed = 2;
 
+    [Space(10)]
+    public float rotation; // "aim direction" rotation
+
     [Header("Effects")]
     public GameObject stunEffect;
-
+    public GameObject panicEffect;
+    public GameObject slowEffect;
+    public GameObject dashEffect;
 
     [Header("Lighting")]
     public Light2D playerLight; // player light
@@ -62,7 +69,10 @@ public class PlayerAnimator : MonoBehaviour
         movement = GetComponent<PlayerMovement>();
         inv_script = GetComponent<PlayerInventory>();
         playerLight = GetComponent<Light2D>();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+
         stunEffect.SetActive(false);
+        panicEffect.SetActive(false);
     }
 
     // Update is called once per frame
@@ -77,6 +87,11 @@ public class PlayerAnimator : MonoBehaviour
 
     public void AnimationStateMachine()
     {
+        // get angle value of aim direaction
+        rotation = Mathf.Atan2(movement.aimDirection.y, movement.aimDirection.x) * Mathf.Rad2Deg;
+
+        UpdateStateBasedEffect(movement.state);
+
         switch (movement.state)
         {
             case PlayerState.IDLE:
@@ -91,13 +106,29 @@ public class PlayerAnimator : MonoBehaviour
                 rightEye.sprite = halfClosedEye;
 
                 anim.SetBool("isMoving", true);
-
-
                 break;
 
             case PlayerState.STUNNED:
                 leftEye.sprite = winceEye;
                 rightEye.sprite = winceEye;
+                break;
+
+            case PlayerState.PANIC:
+                leftEye.sprite = openEye;
+                rightEye.sprite = openEye;
+                break;
+
+            case PlayerState.THROWING:
+
+                // rotate parent and UI towards throw point
+                movement.throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
+
+                break;
+
+            case PlayerState.DASH:
+
+                dashEffect.transform.eulerAngles = new Vector3(0, 0, rotation - 180f);
+
                 break;
 
             default:
@@ -125,6 +156,43 @@ public class PlayerAnimator : MonoBehaviour
         bodySprite.rotation = Quaternion.Lerp(bodySprite.rotation, targetRotation, Time.deltaTime * leanSpeed);
     }
 
+    public void UpdateStateBasedEffect(PlayerState state)
+    {
+        // stunned
+        if (state == PlayerState.STUNNED) { stunEffect.SetActive(true); }
+        else { stunEffect.SetActive(false); }
+
+        // panic
+        if (state == PlayerState.PANIC) { panicEffect.SetActive(true); }
+        else { panicEffect.SetActive(false); }
+
+        // slowed
+        if (state == PlayerState.PANIC || state == PlayerState.SLOWED) 
+        { 
+            slowEffect.SetActive(true);
+            gameManager.effectManager.EnablePanicShader();
+            gameManager.camManager.Panic();
+
+        }
+        else { 
+
+            slowEffect.SetActive(false);
+            gameManager.effectManager.DisablePanicShader();
+
+        }
+
+    }
+
+    public void PlayDashEffect()
+    {
+        gameManager.camManager.ShakeCamera(movement.dashDuration, 0.1f);
+
+        // there are two particle effects that activate on awake so i did this cause im lazy
+        dashEffect.SetActive(false);
+        dashEffect.SetActive(true); 
+    }
+
+    #region <<<< LIGHTING >>>>
     public void LightingStateMachine()
     {
         switch(movement.state)
@@ -133,10 +201,6 @@ public class PlayerAnimator : MonoBehaviour
             case PlayerState.MOVING:
                 // raise light intensity with more items
                 InventoryCountLightLerp();
-                break;
-
-            case PlayerState.CHARGING:
-                ChargingLight(Time.deltaTime);
                 break;
 
             default:
@@ -163,10 +227,5 @@ public class PlayerAnimator : MonoBehaviour
 
     }
 
-    public void ChargingLight(float amount)
-    {
-        outerLight.intensity = Mathf.Lerp(outerLight.intensity, outer_chargingLightIntensity, amount);
-        outerLight.pointLightOuterRadius = Mathf.Lerp(outerLight.pointLightOuterRadius, outer_chargingLightRange, amount);
-        outerLight.color = Color.Lerp(outerLight.color, outer_chargeColor, amount);
-    }
+    #endregion
 }

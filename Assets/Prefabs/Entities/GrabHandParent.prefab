@@ -65,6 +65,8 @@ MonoBehaviour:
   grabStarted: 0
   grab_pullBackSpeed: 0.2
   breakFree_struggleCount: 4
+  playerCaptured: 0
+  capturePoint: {fileID: 2578850757250197888}
   idleSprite: {fileID: 3892614568532667115}
   trackingSprite: {fileID: 3892614568532667115}
   attackSprite: {fileID: 3892614568532667115}

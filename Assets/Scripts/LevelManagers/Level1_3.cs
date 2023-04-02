@@ -162,26 +162,6 @@ public class Level1_3 : LevelManager
         else { StartCoroutine(CompletedLeveRoutine()); }
     }
 
-    IEnumerator DamageToLifeFlowerReaction()
-    {
-        yield return new WaitUntil(() => currLifeFlower.darklightDamage == true);
-
-        NewTimedDialogue(dialogueManager.witness_darklightSubmit, 2);
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-
-        player.SetSlowed(10);
-        NewTimedDialogue(dialogueManager.witness_startSoulPanic, 2);
-        yield return new WaitUntil(() => !uiManager.inDialogue);
-
-        while (state != LevelState.COMPLETE && state != LevelState.FAIL)
-        {
-            yield return new WaitUntil(() => currLifeFlower.darklightDamage == true);
-            player.SetSlowed(10);
-
-        }
-
-    }
-
     IEnumerator FailedLevelRoutine()
     {
         gameConsole.NewMessage("Level Failed");
