@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance = null;
@@ -19,22 +23,29 @@ public class GameManager : MonoBehaviour
     public UIManager uiManager;
     [HideInInspector]
     public DialogueManager dialogueManager;
+    [HideInInspector]
+    public EffectManager effectManager;
 
     public bool sceneReady;
     public LevelState levelSavePoint;
 
-    [Space(10)]
-    public string menuScene;
-    public string tutorialScene;
+    [Header("Scenes")]
+    public SceneObject menuScene;
 
-    [Space(10)]
-    public string level_1_1;
-    public string level_1_2;
-    public string level_1_3;
+    [Header("Cutscenes")]
+    public SceneObject introCutscene;
 
-    [Space(10)]
-    public string level_2;
+    [Header("Tutorial")]
+    public SceneObject level_1_1;
+    public SceneObject level_1_2;
+    public SceneObject level_1_3;
 
+    [Header("Levels")]
+    public SceneObject level_2;
+    public SceneObject level_3;
+
+    [Header("The Witness")]
+    public SceneObject witness;
 
     void Awake()
     {
@@ -53,8 +64,11 @@ public class GameManager : MonoBehaviour
         dialogueManager = GetComponent<DialogueManager>();
         camManager = GetComponentInChildren<CameraManager>();
         uiManager = GetComponentInChildren<UIManager>();
+        effectManager = GetComponent<EffectManager>();
     }
 
+
+    #region <<<< SCENE MANAGEMENT >>>>
     private void OnEnable()
     {
         SceneManager.sceneLoaded += NewSceneReset;
@@ -105,18 +119,18 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        levelManager.StartLevelFromPoint(levelSavePoint);
-
         sceneReady = true;
+
+        levelManager.StartLevelFromPoint(levelSavePoint);
     }
 
 
     public void StartGame()
     {
-        SceneManager.LoadScene(menuScene);
+        SceneManager.LoadScene(introCutscene);
     }
 
-    public void LoadScene(string scene)
+    public void LoadScene(SceneObject scene)
     {
         SceneManager.LoadScene(scene);
     }
@@ -130,4 +144,78 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+
+    #region >> SCENE OBJECT (( allows for drag / dropping scenes into inspector ))
+    [System.Serializable]
+    public class SceneObject
+    {
+        [SerializeField]
+        private string m_SceneName;
+
+        public static implicit operator string(SceneObject sceneObject)
+        {
+            return sceneObject.m_SceneName;
+        }
+
+        public static implicit operator SceneObject(string sceneName)
+        {
+            return new SceneObject() { m_SceneName = sceneName };
+        }
+    }
+
+    #if UNITY_EDITOR
+    [CustomPropertyDrawer(typeof(SceneObject))]
+    public class SceneObjectEditor : PropertyDrawer
+    {
+        protected SceneAsset GetSceneObject(string sceneObjectName)
+        {
+            if (string.IsNullOrEmpty(sceneObjectName))
+                return null;
+
+            for (int i = 0; i < EditorBuildSettings.scenes.Length; i++)
+            {
+                EditorBuildSettingsScene scene = EditorBuildSettings.scenes[i];
+                if (scene.path.IndexOf(sceneObjectName) != -1)
+                {
+                    return AssetDatabase.LoadAssetAtPath(scene.path, typeof(SceneAsset)) as SceneAsset;
+                }
+            }
+
+            Debug.Log("Scene [" + sceneObjectName + "] cannot be used. Add this scene to the 'Scenes in the Build' in the build settings.");
+            return null;
+        }
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            var sceneObj = GetSceneObject(property.FindPropertyRelative("m_SceneName").stringValue);
+            var newScene = EditorGUI.ObjectField(position, label, sceneObj, typeof(SceneAsset), false);
+            if (newScene == null)
+            {
+                var prop = property.FindPropertyRelative("m_SceneName");
+                prop.stringValue = "";
+            }
+            else
+            {
+                if (newScene.name != property.FindPropertyRelative("m_SceneName").stringValue)
+                {
+                    var scnObj = GetSceneObject(newScene.name);
+                    if (scnObj == null)
+                    {
+                        Debug.LogWarning("The scene " + newScene.name + " cannot be used. To use this scene add it to the build settings for the project.");
+                    }
+                    else
+                    {
+                        var prop = property.FindPropertyRelative("m_SceneName");
+                        prop.stringValue = newScene.name;
+                    }
+                }
+            }
+        }
+    }
+    #endif
+    #endregion
+
+
+#endregion
 }

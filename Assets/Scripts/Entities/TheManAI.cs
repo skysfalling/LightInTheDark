@@ -137,21 +137,21 @@ public class TheManAI : MonoBehaviour
         switch (state)
         {
             case TheManState.IDLE:
-                rb.MovePosition(Vector2.Lerp(transform.position, startPosition, chaseSpeed * Time.deltaTime));
+                rb.MovePosition(Vector2.MoveTowards(transform.position, startPosition, chaseSpeed * Time.deltaTime));
                 break;
 
 
             case TheManState.CHASE:
 
                 // chase player
-                rb.MovePosition(Vector2.Lerp(transform.position, player.transform.position, chaseSpeed * Time.deltaTime));
+                rb.MovePosition(Vector2.MoveTowards(transform.position, player.transform.position, chaseSpeed * Time.deltaTime));
                 break;
 
             case TheManState.RETREAT:
 
                 // run away from player
                 Vector3 oppositeDirection = (transform.position - player.transform.position) * -1f;
-                rb.MovePosition(Vector2.Lerp(transform.position, transform.position - oppositeDirection, retreatSpeed * Time.deltaTime));
+                rb.MovePosition(Vector2.MoveTowards(transform.position, transform.position - oppositeDirection, retreatSpeed * Time.deltaTime));
                 break;
         }
     }
@@ -193,7 +193,7 @@ public class TheManAI : MonoBehaviour
         // move hand back to home position AND player hasn't broken free
         while (Vector2.Distance(transform.position, startPosition) > 1 && playerMovement.struggleCount < breakFree_struggleCount)
         {
-            transform.position = Vector3.Lerp(transform.position, startPosition, grabSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, startPosition, grabSpeed * Time.deltaTime);
 
             yield return null;
         }

@@ -101,12 +101,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111b6e188b58a4048b043c7eeb2d22ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  light: {fileID: 0}
   type: 0
   state: 0
   triggerSize: 2
   lifeForce: 2
-  default_lightRange: 5
-  default_lightIntensity: 5
+  default_lightRange: 8
+  default_lightIntensity: 1
   inventory_lightRange: 10
   inventory_lightIntensity: 2
   thrown_lightRange: 20

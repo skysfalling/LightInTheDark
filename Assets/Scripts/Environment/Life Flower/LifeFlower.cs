@@ -23,7 +23,9 @@ public class LifeFlower : SubmitItemObject
     [Space(10)]
     public bool decayActive;
     public float decay_speed = 1;
-    public bool darklightDamage;
+
+    [Space(10)]
+    public float darklightPanicTime = 5;
 
     [Header("Flower Lines")]
     public List<string> damageReactions;
@@ -81,10 +83,14 @@ public class LifeFlower : SubmitItemObject
         if (playerInTrigger && player.inventory.Count > 0)
         {
             List<GameObject> inventory = player.inventory;
+
+            RemoveNullValues(player.inventory);
+
             for (int i = 0; i < inventory.Count; i++)
             {
-                // if item type is allowed
-                if (submissionTypes.Contains(inventory[i].GetComponent<Item>().type))
+                // if item type is allowed and not already in overflow
+                if (submissionTypes.Contains(inventory[i].GetComponent<Item>().type) &&
+                    !submissionOverflow.Contains(inventory[i]))
                 {
                     // add to overflow
                     submissionOverflow.Add(inventory[i]);
@@ -100,6 +106,9 @@ public class LifeFlower : SubmitItemObject
             // circle overflow items
             CircleAroundTransform(submissionOverflow);
 
+            // remove null values in the list
+            RemoveNullValues(submissionOverflow);
+
             if (canSubmit && state != FlowerState.OVERFLOWING)
             {
                 StartCoroutine(SubmitItem());
@@ -111,14 +120,15 @@ public class LifeFlower : SubmitItemObject
     {
 
         if (submissionOverflow.Count == 0) { yield return null; }
+        if (submissionOverflow[0] == null) { yield return null; }
 
         canSubmit = false;
 
         // get item
         Item item = submissionOverflow[0].GetComponent<Item>();
+        submissionOverflow.RemoveAt(0);
 
         item.transform.parent = transform; // set parent
-
 
         // << MOVE ITEM TO CENTER >>
         while (Vector2.Distance(item.transform.position, transform.position) > 5f)
@@ -126,14 +136,10 @@ public class LifeFlower : SubmitItemObject
             item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, submitSpeed * Time.deltaTime);
         }
 
-        // Debug.Log("Submit Item", item.gameObject);
-        submissionOverflow.Remove(item.gameObject);
-
         // add to life force
         lifeForce += item.lifeForce;
 
-        if (item.lifeForce < 0) { DamageReaction(); darklightDamage = true; }
-        else { darklightDamage = false; }
+        if (item.lifeForce < 0) { DamageReaction(); }
 
         // << SPAWN EFFECT >>
         submitEffect.GetComponent<ParticleSystem>().startColor = item.GetComponent<SpriteRenderer>().color;
@@ -141,7 +147,6 @@ public class LifeFlower : SubmitItemObject
         Destroy(effect, 5);
 
         // destroy item
-        player.inventory.Remove(item.gameObject);
         item.Destroy();
 
         yield return new WaitForSeconds(1);
@@ -172,6 +177,8 @@ public class LifeFlower : SubmitItemObject
         anim.SpawnAggressiveBurstEffect();
         levelManager.camManager.ShakeCamera();
         console.NewMessage(GetRandomLine(damageReactions));
+
+        levelManager.player.Panic(darklightPanicTime);
     }
 
     public string GetRandomLine(List<string> lines)
@@ -189,5 +196,10 @@ public class LifeFlower : SubmitItemObject
     public bool IsDead()
     {
         return state == FlowerState.DEAD;
+    }
+
+    private void RemoveNullValues(List<GameObject> list)
+    {
+        list.RemoveAll(item => item == null);
     }
 }

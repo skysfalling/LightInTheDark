@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState { IDLE , MOVING , THROWING, CHARGING, STUNNED, GRABBED, INACTIVE}
+public enum PlayerState { 
+    IDLE , MOVING , THROWING, 
+    STUNNED, GRABBED, PANIC, DASH, SLOWED, INACTIVE }
 
 public class PlayerMovement : MonoBehaviour
 {
+    GameManager gameManager;
     Rigidbody2D rb;
     PlayerAnimator animator;
     PlayerInventory inventory;
@@ -26,12 +29,10 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 moveDirection;
 
     [Header("Slowed Values")]
-    public bool slowed;
     public float slowedSpeed;
     public float slowedTimer;
 
     [Header("Dash Values")]
-    public bool isDashing;
     public float dashSpeed;
     public float dashDuration;
     public float dashTimer;
@@ -68,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<PlayerAnimator>();
         inventory = GetComponent<PlayerInventory>();
@@ -101,8 +103,7 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = input_system.direction;
 
         // if move input down , move
-        if (state != PlayerState.STUNNED && state != PlayerState.GRABBED
-            && state != PlayerState.INACTIVE && state != PlayerState.THROWING)
+        if (state == PlayerState.IDLE || state == PlayerState.MOVING)
         {
             if (moveDirection != Vector2.zero)
             {
@@ -149,7 +150,9 @@ public class PlayerMovement : MonoBehaviour
         input_system.bAction.started += ctx =>
         {
             // << START DASH >>
-            if (!isDashing) { StartDash(); }
+            if (state == PlayerState.IDLE 
+                || state == PlayerState.MOVING
+                || state == PlayerState.THROWING) { Dash(); }
 
             // << STRUGGLE >>
             if (state == PlayerState.GRABBED)
@@ -161,110 +164,55 @@ public class PlayerMovement : MonoBehaviour
                 struggleCount = 0;
             }
         };
-
-
-
-
-        /*
-        // << MOVE >>
-        // clamp velocity when button is pressed down
-        if (Input.GetMouseButtonDown(0))
-        {
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
-        }
-
-        var mousePos = Input.mousePosition;
-        mousePos.z = -Camera.main.transform.position.z; // select distance in units from the camera
-
-
-        //aimDirection = Camera.main.ScreenToWorldPoint(mousePos);
-        //aimDirection.z = transform.position.z;
-
-        // main input
-        if (Input.GetMouseButton(0))
-        {
-            inputIsDown = true;
-
-
-        }
-        else { inputIsDown = false; }
-
-
-        // << THROW >>
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (throwObject == null)
-            {
-                NewThrowObject();
-            }
-            else
-            {
-                ThrowObject();
-            }
-        }
         
-
-        // << STRUGGLE >>
-        if (state == PlayerState.GRABBED && Input.GetMouseButtonDown(0))
-        {
-            struggleCount++;
-        }
-        else if (state != PlayerState.GRABBED)
-        {
-            struggleCount = 0;
-        }
-        */
     }
 
     public void StateMachine()
     {
 
-        // << ADJUST SPEED IF SLOWED >>
-        if (slowed && slowedTimer > 0)
-        {
-            slowedTimer -= Time.deltaTime;
+        // << DISABLE COLLIDER >>
+        if (state == PlayerState.GRABBED || state == PlayerState.INACTIVE) { EnableCollider(false); }
+        else { EnableCollider(true); }
 
-            speed = slowedSpeed;
-        }
-        else if (slowed && slowedTimer <= 0)
-        {
-            slowedTimer = 0;
-            slowed = false;
-            speed = defaultSpeed;
-        }
-
-        // << ADJUST SPEED IF DASH >>
-        if (isDashing && dashTimer > 0)
-        {
-            dashTimer -= Time.deltaTime;
-
-            speed = dashSpeed;
-        }
-        else if (isDashing && dashTimer <= 0)
-        {
-            dashTimer = 0;
-            isDashing = false;
-            speed = defaultSpeed;
-        }
 
         switch (state)
         {
-            case PlayerState.MOVING:
-                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
-
-                rb.velocity = moveDirection * speed;
-
-                break;
-
             case PlayerState.IDLE:
                 rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
+                break;
 
-                // << CHARGE STATE >>
-                if (state != PlayerState.CHARGING && inputIsDown && !chargeDisabled)
+            case PlayerState.MOVING:
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
+                rb.velocity = moveDirection * speed;
+                break;
+
+            case PlayerState.DASH:
+                if (dashTimer > 0)
                 {
-                    StartCoroutine(ChargeCoroutine(chargeFlashActivateDuration));
+                    dashTimer -= Time.deltaTime;
+                    rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
+                    rb.velocity = moveDirection * dashSpeed;
+                }
+                else
+                {
+                    state = PlayerState.IDLE;
                 }
                 break;
+
+            case PlayerState.SLOWED:
+            case PlayerState.PANIC:
+                if (slowedTimer > 0)
+                {
+                    slowedTimer -= Time.deltaTime;
+                    rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
+                    rb.velocity = moveDirection * slowedSpeed;
+                }
+                else
+                {
+                    state = PlayerState.IDLE;
+                }
+                break;
+
 
             case PlayerState.THROWING:
 
@@ -285,13 +233,12 @@ public class PlayerMovement : MonoBehaviour
                         throwObject.transform.position = newDirection;
                     }
 
-
-                    // rotate parent and UI towards throw point
-                    float rotation = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-                    throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
                 }
                 
                 break;
+
+
+
 
             default:
                 rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
@@ -357,11 +304,7 @@ public class PlayerMovement : MonoBehaviour
     {
         state = PlayerState.STUNNED;
 
-        animator.stunEffect.SetActive(true);
-
         yield return new WaitForSeconds(time);
-
-        animator.stunEffect.SetActive(false);
 
         state = PlayerState.IDLE;
     }
@@ -394,44 +337,32 @@ public class PlayerMovement : MonoBehaviour
         state = PlayerState.MOVING;
     }
 
+    public void Panic(float time)
+    {
+        slowedTimer = time;
+        state = PlayerState.PANIC;
+    }
+
+    public void Slowed(float time)
+    {
+        slowedTimer = time;
+        state = PlayerState.SLOWED;
+    }
+
+    public void Dash()
+    {
+        dashTimer = dashDuration;
+        state = PlayerState.DASH;
+
+        animator.PlayDashEffect();
+    }
+
     #endregion
 
 
-    private IEnumerator ChargeCoroutine(float activateDuration)
+    public void EnableCollider(bool enabled)
     {
-        float elapsedTime = 0f;
-
-        Debug.Log("Charging....");
-        state = PlayerState.CHARGING;
-
-        // iterate until time is reached
-        while (elapsedTime < activateDuration && inputIsDown)
-        {
-            yield return null;
-
-
-            elapsedTime += Time.deltaTime;
-        }
-
-        Debug.Log("Boom");
-        state = PlayerState.IDLE;
-        chargeDisabled = true;
-
-        yield return new WaitForSeconds(chargeDisableTime);
-        chargeDisabled = false;
-
-    }
-
-    public void SetSlowed(float timer)
-    {
-        slowed = true;
-        slowedTimer = timer;
-    }
-
-    public void StartDash()
-    {
-        isDashing = true;
-        dashTimer = dashDuration;
+        GetComponent<CapsuleCollider2D>().enabled = enabled;
     }
 
     public void OnDrawGizmos()
