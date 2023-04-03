@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{30f69172-de9d-4a6a-9d5f-dc5fcdac3247}">
 		<property name="name">
-			<value>orbShatters</value>
+			<value>dropAllOrbs</value>
 		</property>
 		<property name="outputFormat">
 			<value>0</value>
 		</property>
 		<relationship name="folder">
-			<destination>{0d3aca06-8ec4-4baf-a709-868d1811f4a9}</destination>
+			<destination>{9764c7b5-9c6e-40ae-865d-2aa6c7226688}</destination>
 		</relationship>
 		<relationship name="mixer">
 			<destination>{ca1b0bf0-2136-4e15-8eea-3b81f4398c7a}</destination>
@@ -62,9 +62,9 @@
 	<object class="EventAutomatableProperties" id="{62c9549b-1825-4b6c-a91f-e7944c1bf07b}" />
 	<object class="MarkerTrack" id="{d14b1f87-8f4e-4521-ac89-0a774c7f4323}" />
 	<object class="Timeline" id="{2e3bfe26-3036-461b-b31b-04a6f7b346f9}">
-		<property name="isProxyEnabled">
-			<value>false</value>
-		</property>
+		<relationship name="markers">
+			<destination>{f5a1673e-0be9-4263-8a76-a6ab77bd6c12}</destination>
+		</relationship>
 	</object>
 	<object class="ActionSheet" id="{59f72b96-1b47-423a-9610-58af1868dc56}">
 		<relationship name="modules">
@@ -93,6 +93,20 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{72f8fb77-675f-4d0a-9325-9ba75c1161fd}" />
+	<object class="NamedMarker" id="{f5a1673e-0be9-4263-8a76-a6ab77bd6c12}">
+		<property name="position">
+			<value>0</value>
+		</property>
+		<property name="name">
+			<value>A "rattle" sound</value>
+		</property>
+		<relationship name="timeline">
+			<destination>{2e3bfe26-3036-461b-b31b-04a6f7b346f9}</destination>
+		</relationship>
+		<relationship name="markerTrack">
+			<destination>{d14b1f87-8f4e-4521-ac89-0a774c7f4323}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusEffectChain" id="{35c2ee4f-8f24-4a0d-829e-3e4f879ee454}">
 		<relationship name="effects">
 			<destination>{70bc3649-fe12-44f2-a151-b06ec03b8176}</destination>

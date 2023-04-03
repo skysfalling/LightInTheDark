@@ -99,7 +99,11 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{5229b6aa-5c52-4d10-8092-e78accb3fba5}" />
-	<object class="MultiSound" id="{75070ca3-4d66-4f60-9407-c9be5d1a7cd4}" />
+	<object class="MultiSound" id="{75070ca3-4d66-4f60-9407-c9be5d1a7cd4}">
+		<property name="name">
+			<value>Text-based</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{6bb9ea00-063d-4293-a14c-f9f643d3b61b}" />
 	<object class="MixerBusFader" id="{bbed672b-9e88-4807-b415-0cc229ac3445}" />
 </objects>

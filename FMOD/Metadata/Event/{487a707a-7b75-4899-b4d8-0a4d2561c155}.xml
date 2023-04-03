@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{487a707a-7b75-4899-b4d8-0a4d2561c155}">
 		<property name="name">
-			<value>powerUp_GoldOrb</value>
+			<value>powerUpTotem</value>
 		</property>
 		<property name="outputFormat">
 			<value>0</value>

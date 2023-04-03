@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="ParameterPreset" id="{01c90bbd-69d9-4ae8-ad4a-fc9d1fdf5188}">
+	<object class="ParameterPreset" id="{df099b55-227c-4739-910c-31125e46d62c}">
 		<property name="name">
-			<value>orbType</value>
+			<value>childName</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ac17fd91-bc8b-4652-b30a-175f8b3c317c}</destination>
 		</relationship>
 		<relationship name="parameter">
-			<destination>{38e25146-8c72-46a6-b5a3-b2abc05f4737}</destination>
+			<destination>{3df23c49-3f83-4c1e-a960-f3d9f464128c}</destination>
 		</relationship>
 	</object>
-	<object class="GameParameter" id="{38e25146-8c72-46a6-b5a3-b2abc05f4737}">
+	<object class="GameParameter" id="{3df23c49-3f83-4c1e-a960-f3d9f464128c}">
 		<property name="parameterType">
 			<value>2</value>
 		</property>
 		<property name="maximum">
-			<value>4</value>
+			<value>5</value>
 		</property>
 		<property name="enumerationLabels">
-			<value>DarklightOrb</value>
-			<value>LightOrb</value>
-			<value>GoldOrb</value>
-			<value>EtherealOrb</value>
+			<value>Child 1</value>
+			<value>Child 2</value>
+			<value>Child 3</value>
+			<value>Child 4</value>
+			<value>Child 5</value>
 		</property>
 		<property name="initialValue">
-			<value>1</value>
+			<value>0</value>
 		</property>
 	</object>
 </objects>
