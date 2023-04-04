@@ -21,10 +21,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Level_1.3.unity
     guid: f8dbd2faa190a4af89f08876afc038d7
   - enabled: 1
-    path: Assets/Scenes/Level_2.unity
+    path: Assets/Scenes/Extra Levels/ExtraLevel_1.unity
     guid: 030d33cc9c854f140bf738f6ce122b4b
   - enabled: 1
-    path: Assets/Scenes/Level_3.unity
+    path: Assets/Scenes/Extra Levels/ExtraLevel_2.unity
     guid: 1655379c6efb3480091beb8cf67ac74e
   - enabled: 1
     path: Assets/Scenes/TheWitness.unity

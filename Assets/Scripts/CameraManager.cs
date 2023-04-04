@@ -25,7 +25,8 @@ public class CameraManager : MonoBehaviour
     public float zoomOutCamSize = 60;
 
     [Space(10)]
-    public float playerOffset = 2;
+    public float playerCamOffset = 10;
+    public float playerDashCamOffset = 5;
     public Vector2 gameplayTipOffset = new Vector2(-100, 0);
 
     [Header("Camera Shake")]
@@ -144,8 +145,21 @@ public class CameraManager : MonoBehaviour
         currTarget = player;
 
         Vector3 targetPos = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
-        Vector3 offset = player.GetComponent<PlayerMovement>().moveDirection * playerOffset;
+        Vector3 offset = Vector3.zero;
 
+        // << MOVE OFFSET >>
+        if (player.GetComponent<PlayerMovement>().state != PlayerState.GRABBED ||
+            player.GetComponent<PlayerMovement>().state != PlayerState.PANIC )
+        {
+            offset = player.GetComponent<PlayerMovement>().moveDirection * playerCamOffset;
+
+            if (player.GetComponent<PlayerMovement>().state == PlayerState.DASH)
+            {
+                offset = player.GetComponent<PlayerMovement>().moveDirection * playerDashCamOffset;
+            }
+        }
+
+        // update position
         transform.position = Vector3.Lerp(transform.position , targetPos + offset, camSpeed * Time.deltaTime);
     }
 

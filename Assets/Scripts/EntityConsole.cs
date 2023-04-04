@@ -8,13 +8,14 @@ public class EntityConsole : MonoBehaviour
     public GameObject messageParent;
     public TextMeshProUGUI textMesh;
 
-    [Space(10)]
+    [Header(" === Message Values === ")]
     public Color defaultColor = Color.white;
-    public float msgFadeInDuration = 1;
-    public float msgStayDuration = 1;
-    public float msgFadeOutDuration = 5;
+    public float messageDelay = 2;
+    private float msgFadeInDuration = 1;
+    private float msgStayDuration = 1;
+    private float msgFadeOutDuration = 5;
 
-    [Space(10)]
+    [Header(" === Commands === ")]
     public char flowerCommand = 'f';
     public Color flowerColor = Color.magenta;
 
@@ -30,13 +31,13 @@ public class EntityConsole : MonoBehaviour
     public char goldCommand = 'g';
     public Color goldColor = Color.yellow;
 
-    [Header("MESSAGES")]
-    public List<string> generalMessageList = new List<string>();
-
     // Start is called before the first frame update
     public void Start()
     {
         messageParent.SetActive(false);
+
+        SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
+
     }
 
     public void NewMessage(string input_text)

@@ -73,7 +73,7 @@ public class GremlinAI : MonoBehaviour
     private void StateMachine()
     {
         // get distance from player
-        distToPlayer = Vector3.Distance(transform.position, player.position);
+        distToPlayer = Vector2.Distance(transform.position, player.position);
 
         switch (state)
         {

@@ -24,7 +24,8 @@ public class PlayerInventory : MonoBehaviour
     public float circleSpacing = 1f; // Spacing between objects
     public float circleRadius = 1f; // Radius of circle
 
-
+    [Header("Drop Items")]
+    public float itemDropForce = 20;
 
     void Start()
     {
@@ -194,7 +195,20 @@ public class PlayerInventory : MonoBehaviour
 
     public void DropAllItems()
     {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            GameObject obj = inventory[i];
 
+            obj.GetComponent<Item>().state = ItemState.FREE;
+            obj.GetComponent<Item>().ResetSortingOrder();
+
+            // remove from inventory and set state
+            RemoveItem(obj);
+            obj.transform.parent = null;
+
+            // add force pushing item to opposite direction
+            obj.GetComponent<Rigidbody2D>().AddForce( (transform.position - obj.transform.position) * itemDropForce, ForceMode2D.Impulse);
+        }
     }
 
     private void RemoveNullValues(List<GameObject> list)

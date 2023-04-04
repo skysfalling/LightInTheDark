@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public enum LevelState { INTRO, ROOM1, ROOM2, FAIL, COMPLETE }
@@ -80,7 +81,6 @@ public class LevelManager : MonoBehaviour
     {
         StartCoroutine(Intro());
     }
-
 
     public virtual IEnumerator Intro()
     {

@@ -184,16 +184,19 @@ public class TheManAI : MonoBehaviour
     IEnumerator GrabPlayer()
     {
         grabStarted = true;
-        player.transform.parent = transform;
-        player.transform.position = transform.position;
 
         playerMovement.state = PlayerState.GRABBED;
         state = TheManState.GRABBED_PLAYER;
 
+        player.transform.position = transform.position;
+
         // move hand back to home position AND player hasn't broken free
         while (Vector2.Distance(transform.position, startPosition) > 1 && playerMovement.struggleCount < breakFree_struggleCount)
         {
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, grabSpeed * Time.deltaTime);
+            player.GetComponentInChildren<Rigidbody2D>().velocity = Vector3.zero;
+            player.transform.position = transform.position;
+
+            rb.MovePosition(Vector3.MoveTowards(transform.position, startPosition, grabSpeed * Time.deltaTime));
 
             yield return null;
         }

@@ -32,6 +32,9 @@ public class GameConsole : MonoBehaviour
     public char goldCommand = 'g';
     public Color goldColor = Color.yellow;
 
+    [Space(10)]
+    public char purpleCommand = 'p';
+    public Color purpleColor = Color.magenta;
 
     [Space(10)]
     public int maxMessages = 4;
@@ -154,6 +157,10 @@ public class GameConsole : MonoBehaviour
                 else if (openingCommand == flowerCommand)
                 {
                     colorTag = "<color=#" + ColorToHex(flowerColor) + ">";
+                }
+                else if (openingCommand == purpleCommand)
+                {
+                    colorTag = "<color=#" + ColorToHex(purpleColor) + ">";
                 }
                 else if (openingCommand == 'w')
                 {

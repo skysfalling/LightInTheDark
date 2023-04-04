@@ -50,7 +50,7 @@ public class Level1_2 : LevelManager
         StartCoroutine(Room2());
     }
 
-    IEnumerator Intro()
+    public override IEnumerator Intro()
     {
         state = LevelState.INTRO;
         player.state = PlayerState.INACTIVE;

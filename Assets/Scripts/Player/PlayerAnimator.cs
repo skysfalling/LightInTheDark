@@ -185,7 +185,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void PlayDashEffect()
     {
-        gameManager.camManager.ShakeCamera(movement.dashDuration, 0.1f);
+        // gameManager.camManager.ShakeCamera(movement.dashDuration, 0.1f);
 
         // there are two particle effects that activate on awake so i did this cause im lazy
         dashEffect.SetActive(false);

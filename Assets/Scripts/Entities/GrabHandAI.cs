@@ -199,7 +199,11 @@ public class GrabHandAI : MonoBehaviour
         // move hand back to home position AND player hasn't broken free
         while (Vector2.Distance(transform.position, handHome.position) > 5 && player.struggleCount < breakFree_struggleCount)
         {
+
             transform.position = Vector3.Lerp(transform.position, handHome.position, grab_pullBackSpeed * Time.deltaTime);
+            
+            player.transform.localPosition = Vector3.zero;
+
 
             yield return null;
         }

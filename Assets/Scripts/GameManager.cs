@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
 
     [HideInInspector]
+    public InputManager inputManager;
+    [HideInInspector]
     public SoundManager soundManager;
     [HideInInspector]
     public LevelManager levelManager;
@@ -59,6 +61,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        inputManager = GetComponent<InputManager>();
         soundManager = GetComponent<SoundManager>();
         gameConsole = GetComponent<GameConsole>();
         dialogueManager = GetComponent<DialogueManager>();
@@ -98,8 +101,16 @@ public class GameManager : MonoBehaviour
         {
             levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
+            // check for cutscene
+            if (levelManager == null)
+            {
+                levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<IntroCutsceneManager>();
+            }
+
             yield return null;
         }
+
+        Debug.Log("Level Manager found");
 
         levelManager.gameConsole = GetComponent<GameConsole>();
         levelManager.soundManager = GetComponent<SoundManager>();
@@ -121,9 +132,10 @@ public class GameManager : MonoBehaviour
 
         sceneReady = true;
 
+        Debug.Log("Scene Is Ready");
+
         levelManager.StartLevelFromPoint(levelSavePoint);
     }
-
 
     public void StartGame()
     {

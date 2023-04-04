@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CustomPlayerInput : MonoBehaviour
+public class InputManager : MonoBehaviour
 {
     // InputAction: https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/api/UnityEngine.InputSystem.InputAction.html
 
     [Header("Movement")]
-    public Vector2 direction = Vector2.zero;
+    public Vector2 moveDirection = Vector2.zero;
     public InputAction directionAction;
-
     [Header("A Button")]
     public bool aInput;
     public InputAction aAction;
@@ -36,7 +35,7 @@ public class CustomPlayerInput : MonoBehaviour
 
     private void Update()
     { 
-        direction = directionAction.ReadValue<Vector2>();
+        moveDirection = directionAction.ReadValue<Vector2>();
 
         aAction.started += context => aInput = true;
         aAction.canceled += context => aInput = false;

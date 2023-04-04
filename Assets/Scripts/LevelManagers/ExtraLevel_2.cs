@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Level_3 : LevelManager
+public class ExtraLevel_2 : LevelManager
 {
     [Space(10)]
     public bool introComplete;

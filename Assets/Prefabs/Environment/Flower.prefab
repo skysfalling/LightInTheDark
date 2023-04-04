@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5968800953475882448}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &690319570
 SpriteRenderer:
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1479977113
   m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: b7b28a466f7f5a64997138e74bd9dadd, type: 3}
   m_Color: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
   m_FlipX: 0
@@ -5025,7 +5025,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 5
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -9896,7 +9896,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 4
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -9958,7 +9958,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5968800953475882448}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7812922192115732755
 SpriteRenderer:
@@ -10000,7 +10000,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1479977113
   m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 94b65f662007ccf4b9763e085a3d09b2, type: 3}
   m_Color: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
   m_FlipX: 0
@@ -14811,7 +14811,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 4
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -15050,7 +15050,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1479977113
   m_SortingLayer: 1
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 4bd6d18d1a599594297f298f5ba530b8, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -15444,7 +15444,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5968800953475882448}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5968800953037043192
 SpriteRenderer:
@@ -15486,7 +15486,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1479977113
   m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: d6f072ac8edecb849abf22bcb906fec8, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -15527,9 +15527,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5942470579439524873}
+  - {fileID: 690319569}
   - {fileID: 5968800953037043191}
   - {fileID: 3144182333003228690}
-  - {fileID: 690319569}
   - {fileID: 1928228713015395148}
   m_Father: {fileID: 8165392962169260697}
   m_RootOrder: 0
@@ -15609,7 +15609,7 @@ MonoBehaviour:
   deathAmount: -1
   decayActive: 0
   decay_speed: 2
-  darklightDamage: 0
+  darklightPanicTime: 5
   damageReactions:
   - Ow!
   - oh no ...
@@ -15629,9 +15629,7 @@ MonoBehaviour:
   messageParent: {fileID: 7755548846962855063}
   textMesh: {fileID: 8629215976217507427}
   defaultColor: {r: 1, g: 0, b: 0.53744507, a: 1}
-  msgFadeInDuration: 1
-  msgStayDuration: 1
-  msgFadeOutDuration: 3
+  messageDelay: 2
   flowerCommand: 102
   flowerColor: {r: 1, g: 0, b: 1, a: 1}
   lightCommand: 108
@@ -15640,7 +15638,6 @@ MonoBehaviour:
   darkColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   goldCommand: 103
   goldColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  generalMessageList: []
   lifeForceText: {fileID: 6078971702273193518}
 --- !u!114 &4029789114089494809
 MonoBehaviour:
@@ -15919,9 +15916,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1479977113
+  m_SortingLayer: 1
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 30f6f6a6174a56347a38a8c587af6fad, type: 3}
   m_Color: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
   m_FlipX: 0

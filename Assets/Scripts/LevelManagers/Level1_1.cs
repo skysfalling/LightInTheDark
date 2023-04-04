@@ -4,77 +4,101 @@ using UnityEngine;
 
 public class Level1_1 : LevelManager
 {
-    public PlayerSpawn_Hand playerSpawn;
-    public GrabHandAI endGrabHand;
 
-    bool levelRoutineStarted;
+    public List<Spawner> levelSpawners;
 
+    [TextArea(1, 10)]
     [Header("Script Lines")]
-    public float messageDelay = 2;
-    public List<string> flower_lines1;
-    public List<string> flower_lines2;
-    public List<string> flower_lines3;
+    public List<string> witnessComment1;
+    [TextArea(1, 10)]
+    public List<string> witnessComment2;
+    [TextArea(1, 10)]
+    public List<string> witnessComment3;
 
-    public override void LevelStateMachine()
+    public override IEnumerator Intro()
     {
-        if (state != LevelState.INTRO) { UpdateGameClock(); }
+        state = LevelState.INTRO;
+        player.Inactive();
 
-        switch (state)
-        {
-            case (LevelState.INTRO):
+        uiManager.StartTransitionFadeOut(); // start transition
+        playerSpawn.StartSpawnRoutine();
 
-                // start introduction routine b
-                if (!levelRoutineStarted) { StartCoroutine(LevelRoutine()); }
+        // wait until spawned
+        yield return new WaitUntil(() => uiManager.transitionFinished);
+        yield return new WaitUntil(() => playerSpawn.playerSpawned);
 
-                break;
-        }
+        // continue to next room
+        StartCoroutine(Room1());
     }
 
-    IEnumerator LevelRoutine()
+    IEnumerator Room1()
     {
-        levelRoutineStarted = true;
-        currLifeFlower.console.SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
+        state = LevelState.ROOM1;
+
+        player.Inactive();
+        camManager.NewCustomZoomInTarget(player.transform);
 
         // wait until spawned
         yield return new WaitUntil(() => playerSpawn.playerSpawned);
-        player.state = PlayerState.INACTIVE;
-        camManager.state = CameraState.ROOM_BASED;
+
+        // focus on flower
+        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        yield return new WaitForSeconds(2);
 
         // [[ LINES 1 ]]
-        currLifeFlower.console.MessageList(flower_lines1, messageDelay);
-        yield return new WaitForSeconds(flower_lines1.Count * messageDelay); // wait for length of message list
+        NewDialogue(witnessComment1);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
 
         // let player move
-        player.state = PlayerState.IDLE;
-        gameConsole.NewMessage("use WASD to move , soul");
+        player.Idle();
+        camManager.Player();
+        gameConsole.NewMessage("use WASD to move");
+
+        // wait until player moves
+        yield return new WaitUntil(() => gameManager.inputManager.moveDirection != Vector2.zero);
+        yield return new WaitForSeconds(2);
+
+        // focus on new light orbs
+        player.Inactive();
+        camManager.NewCustomZoomInTarget(levelSpawners[0].transform);
+        yield return new WaitForSeconds(1);
+        EnableSpawners(levelSpawners);
+        gameConsole.NewMessage("pickup the l(light orb) by moving into it");
+        yield return new WaitForSeconds(2);
+
+        // allow player to move
+        player.Idle();
+        camManager.Player();
 
         // wait for player to pick up light orb
-        while (playerInventory.GetTypeCount(ItemType.LIGHT) == 0)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil(() => playerInventory.GetTypeCount(ItemType.LIGHT) > 0);
+        gameConsole.NewMessage("now bring the l(light orb) to the f(flower)");
 
+        // wait for submission to flower
+        yield return new WaitUntil(() => currLifeFlower.submissionOverflow.Count > 1);
         // [[ LINES 2 ]]
-        currLifeFlower.console.MessageList(flower_lines2, messageDelay);
-        yield return new WaitForSeconds(flower_lines2.Count * messageDelay); // wait for length of message list
+        NewDialogue(witnessComment2);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
+
 
         // wait for flower to be overflowing
         yield return new WaitUntil(() => currLifeFlower.state == FlowerState.OVERFLOWING);
 
-        // [[ LINES 3 ]]
-        currLifeFlower.console.MessageList(flower_lines3, messageDelay);
-        yield return new WaitForSeconds(flower_lines3.Count * messageDelay); // wait for length of message list
-
         // level is complete
         state = LevelState.COMPLETE;
         currLifeFlower.state = FlowerState.HEALED;
+        player.Inactive();
+        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        yield return new WaitForSeconds(2);
+
+        // [[ LINES 3 ]]
+        NewDialogue(witnessComment3);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
 
         yield return new WaitForSeconds(3);
 
         endGrabHand.canAttack = true;
 
         yield return new WaitUntil(() => endGrabHand.state == HandState.PLAYER_CAPTURED);
-
-
     }
 }

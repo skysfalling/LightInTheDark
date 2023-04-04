@@ -156,7 +156,7 @@ public class UIManager : MonoBehaviour
 
         while (currentStringIndex < dialogue.Count)
         {
-            Debug.Log("Dialogue string #" + currentStringIndex);
+            // Debug.Log("Dialogue string #" + currentStringIndex);
 
             // get string
             string decodedText = gameManager.gameConsole.DecodeColorString(dialogue[currentStringIndex]);

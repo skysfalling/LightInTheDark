@@ -137,21 +137,21 @@ MonoBehaviour:
   deathEffect: {fileID: 0}
   state: 0
   playerInOuterTrigger: 0
-  outerTriggerSize: 70
+  outerTriggerSize: 100
   playerInInnerTrigger: 0
-  innerTriggerSize: 25
+  innerTriggerSize: 10
   startColor: {r: 1, g: 1, b: 1, a: 1}
   endColor: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
   cur_health: 5
   max_health: 5
   lightOrbCountNeeded: 3
   lifeDecayDelay: 0.25
-  chaseSpeed: 10
-  retreatSpeed: 5
-  grabSpeed: 3
-  grabTime: 2
+  chaseSpeed: 200
+  retreatSpeed: 100
+  grabSpeed: 50
+  grabTime: 0.5
   grabStarted: 0
-  breakFree_struggleCount: 2
+  breakFree_struggleCount: 8
 --- !u!70 &2327437281591290088
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
     PlayerAnimator animator;
     PlayerInventory inventory;
-    CustomPlayerInput input_system;
+    InputManager inputManager;
 
 
     public PlayerState state = PlayerState.IDLE;
@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<PlayerAnimator>();
         inventory = GetComponent<PlayerInventory>();
-        input_system = GetComponent<CustomPlayerInput>();
+        inputManager = gameManager.inputManager;
 
 
         moveTarget = transform.position;
@@ -100,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
 
         // << BASIC MOVE >>
         // set move target
-        moveDirection = input_system.direction;
+        moveDirection = inputManager.moveDirection;
 
         // if move input down , move
         if (state == PlayerState.IDLE || state == PlayerState.MOVING)
@@ -122,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // << THROW ACTION DOWN >>
-        input_system.aAction.started += ctx =>
+        inputManager.aAction.started += ctx =>
         {
             // << GET THROW OBJECT >>
             if (throwObject == null && !inThrow)
@@ -133,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
         };
 
         // << THROW ACTION UP >>
-        input_system.aAction.canceled += ctx =>
+        inputManager.aAction.canceled += ctx =>
         {
             // << THROW OBJECT >>
             if (throwObject != null)
@@ -147,21 +147,24 @@ public class PlayerMovement : MonoBehaviour
         };
 
         // << DASH ACTION >>
-        input_system.bAction.started += ctx =>
+        inputManager.bAction.started += ctx =>
         {
-            // << START DASH >>
-            if (state == PlayerState.IDLE 
-                || state == PlayerState.MOVING
-                || state == PlayerState.THROWING) { Dash(); }
-
             // << STRUGGLE >>
             if (state == PlayerState.GRABBED)
             {
+                inventory.DropAllItems();
+                gameManager.camManager.ShakeCamera();
+
                 struggleCount++;
             }
             else if (state != PlayerState.GRABBED)
             {
                 struggleCount = 0;
+
+                // << START DASH >>
+                if (state == PlayerState.IDLE
+                    || state == PlayerState.MOVING
+                    || state == PlayerState.THROWING) { Dash(); }
             }
         };
         
@@ -237,11 +240,8 @@ public class PlayerMovement : MonoBehaviour
                 
                 break;
 
-
-
-
             default:
-                rb.velocity = Vector3.ClampMagnitude(rb.velocity, 0);
+                rb.velocity = Vector3.zero;
                 break;
         }
         
