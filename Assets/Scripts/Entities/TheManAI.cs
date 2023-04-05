@@ -45,8 +45,13 @@ public class TheManAI : MonoBehaviour
     public float grabSpeed = 0.6f;
 
     [Space(10)]
-    public float grabTime = 2;
-    private float grabTimer;
+    public float timeToGrab = 2;
+    private float timeToGrabTimer;
+    public float timeToCapture = 5;
+    private float timeToCaptureTimer;
+    public float grabDelay = 2; // delay next grab
+
+
 
     public bool grabStarted;
     public int breakFree_struggleCount;
@@ -97,6 +102,7 @@ public class TheManAI : MonoBehaviour
         // player in trigger and not grabbed
         if (state != TheManState.GRABBED_PLAYER && state != TheManState.PLAYER_CAPTURED)
         {
+            // << CHASE GRAB AND RETREAT >>
             if (playerInOuterTrigger)
             {
                 // determine retreat or chase
@@ -116,23 +122,20 @@ public class TheManAI : MonoBehaviour
                 {
                     if (!grabStarted)
                     {
-                        grabTimer += Time.deltaTime;
+                        timeToGrabTimer += Time.deltaTime;
 
-                        if (grabTimer >= grabTime)
+                        if (timeToGrabTimer >= timeToGrab)
                         {
                             state = TheManState.GRABBED_PLAYER;
                             StartCoroutine(GrabPlayer());
-                            grabTimer = 0;
+                            timeToGrabTimer = 0;
                         }
                     }
                 }
-                else { grabTimer = 0; }
+                else { timeToGrabTimer = 0; }
             }
             else { state = TheManState.IDLE; }
-
         }
-
-
 
         // move differently depending on state
         switch (state)
@@ -149,7 +152,6 @@ public class TheManAI : MonoBehaviour
                 break;
 
             case TheManState.RETREAT:
-
                 // run away from player
                 Vector3 oppositeDirection = (transform.position - player.transform.position) * -1f;
                 rb.MovePosition(Vector2.MoveTowards(transform.position, transform.position - oppositeDirection, retreatSpeed * Time.deltaTime));
@@ -188,35 +190,46 @@ public class TheManAI : MonoBehaviour
 
         playerMovement.state = PlayerState.GRABBED;
         state = TheManState.GRABBED_PLAYER;
+        timeToCaptureTimer = 0; // set capture timer
 
-        player.transform.position = transform.position;
-
-        // move hand back to home position AND player hasn't broken free
-        while (Vector2.Distance(transform.position, startPosition) > 1 && playerMovement.struggleCount < breakFree_struggleCount)
+        // while player hasn't broken free
+        while (playerMovement.struggleCount < breakFree_struggleCount && 
+            state == TheManState.GRABBED_PLAYER && playerMovement.state == PlayerState.GRABBED)
         {
+            // HOLD PLAYER
+            rb.velocity = Vector3.zero;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
             player.GetComponentInChildren<Rigidbody2D>().velocity = Vector3.zero;
             player.transform.position = transform.position;
 
-            rb.MovePosition(Vector3.MoveTowards(transform.position, startPosition, grabSpeed * Time.deltaTime));
+            // PLAYER CAPTURE
+            timeToCaptureTimer += Time.deltaTime;
+            if (timeToCaptureTimer >= timeToCapture)
+            {
+                state = TheManState.PLAYER_CAPTURED;
+                timeToCaptureTimer = 0;
+
+                grabStarted = false;
+                
+            }
 
             yield return null;
         }
 
-        // if broken free, release player
-        if (playerMovement.struggleCount >= breakFree_struggleCount)
+
+        if (state != TheManState.PLAYER_CAPTURED)
         {
             player.transform.parent = null;
             playerMovement.state = PlayerState.IDLE;
 
+
             state = TheManState.IDLE;
-        }
-        else
-        {
-            state = TheManState.PLAYER_CAPTURED;
-        }
+            rb.constraints = RigidbodyConstraints2D.None;
 
+            yield return new WaitForSeconds(grabDelay);
 
-        grabStarted = false;
+            grabStarted = false;
+        }
 
 
     }
@@ -228,16 +241,23 @@ public class TheManAI : MonoBehaviour
 
     }
 
-
     public void FlipTowardsPlayer()
     {
         if (player.transform.position.x < transform.position.x) // player is to the left
         {
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f); // rotate 180 degrees on the y-axis
+
+            Quaternion flipRotation = Quaternion.Euler(0f, 180f, 0f); // rotate 180 degrees on the y-axis
+
+            head.transform.rotation = flipRotation;
+            body.transform.rotation = flipRotation;
+
         }
         else // player is to the right
         {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f); // rotate back to original rotation
+            Quaternion flipRotation = Quaternion.Euler(0f, 0f, 0f); // rotate back to original rotation
+
+            head.transform.rotation = flipRotation;
+            body.transform.rotation = flipRotation;
         }
     }
 

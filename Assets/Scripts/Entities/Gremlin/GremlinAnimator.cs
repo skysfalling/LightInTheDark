@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class GremlinAnimator : MonoBehaviour
 {
+
     GremlinAI ai;
     public Animator anim;
-
+    public Canvas canvas;
     public void Start()
     {
         ai = GetComponent<GremlinAI>();
-
+        canvas.worldCamera = Camera.main;
     }
 
 

@@ -68,7 +68,48 @@ public class CameraManager : MonoBehaviour
 
     void CameraStateMachine()
     {
-        switch(state)
+        // << GRAB OVERRIDE >>
+
+
+
+        // << PLAYER MOVEMENT OVERRIDE >>>
+        try
+        {
+            if (player != null)
+            {
+                Debug.Log("Camera Found Player");
+
+                PlayerState playerState = player.GetComponent<PlayerMovement>().state;
+
+                switch(playerState)
+                {
+                    case PlayerState.GRABBED:
+                    case PlayerState.STUNNED:
+                    case PlayerState.SLOWED:
+                    case PlayerState.PANIC:
+                        NewCustomZoomInTarget(player);
+                        break;
+
+                    case PlayerState.IDLE:
+                    case PlayerState.MOVING:
+                    case PlayerState.THROWING:
+                        NormalCam();
+                        FollowPlayer();
+                        break;
+
+
+                    default:
+                        break;
+                }
+            }
+        }
+        catch { }
+
+
+
+
+        // << CAMERA STATE >>
+        switch (state)
         {
             case (CameraState.START):
                 NormalCam();
@@ -114,6 +155,10 @@ public class CameraManager : MonoBehaviour
                 break;
 
         }
+
+
+
+
     }
 
     public void MoveCamToClosestRoom()
@@ -145,18 +190,13 @@ public class CameraManager : MonoBehaviour
         currTarget = player;
 
         Vector3 targetPos = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+        
         Vector3 offset = Vector3.zero;
+        offset = player.GetComponent<PlayerMovement>().moveDirection * playerCamOffset;
 
-        // << MOVE OFFSET >>
-        if (player.GetComponent<PlayerMovement>().state != PlayerState.GRABBED ||
-            player.GetComponent<PlayerMovement>().state != PlayerState.PANIC )
+        if (player.GetComponent<PlayerMovement>().state == PlayerState.DASH)
         {
-            offset = player.GetComponent<PlayerMovement>().moveDirection * playerCamOffset;
-
-            if (player.GetComponent<PlayerMovement>().state == PlayerState.DASH)
-            {
-                offset = player.GetComponent<PlayerMovement>().moveDirection * playerDashCamOffset;
-            }
+            offset = player.GetComponent<PlayerMovement>().moveDirection * playerDashCamOffset;
         }
 
         // update position

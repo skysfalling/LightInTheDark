@@ -101,7 +101,9 @@ public class GremlinAI : MonoBehaviour
 
 
                 // << TARGET PLAYER >>
-                if (distToPlayer < chaseRadius)
+                if (distToPlayer < chaseRadius 
+                    && player.GetComponent<PlayerMovement>().state != PlayerState.GRABBED
+                    && player.GetComponent<PlayerMovement>().state != PlayerState.INACTIVE)
                 {
                     // << TARGET ITEM >>
                     if (GetClosestThrownItem() != null)

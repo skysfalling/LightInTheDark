@@ -624,7 +624,8 @@ MonoBehaviour:
   slowedTimer: 20
   dashSpeed: 120
   dashDuration: 0.25
-  dashTimer: 0.25
+  dashDelay: 0
+  dashReady: 1
   throwParent: {fileID: 3779496793890040832}
   throwObject: {fileID: 0}
   aimDirection: {x: 0, y: 0}
@@ -658,6 +659,7 @@ MonoBehaviour:
   circleSpeed: 100
   circleSpacing: 30
   circleRadius: 5
+  itemDropForce: 20
 --- !u!114 &7522916275895387744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,7 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 700bea19ca9391d4e8e6be00351c2ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0}
+  moveDirection: {x: 0, y: 0}
   directionAction:
     m_Name: Direction
     m_Type: 0

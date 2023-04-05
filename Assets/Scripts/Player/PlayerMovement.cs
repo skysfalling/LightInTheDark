@@ -35,7 +35,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Dash Values")]
     public float dashSpeed;
     public float dashDuration;
-    public float dashTimer;
+    private float dashTimer;
+    public float dashDelay;
+    public bool dashReady = true;
+
 
     [Header("Throw Ability")]
     public Transform throwParent;
@@ -216,6 +219,11 @@ public class PlayerMovement : MonoBehaviour
                 }
                 break;
 
+            case PlayerState.GRABBED:
+
+
+                break;
+
 
             case PlayerState.THROWING:
 
@@ -235,9 +243,7 @@ public class PlayerMovement : MonoBehaviour
                         Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, inventory.circleSpeed * Time.deltaTime);
                         throwObject.transform.position = newDirection;
                     }
-
                 }
-                
                 break;
 
             default:
@@ -351,10 +357,25 @@ public class PlayerMovement : MonoBehaviour
 
     public void Dash()
     {
-        dashTimer = dashDuration;
-        state = PlayerState.DASH;
+        if (dashReady)
+        {
+            dashTimer = dashDuration;
+            state = PlayerState.DASH;
 
-        animator.PlayDashEffect();
+            animator.PlayDashEffect();
+
+            StartCoroutine(DashDelay(dashDelay));
+        }
+
+    }
+
+    IEnumerator DashDelay(float timer)
+    {
+        dashReady = false;
+
+        yield return new WaitForSeconds(timer);
+
+        dashReady = true;
     }
 
     #endregion

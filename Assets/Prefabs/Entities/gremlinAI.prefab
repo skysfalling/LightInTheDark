@@ -651,6 +651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 3389454966016080425}
+  canvas: {fileID: 1295815304796640608}
 --- !u!114 &5998634264669331168
 MonoBehaviour:
   m_ObjectHideFlags: 0
