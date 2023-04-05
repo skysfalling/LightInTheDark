@@ -20,6 +20,10 @@ public class LeviathanAI : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
+        // set leviathan to start at first node
+        transform.position = pathObjects[0].position;
+
         StartCoroutine(PathMove(0));
     }
 
