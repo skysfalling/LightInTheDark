@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class GremlinAnimator : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    GremlinAI ai;
+    public Animator anim;
+
+    public void Start()
     {
-        
+        ai = GetComponent<GremlinAI>();
+
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void Update()
     {
-        
+        // set anim bools based on states
+
+        anim.SetBool("idle", ai.state == GremlinState.IDLE );
+        anim.SetBool("chase player", ai.state == GremlinState.CHASE_PLAYER);
+
     }
+
 }

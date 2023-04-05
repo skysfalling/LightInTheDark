@@ -96,6 +96,7 @@ public class GremlinAI : MonoBehaviour
                     state = GremlinState.CHASE_PLAYER;
                 }
                 break;
+
             case GremlinState.CHASE_PLAYER:
 
 

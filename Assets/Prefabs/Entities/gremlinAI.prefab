@@ -248,7 +248,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -373167607, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
@@ -332,7 +332,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 1
   m_Sprite: {fileID: 1969495153, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -416,7 +416,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 2
   m_Sprite: {fileID: -406729819, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
@@ -556,7 +556,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 1
   m_Sprite: {fileID: 1882086940, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -579,6 +579,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5318114384725162481}
   - component: {fileID: 5139590250411127848}
+  - component: {fileID: 7234149077280426510}
   - component: {fileID: 5998634264669331168}
   - component: {fileID: 1283278705518591809}
   - component: {fileID: 5885595107389502670}
@@ -637,6 +638,19 @@ MonoBehaviour:
   idleZone: {fileID: 0}
   idleZoneRadius: 50
   idle_delay: 2
+--- !u!114 &7234149077280426510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7352116017459935470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53450d77fe33b4440bac712108c7b076, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 3389454966016080425}
 --- !u!114 &5998634264669331168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -652,9 +666,7 @@ MonoBehaviour:
   messageParent: {fileID: 7374348900795424138}
   textMesh: {fileID: 1287719572018211289}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  msgFadeInDuration: 1
-  msgStayDuration: 1
-  msgFadeOutDuration: 5
+  messageDelay: 2
   flowerCommand: 102
   flowerColor: {r: 1, g: 0, b: 1, a: 1}
   lightCommand: 108
@@ -663,7 +675,6 @@ MonoBehaviour:
   darkColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   goldCommand: 103
   goldColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  generalMessageList: []
   saidChaseQuip: 0
   chase_quips:
   - hehehehe

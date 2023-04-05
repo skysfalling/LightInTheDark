@@ -7,7 +7,8 @@ public enum TheManState { IDLE , CHASE , RETREAT , GRABBED_PLAYER , PLAYER_CAPTU
 public class TheManAI : MonoBehaviour
 {
     PlayerInventory player;
-    PlayerMovement playerMovement;
+    [HideInInspector]
+    public PlayerMovement playerMovement;
     Rigidbody2D rb;
     public SpriteRenderer head;
     public SpriteRenderer body;
