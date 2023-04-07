@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{30f69172-de9d-4a6a-9d5f-dc5fcdac3247}">
 		<property name="name">
-			<value>dropAllOrbs</value>
+			<value>inventoryDrop</value>
 		</property>
 		<property name="outputFormat">
 			<value>0</value>
@@ -62,9 +62,9 @@
 	<object class="EventAutomatableProperties" id="{62c9549b-1825-4b6c-a91f-e7944c1bf07b}" />
 	<object class="MarkerTrack" id="{d14b1f87-8f4e-4521-ac89-0a774c7f4323}" />
 	<object class="Timeline" id="{2e3bfe26-3036-461b-b31b-04a6f7b346f9}">
-		<relationship name="markers">
-			<destination>{f5a1673e-0be9-4263-8a76-a6ab77bd6c12}</destination>
-		</relationship>
+		<property name="isProxyEnabled">
+			<value>false</value>
+		</property>
 	</object>
 	<object class="ActionSheet" id="{59f72b96-1b47-423a-9610-58af1868dc56}">
 		<relationship name="modules">
@@ -84,7 +84,7 @@
 	</object>
 	<object class="MultiSound" id="{1d56e101-4a75-4af3-873e-8ad8174a0360}">
 		<relationship name="sounds">
-			<destination>{88b4d00d-f834-47f3-af03-7ab73e509927}</destination>
+			<destination>{75e242b3-b948-4907-a1a6-180751590748}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{5a179a8a-a8a1-4d63-a5f7-21f97446f328}">
@@ -93,27 +93,17 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{72f8fb77-675f-4d0a-9325-9ba75c1161fd}" />
-	<object class="NamedMarker" id="{f5a1673e-0be9-4263-8a76-a6ab77bd6c12}">
-		<property name="position">
-			<value>0</value>
-		</property>
-		<property name="name">
-			<value>A "rattle" sound</value>
-		</property>
-		<relationship name="timeline">
-			<destination>{2e3bfe26-3036-461b-b31b-04a6f7b346f9}</destination>
-		</relationship>
-		<relationship name="markerTrack">
-			<destination>{d14b1f87-8f4e-4521-ac89-0a774c7f4323}</destination>
-		</relationship>
-	</object>
 	<object class="MixerBusEffectChain" id="{35c2ee4f-8f24-4a0d-829e-3e4f879ee454}">
 		<relationship name="effects">
 			<destination>{70bc3649-fe12-44f2-a151-b06ec03b8176}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{c7788a5f-09c0-43d1-955c-5776dd85c11c}" />
-	<object class="MultiSound" id="{88b4d00d-f834-47f3-af03-7ab73e509927}" />
+	<object class="SingleSound" id="{75e242b3-b948-4907-a1a6-180751590748}">
+		<property name="name">
+			<value>A "rattle" sound</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{052770e0-f9f1-4b47-afcc-b9e216d13ac9}" />
 	<object class="MixerBusFader" id="{70bc3649-fe12-44f2-a151-b06ec03b8176}" />
 </objects>

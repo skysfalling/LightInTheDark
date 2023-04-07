@@ -5,7 +5,7 @@
 			<value>The Leviathan</value>
 		</property>
 		<relationship name="folder">
-			<destination>{5be60b0a-b7f4-48b1-89e9-02c04ecdbf76}</destination>
+			<destination>{28d188de-7078-44ac-bdc7-9c69e441f513}</destination>
 		</relationship>
 	</object>
 </objects>

@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{2f5aa970-95b9-4f95-a77a-e6643a289ae2}">
 		<property name="name">
-			<value>etherealLightPickup</value>
+			<value>etherealOrbPickup</value>
 		</property>
 		<property name="outputFormat">
 			<value>0</value>
 		</property>
 		<relationship name="folder">
-			<destination>{9764c7b5-9c6e-40ae-865d-2aa6c7226688}</destination>
+			<destination>{160e15b2-3b06-4dcd-bd53-15d562cd1dc7}</destination>
 		</relationship>
 		<relationship name="mixer">
 			<destination>{74f8ee84-ec6b-4892-b1ad-23dee0831e7c}</destination>

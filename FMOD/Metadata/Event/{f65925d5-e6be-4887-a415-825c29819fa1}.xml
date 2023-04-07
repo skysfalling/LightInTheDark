@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{f65925d5-e6be-4887-a415-825c29819fa1}">
 		<property name="name">
-			<value>struggleOutOfGrab</value>
+			<value>playerStruggle</value>
 		</property>
 		<property name="outputFormat">
 			<value>0</value>
