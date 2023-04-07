@@ -13,13 +13,14 @@ public class PlayerAnimator : MonoBehaviour
     public GameObject spriteParent;
 
     [Header("Animation")]
-    public SpriteRenderer leftEye;
-    public SpriteRenderer rightEye;
-    public Sprite closedEye;
-    public Sprite halfClosedEye;
-    public Sprite openEye;
-    public Sprite winceEye;
-    public Sprite xEye;
+    public Transform parent;
+
+    public SpriteRenderer eyes;
+    public Sprite closedEyes;
+    public Sprite halfClosedEyes;
+    public Sprite openEyes;
+    public Sprite winceEyes;
+    public Sprite xEyes;
 
     [Space(10)]
     public Transform bodySprite;
@@ -92,36 +93,39 @@ public class PlayerAnimator : MonoBehaviour
 
         UpdateStateBasedEffect(movement.state);
 
+        anim.SetBool("isStunned", movement.state == PlayerState.STUNNED);
+        anim.SetBool("isHoldingObj", movement.throwObject != null);
+        anim.SetBool("inThrow", movement.inThrow);
+
+
         switch (movement.state)
         {
             case PlayerState.IDLE:
-                leftEye.sprite = closedEye;
-                rightEye.sprite = closedEye;
+                eyes.sprite = closedEyes;
 
                 anim.SetBool("isMoving", false);
                 break;
 
             case PlayerState.MOVING:
-                leftEye.sprite = halfClosedEye;
-                rightEye.sprite = halfClosedEye;
+                eyes.sprite = halfClosedEyes;
 
                 anim.SetBool("isMoving", true);
+
                 break;
 
             case PlayerState.STUNNED:
-                leftEye.sprite = winceEye;
-                rightEye.sprite = winceEye;
+                eyes.sprite = winceEyes;
                 break;
 
             case PlayerState.PANIC:
-                leftEye.sprite = openEye;
-                rightEye.sprite = openEye;
+                eyes.sprite = openEyes;
+
                 break;
 
             case PlayerState.THROWING:
 
                 // rotate parent and UI towards throw point
-                movement.throwParent.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
+                movement.aimIndicator.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
 
                 break;
 
@@ -143,14 +147,20 @@ public class PlayerAnimator : MonoBehaviour
         if (movement.moveDirection.x > 0.5f)
         {
             targetRotation = Quaternion.Euler(0f, 0f, -bodyLeanAngle);
+
+            parent.rotation = Quaternion.Euler(0f, 0, 0);
         }
         else if (movement.moveDirection.x < -0.5f)
         {
             targetRotation = Quaternion.Euler(0f, 0f, bodyLeanAngle);
+
+            parent.rotation = Quaternion.Euler(0f, 180, 0);
+
         }
         else
         {
             targetRotation = Quaternion.Euler(0f, 0f, 0);
+
         }
 
         bodySprite.rotation = Quaternion.Lerp(bodySprite.rotation, targetRotation, Time.deltaTime * leanSpeed);

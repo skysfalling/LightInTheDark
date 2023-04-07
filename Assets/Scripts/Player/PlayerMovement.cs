@@ -41,12 +41,13 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Throw Ability")]
+    public Transform aimIndicator;
     public Transform throwParent;
     public GameObject throwObject;
     public Vector2 aimDirection;
     public float throwingMoveSpeed = 10;
     public float throwForce = 20;
-    private bool inThrow;
+    public bool inThrow;
     [Space(5)]
     public string throwSortingLayer = "Player";
     public int throwSortingOrder = 5;
@@ -145,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             state = PlayerState.IDLE;
-            throwParent.gameObject.SetActive(false);
+            aimIndicator.gameObject.SetActive(false);
 
         };
 
@@ -234,13 +235,13 @@ public class PlayerMovement : MonoBehaviour
                 // throw object move to parent
                 if (throwObject != null)
                 {
-                    throwParent.gameObject.SetActive(true);
+                    aimIndicator.gameObject.SetActive(true);
 
 
                     // if not thrown yet, move object towards throw parent
                     if (throwObject.GetComponent<Item>().state == ItemState.PLAYER_INVENTORY)
                     {
-                        Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, inventory.circleSpeed * Time.deltaTime);
+                        Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, aimIndicator.transform.position, inventory.circleSpeed * Time.deltaTime);
                         throwObject.transform.position = newDirection;
                     }
                 }
