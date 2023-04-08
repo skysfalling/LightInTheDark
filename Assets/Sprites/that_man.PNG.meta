@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a7e544e18b2f1b247958c84f8458b46d
+guid: 6c2d21f1163723e4e976283fe09eeaaf
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,9 +47,9 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 300
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IMG_0334_0
+      name: that_man_0
       rect:
         serializedVersion: 2
-        x: 1568
-        y: 1684
-        width: 703
-        height: 632
+        x: 276
+        y: 2440
+        width: 1496
+        height: 752
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,20 +143,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 855bce9c8fd8f63409da39cffca9afe4
-      internalID: -579163873
+      spriteID: 8d7f4d27431244225bc4a4ee8590ea17
+      internalID: -196237299
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_0334_1
+      name: that_man_1
       rect:
         serializedVersion: 2
-        x: 1598
-        y: 1276
-        width: 643
-        height: 331
+        x: 2170
+        y: 2034
+        width: 646
+        height: 1386
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,8 +164,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f1802e488f994ae4eab2254628dccfe5
-      internalID: 2023758031
+      spriteID: a9e859fac548d47ad9a75410a3fa934a
+      internalID: 2075883541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: that_man_2
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 516
+        width: 1088
+        height: 1392
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e90d7bdc80e244f29bef7ca918cd41f
+      internalID: 1260836018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: that_man_3
+      rect:
+        serializedVersion: 2
+        x: 3193
+        y: 1390
+        width: 567
+        height: 935
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4208e29ceba9540a6ab63f0186847e96
+      internalID: 1032140188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: that_man_6
+      rect:
+        serializedVersion: 2
+        x: 2803
+        y: 278
+        width: 428
+        height: 865
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa1fc94f89404468893b489af098b584
+      internalID: 1789906797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: that_man_9
+      rect:
+        serializedVersion: 2
+        x: 1634
+        y: 158
+        width: 352
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb3708a157ca84dc581d3fb22994c222
+      internalID: -1056404328
       vertices: []
       indices: 
       edges: []
@@ -181,8 +265,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      IMG_0334_0: -579163873
-      IMG_0334_1: 2023758031
+      that_man_8: 263812395
+      that_man_9: -1056404328
+      that_man_7: -172740452
+      that_man_3: 1032140188
+      that_man_0: -196237299
+      that_man_2: 1260836018
+      that_man_6: 1789906797
+      that_man_1: 2075883541
+      that_man_4: 352962430
+      that_man_10: 887552847
+      that_man_5: -1784338522
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

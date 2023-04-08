@@ -235,13 +235,11 @@ public class PlayerMovement : MonoBehaviour
                 // throw object move to parent
                 if (throwObject != null)
                 {
-                    aimIndicator.gameObject.SetActive(true);
-
 
                     // if not thrown yet, move object towards throw parent
                     if (throwObject.GetComponent<Item>().state == ItemState.PLAYER_INVENTORY)
                     {
-                        Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, aimIndicator.transform.position, inventory.circleSpeed * Time.deltaTime);
+                        Vector3 newDirection = Vector3.MoveTowards(throwObject.transform.position, throwParent.transform.position, inventory.circleSpeed * Time.deltaTime);
                         throwObject.transform.position = newDirection;
                     }
                 }
@@ -293,9 +291,10 @@ public class PlayerMovement : MonoBehaviour
         obj.GetComponent<Item>().SetSortingOrder(throwSortingOrder, throwSortingLayer);
         obj.GetComponent<Rigidbody2D>().AddForce(direction * force, ForceMode2D.Impulse);
 
-        yield return new WaitForSeconds(0.25f); // wait for item to get out of player's range -> to stop immediate pickup 
+        yield return new WaitForSeconds(0.5f); // wait for item to get out of player's range -> to stop immediate pickup 
  
         throwObject = null; // set throw object to null
+
 
         inThrow = false;
     }

@@ -95,8 +95,12 @@ public class PlayerAnimator : MonoBehaviour
 
         anim.SetBool("isStunned", movement.state == PlayerState.STUNNED);
         anim.SetBool("isHoldingObj", movement.throwObject != null);
-        anim.SetBool("inThrow", movement.inThrow);
 
+        // enable / disable aim indicator
+        movement.aimIndicator.gameObject.SetActive(movement.state == PlayerState.THROWING);
+
+        // play throw anim
+        if (movement.inThrow) { PlayAnimationIfNotPlaying("throw"); }
 
         switch (movement.state)
         {
@@ -125,13 +129,14 @@ public class PlayerAnimator : MonoBehaviour
             case PlayerState.THROWING:
 
                 // rotate parent and UI towards throw point
-                movement.aimIndicator.transform.eulerAngles = new Vector3(0, 0, rotation - 90f);
+                movement.aimIndicator.transform.eulerAngles = new Vector3(0, 0, rotation);
 
                 break;
 
             case PlayerState.DASH:
 
                 dashEffect.transform.eulerAngles = new Vector3(0, 0, rotation - 180f);
+                anim.SetBool("isMoving", true);
 
                 break;
 
@@ -235,6 +240,14 @@ public class PlayerAnimator : MonoBehaviour
         outerLight.pointLightOuterRadius = Mathf.Lerp(outerLight.pointLightOuterRadius, outerLightRadius, Time.deltaTime * 0.2f);
 
 
+    }
+
+    public void PlayAnimationIfNotPlaying(string animationName)
+    {
+        if (anim != null && !anim.GetCurrentAnimatorStateInfo(0).IsName(animationName))
+        {
+            anim.Play(animationName);
+        }
     }
 
     #endregion

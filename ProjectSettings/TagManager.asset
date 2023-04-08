@@ -58,14 +58,14 @@ TagManager:
   - name: Env Mid
     uniqueID: 2363798649
     locked: 0
+  - name: Entity
+    uniqueID: 933479929
+    locked: 0
   - name: Player
     uniqueID: 3212026923
     locked: 0
   - name: Env Front
     uniqueID: 535356735
-    locked: 0
-  - name: Entity
-    uniqueID: 933479929
     locked: 0
   - name: UI
     uniqueID: 1128220421
