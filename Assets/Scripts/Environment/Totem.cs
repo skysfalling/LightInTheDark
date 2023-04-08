@@ -38,10 +38,12 @@ public class Totem : MonoBehaviour
 
     [Header("Lights")]
     public Light2D mainLight;
+    public Vector2 mainLightIntensity;
+    public Vector2 mainLightRange;
+    [Space(10)]
     public Light2D glowLight;
     public Vector2 glowLightIntensity;
     public Vector2 glowLightRange;
-
 
     [Header("Door Unlock")]
     public List<Door> unlockDoors;
@@ -92,16 +94,26 @@ public class Totem : MonoBehaviour
         if (lifeForce > maxLifeForce) { overflowing = true; }
         else { overflowing = false; }
 
-        // unlock door
-        UnlockDoors(overflowing);
+        // lock door
+        LockDoors(lifeForce > maxLifeForce * 0.5f);
 
-        // target percentage + 0.1 percent
+
+        // << GLOW LIGHT >>
+        // target percentage
         float targetIntensity = Mathf.Lerp(glowLightIntensity.x, glowLightIntensity.y, (float)lifeForce / (float)maxLifeForce);
         glowLight.intensity = Mathf.Lerp(glowLight.intensity, targetIntensity, Time.deltaTime);
 
         float targetRange = Mathf.Lerp(glowLightRange.x, glowLightRange.y, (float)lifeForce / (float)maxLifeForce);
         glowLight.pointLightOuterRadius = Mathf.Lerp(glowLight.pointLightOuterRadius, targetRange, Time.deltaTime);
 
+
+        // << MAIN LIGHT >>
+        // target percentage
+        float mainTargetIntensity = Mathf.Lerp(mainLightIntensity.x, mainLightIntensity.y, (float)lifeForce / (float)maxLifeForce);
+        mainLight.intensity = Mathf.Lerp(mainLight.intensity, mainTargetIntensity, Time.deltaTime);
+
+        float mainTargetRange = Mathf.Lerp(mainLightRange.x, mainLightRange.y, (float)lifeForce / (float)maxLifeForce);
+        mainLight.pointLightOuterRadius = Mathf.Lerp(mainLight.pointLightOuterRadius, mainTargetRange, Time.deltaTime);
     }
 
     public void SubmissionManager()
@@ -186,15 +198,16 @@ public class Totem : MonoBehaviour
         item.transform.parent = transform; // set parent
 
         // << MOVE ITEM TO CENTER >>
-        while (Vector2.Distance(item.transform.position, transform.position) > 5f)
+        while (Vector2.Distance(item.transform.position, transform.position) > 1f)
         {
-            item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, 2 * Time.deltaTime);
+            item.transform.position = Vector3.MoveTowards(item.transform.position, transform.position, Time.deltaTime);
         }
 
         submissionOverflow.Remove(item.gameObject);
 
         // add to life force
         lifeForce += lifeForceSubmitAmount;
+        //Debug.Log("Totem Submission");
 
         // destroy item
         player.inventory.Remove(item.gameObject);
@@ -205,12 +218,14 @@ public class Totem : MonoBehaviour
         canSubmit = true;
     }
 
-    public void UnlockDoors(bool enabled)
+    public void LockDoors(bool enabled)
     {
+        Debug.Log("Door lock" + enabled);
+
         foreach (Door door in unlockDoors)
         {
             if (door == null) { continue; }
-            door.locked = !enabled;
+            door.locked = enabled;
         }
     }
 
@@ -261,7 +276,7 @@ public class Totem : MonoBehaviour
     {
         currCircleAngle += circleSpeed * Time.deltaTime; // Update angle of rotation
 
-        Vector3 targetPos = triggerParent.position;
+        Vector3 targetPos = transform.position;
         targetPos.z = 0f; // Ensure target position is on the same plane as objects to circle
 
         for (int i = 0; i < items.Count; i++)
