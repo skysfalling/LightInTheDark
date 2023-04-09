@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="ParameterPreset" id="{063e20b6-284e-4ff9-b280-1fdf7ea50702}">
 		<property name="name">
-			<value>gremlinDistance</value>
+			<value>gremlinProximity</value>
 		</property>
 		<relationship name="folder">
 			<destination>{ac17fd91-bc8b-4652-b30a-175f8b3c317c}</destination>
