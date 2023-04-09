@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1159354729833526192}
   - component: {fileID: 1159354729833526094}
   - component: {fileID: 1159354729833526095}
-  - component: {fileID: 1159354729833526195}
+  - component: {fileID: -5034140437531142693}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &1159354729833526195
+--- !u!114 &-5034140437531142693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -444,7 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 597d17087a88a5d4f90bd5564293caa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightPickupSound: event:/lightPickup
+  lightPickupSound: event:/SFX/Items/lightOrbPickup
 --- !u!114 &2093135814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,11 +460,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 1882599092
-      Data2: 1314803241
-      Data3: -1455926888
-      Data4: -924153032
-    Path: event:/backgroundMusic
+      Data1: -909266172
+      Data2: 1159987350
+      Data3: -1600029545
+      Data4: -1765030248
+    Path: event:/Music/backgroundMusic
   Event: 
   PlayEvent: 1
   StopEvent: 2

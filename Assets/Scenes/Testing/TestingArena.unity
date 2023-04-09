@@ -1031,6 +1031,41 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2027875961653310383, guid: c133d01e449006c4491ef09241a0d903, type: 3}
   m_PrefabInstance: {fileID: 817120226}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &311980647 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6384830676465493297, guid: e1e316143f66a5c47898719b4a4b3583, type: 3}
+  m_PrefabInstance: {fileID: 6384830677747832875}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &311980650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311980647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -856897401
+      Data2: 1339905681
+      Data3: -556945531
+      Data4: 1843667218
+    Path: event:/Ambience/The Leviathan/leviathanWhale
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 110
 --- !u!1001 &314535125
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2515,6 +2550,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 2027875961653310383, guid: c133d01e449006c4491ef09241a0d903, type: 3}
   m_PrefabInstance: {fileID: 721215924}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &748811951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4537568833586458707, guid: 64205bed4e35cc24ab2f89fadbfbc37f, type: 3}
+  m_PrefabInstance: {fileID: 916827312}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &752132351
 PrefabInstance:
@@ -7172,6 +7212,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5034140437531142693, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: attenuationObject
+      value: 
+      objectReference: {fileID: 748811951}
+    - target: {fileID: 2093135814, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: EventReference.Path
+      value: event:/Music/backgroundMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093135814, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: EventReference.Guid.Data1
+      value: -909266172
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093135814, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: EventReference.Guid.Data2
+      value: 1159987350
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093135814, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: EventReference.Guid.Data3
+      value: -1600029545
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093135814, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: EventReference.Guid.Data4
+      value: -1765030248
+      objectReference: {fileID: 0}
     - target: {fileID: 1159354729833526192, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
       propertyPath: playerOffset
       value: 10
