@@ -4,9 +4,9 @@ using UnityEngine;
 
 
 public enum CameraState { 
-    NONE, START, PLAYER, ROOM_BASED, 
-    CUSTOM_TARGET, CUSTOM_ZOOM_IN_TARGET, 
-    CUSTOM_ZOOM_OUT_TARGET, GAMETIP_TARGET,
+    NONE, START, PLAYER, ROOM_BASED, ACTIVE_FOCUS, 
+    CUSTOM_TARGET, ZOOM_IN_TARGET, 
+    ZOOM_OUT_TARGET, GAMETIP_TARGET,
     PANIC }
 public class CameraManager : MonoBehaviour
 {
@@ -23,11 +23,14 @@ public class CameraManager : MonoBehaviour
     public float zoomInCamSize = 25;
     public float normalCamSize = 40;
     public float zoomOutCamSize = 60;
+    public float customZoomSize = 40;
 
     [Space(10)]
     public float playerCamOffset = 10;
     public float playerDashCamOffset = 5;
     public Vector2 gameplayTipOffset = new Vector2(-100, 0);
+    public float activeFocusOffset = 25;
+
 
     [Header("Camera Shake")]
     public float normalCamShakeDuration = 0.1f;
@@ -87,14 +90,14 @@ public class CameraManager : MonoBehaviour
                     case PlayerState.STUNNED:
                     case PlayerState.SLOWED:
                     case PlayerState.PANIC:
-                        NewCustomZoomInTarget(player);
+                        NewZoomInTarget(player);
                         break;
 
                     case PlayerState.IDLE:
                     case PlayerState.MOVING:
                     case PlayerState.THROWING:
-                        NormalCam();
-                        FollowPlayer();
+                        // NormalCam();
+                        // FollowPlayer();
                         break;
 
 
@@ -119,6 +122,10 @@ public class CameraManager : MonoBehaviour
                 NormalCam();
                 FollowPlayer();
                 break;
+            case (CameraState.ACTIVE_FOCUS):
+                CustomZoom();
+                ActivePlayerFocus(currTarget, activeFocusOffset);
+                break;
             case (CameraState.ROOM_BASED):
                 NormalCam();
                 MoveCamToClosestRoom();
@@ -127,11 +134,11 @@ public class CameraManager : MonoBehaviour
                 NormalCam();
                 FollowTarget(currTarget);
                 break;
-            case (CameraState.CUSTOM_ZOOM_IN_TARGET):
+            case (CameraState.ZOOM_IN_TARGET):
                 ZoomInCam();
                 FollowTarget(currTarget);
                 break;
-            case (CameraState.CUSTOM_ZOOM_OUT_TARGET):
+            case (CameraState.ZOOM_OUT_TARGET):
                 ZoomOutCam();
                 FollowTarget(currTarget);
                 break;
@@ -161,7 +168,7 @@ public class CameraManager : MonoBehaviour
 
     }
 
-    public void MoveCamToClosestRoom()
+    void MoveCamToClosestRoom()
     {
         if (rooms.Count == 0) { return; }
 
@@ -183,7 +190,7 @@ public class CameraManager : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, target, camSpeed * Time.deltaTime);
     }
 
-    public void FollowPlayer()
+    void FollowPlayer()
     {
         if (currTarget == null) { return; }
 
@@ -203,7 +210,25 @@ public class CameraManager : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position , targetPos + offset, camSpeed * Time.deltaTime);
     }
 
-    public void FollowTarget(Transform newTarget)
+    void ActivePlayerFocus(Transform customTarget, float camOffset = 20)
+    {
+        if (customTarget == null) { return; }
+
+        Vector3 targetPos = new Vector3(customTarget.position.x, customTarget.position.y, transform.position.z);
+
+        Vector3 offset = Vector3.zero;
+        PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            // update offset based on player direction
+            offset = (player.transform.position - customTarget.position).normalized * camOffset;
+        }
+
+        // update position
+        transform.position = Vector3.Lerp(transform.position, targetPos + offset, camSpeed * Time.deltaTime);
+    }
+
+    void FollowTarget(Transform newTarget)
     {
         if (currTarget == null) { return; }
 
@@ -214,7 +239,7 @@ public class CameraManager : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPos, camSpeed * Time.deltaTime);
     }
 
-    public void FollowTarget(Transform newTarget, Vector3 offset)
+    void FollowTarget(Transform newTarget, Vector3 offset)
     {
         if (currTarget == null) { return; }
 
@@ -224,21 +249,24 @@ public class CameraManager : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPos + offset, camSpeed * Time.deltaTime);
     }
 
-    public void NewCustomTarget(Transform customTarget)
+    public void NewTarget(Transform customTarget, int zoom = -1)
     {
+        if (zoom == -1) { customZoomSize = normalCamSize; }
+        else if (zoom > 0) { customZoomSize = zoom; }
+
         state = CameraState.CUSTOM_TARGET;
         currTarget = customTarget;
     }
 
-    public void NewCustomZoomInTarget(Transform customTarget)
+    public void NewZoomInTarget(Transform customTarget)
     {
-        state = CameraState.CUSTOM_ZOOM_IN_TARGET;
+        state = CameraState.ZOOM_IN_TARGET;
         currTarget = customTarget;
     }
 
-    public void NewCustomZoomOutTarget(Transform customTarget)
+    public void NewZoomOutTarget(Transform customTarget)
     {
-        state = CameraState.CUSTOM_ZOOM_OUT_TARGET;
+        state = CameraState.ZOOM_OUT_TARGET;
         currTarget = customTarget;
     }
 
@@ -246,6 +274,13 @@ public class CameraManager : MonoBehaviour
     {
         state = CameraState.GAMETIP_TARGET;
         currTarget = customTarget;
+    }
+
+    public void NewActiveFocus(Transform customTarget, float zoom = -1)
+    {
+        state = CameraState.ACTIVE_FOCUS;
+        currTarget = customTarget;
+        customZoomSize = zoom;
     }
 
     void NormalCam()
@@ -261,6 +296,11 @@ public class CameraManager : MonoBehaviour
     void ZoomOutCam()
     {
         Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoomOutCamSize, Time.deltaTime);
+    }
+
+    public void CustomZoom()
+    {
+        Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, customZoomSize, Time.deltaTime);
     }
 
     public void ShakeCamera()

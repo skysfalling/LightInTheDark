@@ -83,7 +83,7 @@ public class Level_2 : LevelManager
         }
 
         player.state = PlayerState.INACTIVE;
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // << START FLOWER DECAY >>
@@ -94,7 +94,7 @@ public class Level_2 : LevelManager
         NewDialogue(dialogueManager.witness_start_1_2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
-        camManager.NewCustomZoomInTarget(player.transform);
+        camManager.NewZoomInTarget(player.transform);
         yield return new WaitForSeconds(1);
 
         currLifeFlower.decayActive = true;
@@ -127,13 +127,13 @@ public class Level_2 : LevelManager
         currLifeFlower.state = FlowerState.HEALED;
         player.state = PlayerState.INACTIVE;
 
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         NewDialogue(dialogueManager.witness_end_1_2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
-        camManager.NewCustomZoomOutTarget(room1Center.transform);
+        camManager.NewZoomOutTarget(room1Center.transform);
         yield return new WaitForSeconds(2);
 
         // destroy items
@@ -145,10 +145,10 @@ public class Level_2 : LevelManager
 
         // shake camera
         camManager.ShakeCamera(2.5f, 0.2f);
-        camManager.NewCustomZoomOutTarget(room1HiddenDoor.transform);
+        camManager.NewZoomOutTarget(room1HiddenDoor.transform);
         yield return new WaitForSeconds(2);
 
-        camManager.NewCustomZoomInTarget(player.transform);
+        camManager.NewZoomInTarget(player.transform);
         yield return new WaitForSeconds(1);
 
         player.state = PlayerState.IDLE;
@@ -174,7 +174,7 @@ public class Level_2 : LevelManager
         player.transform.position = cleansingCrystal.triggerParent.position;
 
         // focus on crystal
-        camManager.NewCustomTarget(cleansingCrystal.transform);
+        camManager.NewTarget(cleansingCrystal.transform);
 
         // wait until conversion is finished
         yield return new WaitUntil(() => cleansingCrystal.itemConverted);
@@ -207,7 +207,7 @@ public class Level_2 : LevelManager
 
         // << NEW LIFE FLOWER >>
         currLifeFlower = lifeFlowers[1];
-        camManager.NewCustomZoomOutTarget(currLifeFlower.transform);
+        camManager.NewZoomOutTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(1);
 
         // comment on flower
@@ -254,7 +254,7 @@ public class Level_2 : LevelManager
         state = LevelState.FAIL;
         player.Inactive();
 
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         NewRandomDialogue(dialogueManager.witness_onFail);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
@@ -280,11 +280,11 @@ public class Level_2 : LevelManager
         currLifeFlower.state = FlowerState.HEALED;
 
         // zoom in to flower
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // zoom out of flower
-        camManager.NewCustomZoomOutTarget(currLifeFlower.transform);
+        camManager.NewZoomOutTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // destroy items
@@ -298,7 +298,7 @@ public class Level_2 : LevelManager
 
         // open exit door
         levelExitDoor.locked = false;
-        camManager.NewCustomZoomInTarget(levelExitDoor.transform);
+        camManager.NewZoomInTarget(levelExitDoor.transform);
         yield return new WaitForSeconds(2);
 
         camManager.state = CameraState.ROOM_BASED;

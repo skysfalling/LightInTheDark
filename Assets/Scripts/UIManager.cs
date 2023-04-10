@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     GameManager gameManager;
+    Animator anim;
     public LevelManager levelManager;
 
     [Header("UI")]
@@ -22,6 +23,9 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI deathText;
     public float transitionSpeed = 5;
 
+    [Header("Encounter Announcement")]
+    public TextMeshProUGUI encounterAnnounceText;
+
     [Header("Dialogue")]
     public GameObject dialogueObject;
     public TextMeshProUGUI dialogueText;
@@ -33,6 +37,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         gameManager = GetComponentInParent<GameManager>();
+        anim = GetComponent<Animator>();
 
         transition.material.SetFloat("_Dissolve", 0);
     }
@@ -110,6 +115,18 @@ public class UIManager : MonoBehaviour
 
     }
     #endregion
+
+    #region EncounterAnnouncement
+
+    public void NewEncounterAnnouncement(string text = "keep your flower alive")
+    {
+
+        StartCoroutine(TimedGameDialogueRoutine(encounterAnnounceText, text, wordDelay, 2));
+
+        anim.Play("StartEncounterAnnouncement");
+    }
+    #endregion
+
 
     #region Dialogue
     public void NewDialogue(string text)
@@ -249,6 +266,26 @@ public class UIManager : MonoBehaviour
         inDialogue = false;
         DisableDialogue();
     }
+
+    IEnumerator TimedGameDialogueRoutine(TextMeshProUGUI textComponent, string dialogue, float wordDelay, float endDelay)
+    {
+        inDialogue = true;
+
+        string[] words = gameManager.gameConsole.DecodeColorString(dialogue).Split(' ');
+        textComponent.text = "";
+
+        for (int i = 0; i < words.Length; i++)
+        {
+            textComponent.text += words[i] + " ";
+            yield return new WaitForSeconds(wordDelay);
+        }
+
+        yield return new WaitForSeconds(endDelay);
+
+        inDialogue = false;
+        DisableDialogue();
+    }
+
     #endregion
 
 }

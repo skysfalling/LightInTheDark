@@ -76,14 +76,14 @@ public class Level1_3 : LevelManager
         gameManager.levelSavePoint = LevelState.ROOM1;
 
         // zoom in on totem
-        camManager.NewCustomZoomInTarget(room1Totems[0].transform);
+        camManager.NewZoomInTarget(room1Totems[0].transform);
 
         // play Witness line introducing totem and throwing mechanic
         NewDialogue(dialogueManager.witness_totem_introduction);
         yield return new WaitUntil(() => !uiManager.inDialogue);
         yield return new WaitForSeconds(1);
 
-        camManager.NewCustomZoomOutTarget(room1Totems[0].transform);
+        camManager.NewZoomOutTarget(room1Totems[0].transform);
         yield return new WaitForSeconds(2);
 
         // play Witness line introducing totem and throwing mechanic
@@ -100,11 +100,11 @@ public class Level1_3 : LevelManager
         player.Inactive();
 
         // zoom in on opening door
-        camManager.NewCustomZoomInTarget(room1Totems[0].transform);
+        camManager.NewZoomInTarget(room1Totems[0].transform);
         yield return new WaitForSeconds(2);
 
         // zoom in on opening door
-        camManager.NewCustomZoomInTarget(room1Totems[0].unlockDoors[0].transform);
+        camManager.NewZoomInTarget(room1Totems[0].unlockDoors[0].transform);
         yield return new WaitForSeconds(2);
 
         // play Witness line demonstrating door unlocks
@@ -139,7 +139,7 @@ public class Level1_3 : LevelManager
         player.state = PlayerState.INACTIVE;
 
         // focus on flower
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
 
         // play Witness line
         NewDialogue(dialogueManager.witness_flower_introduction);
@@ -168,7 +168,7 @@ public class Level1_3 : LevelManager
         state = LevelState.FAIL;
         player.Inactive();
 
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         NewRandomDialogue(dialogueManager.witness_onFail);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
@@ -194,11 +194,11 @@ public class Level1_3 : LevelManager
         currLifeFlower.state = FlowerState.HEALED;
 
         // zoom in to flower
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // zoom out of flower
-        camManager.NewCustomZoomOutTarget(currLifeFlower.transform);
+        camManager.NewZoomOutTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // new dialogue

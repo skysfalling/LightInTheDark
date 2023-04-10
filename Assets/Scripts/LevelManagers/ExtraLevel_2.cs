@@ -78,7 +78,7 @@ public class ExtraLevel_2 : LevelManager
         }
 
         player.state = PlayerState.INACTIVE;
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // << START FLOWER DECAY >>
@@ -93,7 +93,7 @@ public class ExtraLevel_2 : LevelManager
         StartCountdown(roomTimeCountdown);
         countdownStarted = false;
 
-        camManager.NewCustomZoomInTarget(player.transform);
+        camManager.NewZoomInTarget(player.transform);
         player.state = PlayerState.IDLE;
 
         yield return new WaitForSeconds(1);
@@ -118,7 +118,7 @@ public class ExtraLevel_2 : LevelManager
         state = LevelState.FAIL;
         player.Inactive();
 
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         NewRandomDialogue(dialogueManager.witness_onFail);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
@@ -144,11 +144,11 @@ public class ExtraLevel_2 : LevelManager
         currLifeFlower.state = FlowerState.HEALED;
 
         // zoom in to flower
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // zoom out of flower
-        camManager.NewCustomZoomOutTarget(currLifeFlower.transform);
+        camManager.NewZoomOutTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // destroy items

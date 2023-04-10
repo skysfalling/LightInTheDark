@@ -274,6 +274,11 @@ public class Totem : MonoBehaviour
         }
     }
 
+    public float GetLifeForcePercentage()
+    {
+        return (float)lifeForce / (float)maxLifeForce;
+    }
+
     public void CircleAroundTransform(List<GameObject> items)
     {
         currCircleAngle += circleSpeed * Time.deltaTime; // Update angle of rotation
@@ -288,7 +293,7 @@ public class Totem : MonoBehaviour
 
             float angleRadians = (currCircleAngle + (360f / items.Count) * i) * Mathf.Deg2Rad; // Calculate angle in radians for each object
             Vector3 newPos = targetPos + new Vector3(Mathf.Cos(angleRadians) * circleRadius, Mathf.Sin(angleRadians) * circleRadius, 0f); // Calculate new position for object
-            items[i].transform.position = Vector3.Lerp(items[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
+            items[i].GetComponent<Item>().rb.position = Vector3.Lerp(items[i].transform.position, newPos, Time.deltaTime); // Move object towards new position using Lerp
 
         }
     }

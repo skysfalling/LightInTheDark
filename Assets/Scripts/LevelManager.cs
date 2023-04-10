@@ -96,7 +96,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitUntil(() => playerSpawn.playerSpawned);
 
         camManager.state = CameraState.PLAYER;
-        
+        uiManager.NewEncounterAnnouncement();
     }
 
     public virtual void LevelStateMachine()
@@ -184,7 +184,7 @@ public class LevelManager : MonoBehaviour
     {
         foreach (Spawner spawner in spawners)
         {
-            if (spawner.spawnedObject)
+            if (spawner != null & spawner.spawnedObject)
             {
                 spawner.DestroySpawnedObject();
             }

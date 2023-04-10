@@ -36,13 +36,13 @@ public class Level1_1 : LevelManager
         state = LevelState.ROOM1;
 
         player.Inactive();
-        camManager.NewCustomZoomInTarget(player.transform);
+        camManager.NewZoomInTarget(player.transform);
 
         // wait until spawned
         yield return new WaitUntil(() => playerSpawn.playerSpawned);
 
         // focus on flower
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // [[ LINES 1 ]]
@@ -60,7 +60,7 @@ public class Level1_1 : LevelManager
 
         // focus on new light orbs
         player.Inactive();
-        camManager.NewCustomZoomInTarget(levelSpawners[0].transform);
+        camManager.NewZoomInTarget(levelSpawners[0].transform);
         yield return new WaitForSeconds(1);
         EnableSpawners(levelSpawners);
         gameConsole.NewMessage("pickup the l(light orb) by moving into it");
@@ -88,7 +88,7 @@ public class Level1_1 : LevelManager
         state = LevelState.COMPLETE;
         currLifeFlower.state = FlowerState.HEALED;
         player.Inactive();
-        camManager.NewCustomZoomInTarget(currLifeFlower.transform);
+        camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // [[ LINES 3 ]]
