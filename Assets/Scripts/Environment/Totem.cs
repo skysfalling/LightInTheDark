@@ -37,6 +37,8 @@ public class Totem : MonoBehaviour
     public bool canSubmit;
 
     [Header("Lights")]
+    public float lightAdjustSpeed = 3;
+    [Space(10)]
     public Light2D mainLight;
     public Vector2 mainLightIntensity;
     public Vector2 mainLightRange;
@@ -95,7 +97,7 @@ public class Totem : MonoBehaviour
         else { overflowing = false; }
 
         // lock door
-        LockDoors(lifeForce > maxLifeForce * 0.5f);
+        LockDoors(lifeForce <= 0);
 
 
         // << GLOW LIGHT >>
@@ -104,7 +106,7 @@ public class Totem : MonoBehaviour
         glowLight.intensity = Mathf.Lerp(glowLight.intensity, targetIntensity, Time.deltaTime);
 
         float targetRange = Mathf.Lerp(glowLightRange.x, glowLightRange.y, (float)lifeForce / (float)maxLifeForce);
-        glowLight.pointLightOuterRadius = Mathf.Lerp(glowLight.pointLightOuterRadius, targetRange, Time.deltaTime);
+        glowLight.pointLightOuterRadius = Mathf.Lerp(glowLight.pointLightOuterRadius, targetRange, lightAdjustSpeed * Time.deltaTime);
 
 
         // << MAIN LIGHT >>
@@ -113,7 +115,7 @@ public class Totem : MonoBehaviour
         mainLight.intensity = Mathf.Lerp(mainLight.intensity, mainTargetIntensity, Time.deltaTime);
 
         float mainTargetRange = Mathf.Lerp(mainLightRange.x, mainLightRange.y, (float)lifeForce / (float)maxLifeForce);
-        mainLight.pointLightOuterRadius = Mathf.Lerp(mainLight.pointLightOuterRadius, mainTargetRange, Time.deltaTime);
+        mainLight.pointLightOuterRadius = Mathf.Lerp(mainLight.pointLightOuterRadius, mainTargetRange, lightAdjustSpeed * Time.deltaTime);
     }
 
     public void SubmissionManager()
