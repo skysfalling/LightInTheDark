@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum HandState { IDLE, TRACKING, ATTACK, GRAB, GRAB_BROKEN, PLAYER_CAPTURED }
+public enum HandState { IDLE, TRACKING, ATTACK, GRAB, GRAB_BROKEN, TRAVEL, PLAYER_CAPTURED }
 
 public class GrabHandAI : MonoBehaviour
 {
@@ -39,8 +39,13 @@ public class GrabHandAI : MonoBehaviour
     public int breakFree_struggleCount = 4;
 
     [Header("Player Captured")]
-    public bool playerCaptured;
+    public bool captureStarted;
     public Transform capturePoint;
+
+    [Header("Travel Hand")]
+    public bool isTravelHand;
+    public bool travelStarted;
+    public Transform travelDestination;
 
 
     [Header("Animation Gameobjects")]
@@ -113,9 +118,16 @@ public class GrabHandAI : MonoBehaviour
 
             case HandState.PLAYER_CAPTURED:
 
-                if (!playerCaptured)
+                if (!captureStarted)
                 {
                     StartCoroutine(PlayerCapture());
+                }
+                break;
+
+            case HandState.TRAVEL:
+                if (!travelStarted)
+                {
+                    StartCoroutine(TravelRoutine());
                 }
                 break;
 
@@ -216,6 +228,10 @@ public class GrabHandAI : MonoBehaviour
 
             state = HandState.IDLE;
         }
+        else if (isTravelHand)
+        {
+            state = HandState.TRAVEL;
+        }
         else
         {
             state = HandState.PLAYER_CAPTURED;
@@ -229,7 +245,7 @@ public class GrabHandAI : MonoBehaviour
 
     IEnumerator PlayerCapture()
     {
-        playerCaptured = true;
+        captureStarted = true;
         player.transform.parent = transform;
         player.transform.position = transform.position;
 
@@ -241,7 +257,36 @@ public class GrabHandAI : MonoBehaviour
             yield return null;
         }
 
-        playerCaptured = false;
+        captureStarted = false;
+
+    }
+
+    IEnumerator TravelRoutine()
+    {
+        travelStarted = true;
+
+        player.transform.parent = transform;
+        player.transform.position = transform.position;
+        player.GetComponent<PlayerMovement>().state = PlayerState.INACTIVE;
+
+        // << MOVE HAND >>
+        while (Vector2.Distance(transform.position, travelDestination.position) > 2)
+        {
+            transform.position = Vector3.Lerp(transform.position, travelDestination.position, trackingSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        // let go of player
+        player.transform.parent = null;
+        player.GetComponent<PlayerMovement>().moveTarget = player.transform.position;
+        player.GetComponent<PlayerMovement>().state = PlayerState.IDLE;
+
+
+        // << MOVE HAND BACK TO START >>
+        state = HandState.IDLE;
+
+        travelStarted = false;
 
     }
 
