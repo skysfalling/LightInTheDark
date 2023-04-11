@@ -248,7 +248,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -373167607, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
@@ -332,7 +332,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 1
   m_Sprite: {fileID: 1969495153, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -416,7 +416,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 2
   m_Sprite: {fileID: -406729819, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
@@ -556,7 +556,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 933479929
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 1
   m_Sprite: {fileID: 1882086940, guid: 3a107c92f8df4b94cbe61a054462e18d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -583,6 +583,7 @@ GameObject:
   - component: {fileID: 1283278705518591809}
   - component: {fileID: 5885595107389502670}
   - component: {fileID: 7907575297298026076}
+  - component: {fileID: 5493316973321172726}
   m_Layer: 7
   m_Name: gremlinAI
   m_TagString: Untagged
@@ -789,6 +790,36 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &5493316973321172726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7352116017459935470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 2071006970
+      Data2: 1270630389
+      Data3: 1232247464
+      Data4: 1273129123
+    Path: event:/Music/thatManDrums
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 50
 --- !u!1 &7374348900795424138
 GameObject:
   m_ObjectHideFlags: 0

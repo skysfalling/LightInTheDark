@@ -7621,6 +7621,34 @@ PrefabInstance:
       propertyPath: idleZoneRadius
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 6197639851069609862, guid: 6f8f8fca332bef248ad9e450d9efdde8, type: 3}
+      propertyPath: EventReference.Path
+      value: event:/SFX/Gremlins/gremlinStun & Theme
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197639851069609862, guid: 6f8f8fca332bef248ad9e450d9efdde8, type: 3}
+      propertyPath: OverrideAttenuation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197639851069609862, guid: 6f8f8fca332bef248ad9e450d9efdde8, type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197639851069609862, guid: 6f8f8fca332bef248ad9e450d9efdde8, type: 3}
+      propertyPath: EventReference.Guid.Data1
+      value: -2108292986
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197639851069609862, guid: 6f8f8fca332bef248ad9e450d9efdde8, type: 3}
+      propertyPath: EventReference.Guid.Data2
+      value: 1086632366
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197639851069609862, guid: 6f8f8fca332bef248ad9e450d9efdde8, type: 3}
+      propertyPath: EventReference.Guid.Data3
+      value: 741199777
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197639851069609862, guid: 6f8f8fca332bef248ad9e450d9efdde8, type: 3}
+      propertyPath: EventReference.Guid.Data4
+      value: -1021553198
+      objectReference: {fileID: 0}
     - target: {fileID: 6732072404349179224, guid: 6f8f8fca332bef248ad9e450d9efdde8, type: 3}
       propertyPath: idleZoneRadius
       value: 100
@@ -7646,6 +7674,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1204796728497821745, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -81.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1204796728497821745, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1204796729162388299, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
       propertyPath: m_RootOrder
       value: 14
@@ -7693,6 +7729,30 @@ PrefabInstance:
     - target: {fileID: 1204796729162388301, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
       propertyPath: m_Name
       value: TheManHorde
+      objectReference: {fileID: 0}
+    - target: {fileID: 3968020846182130414, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3968020846452974073, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3968020846468630170, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3968020846496675242, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3968020847030539502, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3968020847445021003, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 805fe6d52cc164701b23065d7e7bf719, type: 3}

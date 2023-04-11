@@ -5,10 +5,10 @@
 			<value>thatManDrums</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
-			<destination>{cf9f04e7-a9f3-4693-b54d-d43cdce01211}</destination>
+			<destination>{44f054c4-843f-42b0-b856-dd39d42b1b5a}</destination>
 		</relationship>
 		<relationship name="mixer">
 			<destination>{b2995852-f3af-4138-b97c-323af449a5ad}</destination>
@@ -31,6 +31,9 @@
 		</relationship>
 		<relationship name="timeline">
 			<destination>{cddf32c1-9894-4430-ba03-3967dbb16a82}</destination>
+		</relationship>
+		<relationship name="banks">
+			<destination>{85d97cde-bf8e-4f90-99be-a65a445a19e6}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixer" id="{b2995852-f3af-4138-b97c-323af449a5ad}">
@@ -218,6 +221,7 @@
 	<object class="MixerBusEffectChain" id="{9dd58f13-5783-4f69-a4b9-024f031a5705}">
 		<relationship name="effects">
 			<destination>{31e473bf-df97-4cf4-9779-27d87099e49e}</destination>
+			<destination>{96f452da-a03b-4060-bfb9-83051303528b}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{ee011d33-933d-441a-b18c-4188e6afc4e9}" />
@@ -245,4 +249,9 @@
 	</object>
 	<object class="MixerBusFader" id="{691ec3c4-25b7-4cc5-ae1f-6a16592a58b0}" />
 	<object class="MixerBusFader" id="{31e473bf-df97-4cf4-9779-27d87099e49e}" />
+	<object class="SpatialiserEffect" id="{96f452da-a03b-4060-bfb9-83051303528b}">
+		<property name="distanceRolloffType">
+			<value>2</value>
+		</property>
+	</object>
 </objects>
