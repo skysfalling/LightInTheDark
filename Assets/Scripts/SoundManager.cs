@@ -12,7 +12,6 @@ public class SoundManager : MonoBehaviour
 	public void Play(string path)
 	{
 		FMODUnity.RuntimeManager.PlayOneShot(path);
-
 	}
 
 }
