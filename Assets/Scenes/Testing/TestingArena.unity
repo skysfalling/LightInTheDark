@@ -7184,6 +7184,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2093135815, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: maxEntityCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093135815, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: detectionRadius
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1159354729833526192, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
       propertyPath: playerOffset
       value: 10

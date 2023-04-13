@@ -11,6 +11,7 @@ public class Item : MonoBehaviour
 {
     PlayerMovement playerMovement;
     PlayerInventory playerInventory;
+    FMODUnity.StudioEventEmitter studioEmitter;
     [HideInInspector]
     public Rigidbody2D rb;
     [HideInInspector]
@@ -44,6 +45,7 @@ public class Item : MonoBehaviour
         playerMovement = playerInventory.GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody2D>();
         light = GetComponent<Light2D>();
+        studioEmitter = GetComponent<FMODUnity.StudioEventEmitter>();
 
         sr = GetComponent<SpriteRenderer>();
         defaultSortingLayer = sr.sortingLayerName;
@@ -74,6 +76,8 @@ public class Item : MonoBehaviour
         if (state == ItemState.PLAYER_INVENTORY) { UpdateItemLight(inventory_lightRange, inventory_lightIntensity); }
         else if (state == ItemState.THROWN) { UpdateItemLight(thrown_lightRange, thrown_lightIntensity, 2); }
         else { UpdateItemLight(default_lightRange, default_lightIntensity); }
+
+        // if (studioEmitter && state == ItemState.PLAYER_INVENTORY) { studioEmitter.Play(); }
 
     }
 
