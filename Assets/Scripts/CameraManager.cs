@@ -96,8 +96,11 @@ public class CameraManager : MonoBehaviour
                     case PlayerState.IDLE:
                     case PlayerState.MOVING:
                     case PlayerState.THROWING:
-                        // NormalCam();
-                        // FollowPlayer();
+                        if (state != CameraState.ACTIVE_FOCUS)
+                        {
+                            NormalCam();
+                            FollowPlayer();
+                        }
                         break;
 
 

@@ -250,7 +250,7 @@ public class GrabHandAI : MonoBehaviour
         player.transform.position = transform.position;
 
         // move hand back to home position AND player hasn't broken free
-        while (Vector2.Distance(transform.position, capturePoint.position) > 5)
+        while (Vector2.Distance(transform.position, capturePoint.position) > 10)
         {
             transform.position = Vector3.Lerp(transform.position, capturePoint.position, attackSpeed * Time.deltaTime);
 
@@ -267,10 +267,10 @@ public class GrabHandAI : MonoBehaviour
 
         player.transform.parent = transform;
         player.transform.position = transform.position;
-        player.GetComponent<PlayerMovement>().state = PlayerState.INACTIVE;
+        player.GetComponent<PlayerMovement>().state = PlayerState.PANIC;
 
         // << MOVE HAND >>
-        while (Vector2.Distance(transform.position, travelDestination.position) > 2)
+        while (Vector2.Distance(transform.position, travelDestination.position) > 10)
         {
             transform.position = Vector3.Lerp(transform.position, travelDestination.position, trackingSpeed * Time.deltaTime);
 

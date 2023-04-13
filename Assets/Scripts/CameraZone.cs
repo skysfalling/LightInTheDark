@@ -51,7 +51,7 @@ public class CameraZone : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawCube(transform.position, zoneSize);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(transform.position, zoneSize);
     }
 }

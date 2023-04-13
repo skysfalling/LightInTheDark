@@ -51,11 +51,13 @@ MonoBehaviour:
   currTarget: {fileID: 0}
   camSpeed: 2
   zoomInCamSize: 25
-  normalCamSize: 40
-  zoomOutCamSize: 60
+  normalCamSize: 60
+  zoomOutCamSize: 80
+  customZoomSize: 40
   playerCamOffset: 20
   playerDashCamOffset: 30
   gameplayTipOffset: {x: 0, y: -10}
+  activeFocusOffset: 25
   normalCamShakeDuration: 0.2
   normalCamShakeMagnitude: 0.5
   panicBreatheOffset: 1
@@ -351,9 +353,9 @@ MonoBehaviour:
   level_1_3:
     m_SceneName: Level_1.3
   level_2:
-    m_SceneName: Level_2
+    m_SceneName: ExtraLevel_2
   level_3:
-    m_SceneName: Level_3
+    m_SceneName: 
   witness:
     m_SceneName: TheWitness
 --- !u!114 &2093135815
