@@ -47,6 +47,12 @@ public class Totem : MonoBehaviour
     public Vector2 glowLightIntensity;
     public Vector2 glowLightRange;
 
+    [Header("Particles")]
+    public GameObject overflowParticles;
+    public GameObject smallParticles;
+    public GameObject smallParticles1;
+
+
     [Header("Door Unlock")]
     public List<Door> unlockDoors;
 
@@ -95,6 +101,12 @@ public class Totem : MonoBehaviour
         // update overflow
         if (lifeForce > maxLifeForce) { overflowing = true; }
         else { overflowing = false; }
+
+        // update particles
+        overflowParticles.SetActive(overflowing);
+        smallParticles.SetActive(lifeForce > (maxLifeForce * 0.5f));
+        smallParticles1.SetActive(lifeForce > (maxLifeForce * 0.2f));
+
 
         // lock door
         LockDoors(lifeForce <= 0);

@@ -55,8 +55,6 @@ public class CameraManager : MonoBehaviour
         player = levelManager.player.transform;
         rooms = new List<GameObject>(GameObject.FindGameObjectsWithTag("Room"));
 
-        normalCamSize = Camera.main.orthographicSize;
-
         state = CameraState.START;
     }
 

@@ -10,8 +10,7 @@ public class TheManAI : MonoBehaviour
     [HideInInspector]
     public PlayerMovement playerMovement;
     Rigidbody2D rb;
-    public SpriteRenderer head;
-    public SpriteRenderer body;
+    public SpriteRenderer spriteParent;
     public GameObject deathEffect;
 
     [Space(10)]
@@ -90,10 +89,6 @@ public class TheManAI : MonoBehaviour
         }
 
         StateMachine();
-
-
-        UpdateVisualDecay();
-
     }
 
     void StateMachine()
@@ -236,8 +231,7 @@ public class TheManAI : MonoBehaviour
 
     void UpdateVisualDecay()
     {
-        head.color = Color.Lerp(endColor, startColor, (float)cur_health / (float)max_health);
-        body.color = Color.Lerp(endColor, startColor, (float)cur_health / (float)max_health);
+        spriteParent.color = Color.Lerp(endColor, startColor, (float)cur_health / (float)max_health);
 
     }
 
@@ -248,16 +242,14 @@ public class TheManAI : MonoBehaviour
 
             Quaternion flipRotation = Quaternion.Euler(0f, 180f, 0f); // rotate 180 degrees on the y-axis
 
-            head.transform.rotation = flipRotation;
-            body.transform.rotation = flipRotation;
+            spriteParent.transform.rotation = flipRotation;
 
         }
         else // player is to the right
         {
             Quaternion flipRotation = Quaternion.Euler(0f, 0f, 0f); // rotate back to original rotation
 
-            head.transform.rotation = flipRotation;
-            body.transform.rotation = flipRotation;
+            spriteParent.transform.rotation = flipRotation;
         }
     }
 

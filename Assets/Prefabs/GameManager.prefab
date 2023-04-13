@@ -370,6 +370,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 597d17087a88a5d4f90bd5564293caa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundEmitter: {fileID: 0}
+  backgroundMusicEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  lifeFlowerNearDeath: 0
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  detectionRadius: 40
+  maxEntityCount: 5
+  closestDistance: 0
+  musicIntensity: 0
   lightPickupSound: event:/SFX/Items/lightOrbPickup
 --- !u!114 &2093135814
 MonoBehaviour:

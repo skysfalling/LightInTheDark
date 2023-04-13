@@ -508,7 +508,7 @@ MonoBehaviour:
   lifeForceSubmitAmount: 5
   decayActive: 1
   decay_speed: 3
-  submissionTypes: 00000000
+  submissionTypes: 02000000
   submissionOverflow: []
   canSubmit: 1
   lightAdjustSpeed: 3

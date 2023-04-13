@@ -231,10 +231,14 @@ public class GrabHandAI : MonoBehaviour
         else if (isTravelHand)
         {
             state = HandState.TRAVEL;
+            player.state = PlayerState.INACTIVE;
+
         }
         else
         {
             state = HandState.PLAYER_CAPTURED;
+            player.state = PlayerState.INACTIVE;
+
         }
 
 
@@ -267,9 +271,8 @@ public class GrabHandAI : MonoBehaviour
 
         player.transform.parent = transform;
         player.transform.position = transform.position;
-        player.GetComponent<PlayerMovement>().state = PlayerState.PANIC;
 
-        // << MOVE HAND >>
+        // << MOVE HAND TO TRAVEL DESTINATION >>
         while (Vector2.Distance(transform.position, travelDestination.position) > 10)
         {
             transform.position = Vector3.Lerp(transform.position, travelDestination.position, trackingSpeed * Time.deltaTime);
@@ -287,6 +290,8 @@ public class GrabHandAI : MonoBehaviour
         state = HandState.IDLE;
 
         travelStarted = false;
+
+        yield return null;
 
     }
 
