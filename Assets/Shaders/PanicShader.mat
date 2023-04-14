@@ -53,10 +53,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: -12.07
     - _AlphaClip: 0
     - _Blend: 0
     - _CastShadows: 1
-    - _ColorChangeHardness: 0.5
+    - _ColorChangeHardness: 0.709
     - _ColorRadius: 0
     - _Cull: 2
     - _DstBlend: 10
@@ -67,19 +68,19 @@ Material:
     - _QueueOffset: 0
     - _SrcBlend: 5
     - _Surface: 1
-    - _VignetteIntensity: 1
-    - _VignetteRadiusPower: 2
+    - _VignetteIntensity: 10
+    - _VignetteRadiusPower: 0.91
     - _VoronoiPower: 2
-    - _VoronoiScale: 50
-    - _VoronoiSpeed: 25
+    - _VoronoiScale: 100
+    - _VoronoiSpeed: 50
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
     - _Color: {r: 9.035295, g: 2.6352942, b: 24.72157, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _InnerColor: {r: 23.968628, g: 0, b: 1.0039216, a: 1}
-    - _OuterColor: {r: 2.276119, g: 0, b: 3.9999995, a: 1}
+    - _InnerColor: {r: 0.2721998, g: 0.039649345, b: 0.31132078, a: 1}
+    - _OuterColor: {r: 0.0036851503, g: 0, b: 0.009433985, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &4023538198115905407

@@ -88,13 +88,11 @@ public class UIManager : MonoBehaviour
         }
 
         transitionFinished = true;
-
     }
 
     IEnumerator TransitionFadeIn(float delay)
     {
         transitionFinished = false;
-
 
         yield return new WaitForSeconds(delay);
 
@@ -112,7 +110,6 @@ public class UIManager : MonoBehaviour
         }
 
         transitionFinished = true;
-
     }
     #endregion
 
@@ -120,13 +117,11 @@ public class UIManager : MonoBehaviour
 
     public void NewEncounterAnnouncement(string text = "keep your flower alive")
     {
-
-        StartCoroutine(TimedGameDialogueRoutine(encounterAnnounceText, text, wordDelay, 2));
+        StartCoroutine(IntenseGameDialogue(encounterAnnounceText, text, 1));
 
         anim.Play("StartEncounterAnnouncement");
     }
     #endregion
-
 
     #region Dialogue
     public void NewDialogue(string text)
@@ -136,6 +131,14 @@ public class UIManager : MonoBehaviour
 
         StartCoroutine(GameDialogueRoutine(dialogueText, decodedText, wordDelay));
             
+    }
+
+    public void SlowIntentseDialogue(string text, float slowDelay)
+    {
+        encounterAnnounceText.gameObject.SetActive(true);
+        string decodedText = gameManager.gameConsole.DecodeColorString(text);
+
+        StartCoroutine(IntenseGameDialogue(encounterAnnounceText, decodedText, slowDelay));
     }
 
     public void NewDialogue(List<string> text)
@@ -235,6 +238,36 @@ public class UIManager : MonoBehaviour
         DisableDialogue();
     }
 
+    IEnumerator IntenseGameDialogue(TextMeshProUGUI textComponent, string dialogue, float wordDelay)
+    {
+        inDialogue = true;
+
+        string[] words = gameManager.gameConsole.DecodeColorString(dialogue).Split(' ');
+        textComponent.text = "";
+
+        for (int i = 0; i < words.Length; i++)
+        {
+            textComponent.text += words[i] + " ";
+            yield return new WaitForSeconds(wordDelay);
+
+            DialogueShake(textComponent);
+        }
+
+        // after string is shown, wait for player input
+        bool stringDisplayed = false;
+        while (!stringDisplayed)
+        {
+            if (Input.anyKeyDown)
+            {
+                stringDisplayed = true;
+            }
+            yield return null;
+        }
+
+        inDialogue = false;
+        DisableDialogue();
+    }
+
     IEnumerator TimedGameDialogueRoutine(TextMeshProUGUI textComponent, List<string> dialogue, float wordDelay, float sentenceDelay)
     {
         inDialogue = true;
@@ -284,6 +317,35 @@ public class UIManager : MonoBehaviour
 
         inDialogue = false;
         DisableDialogue();
+    }
+
+
+    public void DialogueShake(TextMeshProUGUI textComponent)
+    {
+        StartCoroutine(DialogueShake(textComponent, 0.2f, 10, new Vector2(-1, -1)));
+    }
+
+    IEnumerator DialogueShake(TextMeshProUGUI textComponent, float duration, float magnitude, Vector2 dirInfluence)
+    {
+        float elapsed = 0.0f;
+
+        Vector2 originalPos = textComponent.transform.localPosition;
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+
+            Vector2 shakePos = new Vector2(x, y) * dirInfluence;
+
+            textComponent.transform.localPosition = (Vector3)shakePos + textComponent.transform.localPosition;
+
+            elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        textComponent.transform.localPosition = originalPos;
+
     }
 
     #endregion

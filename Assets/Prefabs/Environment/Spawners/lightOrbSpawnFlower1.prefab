@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4937246257694487146}
   - component: {fileID: 3719090399165549689}
+  - component: {fileID: 3192970262715014141}
   m_Layer: 0
   m_Name: stem
   m_TagString: Untagged
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -316223702, guid: 3eb4ae6eff5498c44ba67f507ba3f34f, type: 3}
-  m_Color: {r: 0.029375672, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.29803923, g: 0.85098046, b: 0.6666667, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -84,6 +85,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3192970262715014141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743666854724660548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57c008f954fe54a8bb972de1018a2cb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RootBone: {fileID: 0}
+  m_BoneTransforms: []
+  m_Bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_UseBatching: 1
+  m_AlwaysUpdate: 1
+  m_AutoRebind: 0
 --- !u!1 &2792540156900170001
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,14 +187,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8002252867963032677}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.3499756, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.38268277, w: 0.92387986}
+  m_LocalPosition: {x: -7.69, y: -2.69, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1389899390253068576}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
 --- !u!212 &8002252867963032676
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -216,7 +237,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 1878136187, guid: 3eb4ae6eff5498c44ba67f507ba3f34f, type: 3}
-  m_Color: {r: 0, g: 0.9607843, b: 0.8103188, a: 1}
+  m_Color: {r: 0.495283, g: 1, b: 0.9217174, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

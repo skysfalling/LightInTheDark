@@ -94,6 +94,7 @@ public class CameraManager : MonoBehaviour
                     case PlayerState.IDLE:
                     case PlayerState.MOVING:
                     case PlayerState.THROWING:
+                    case PlayerState.DASH:
                         if (state != CameraState.ACTIVE_FOCUS)
                         {
                             NormalCam();

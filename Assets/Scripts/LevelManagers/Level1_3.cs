@@ -147,7 +147,7 @@ public class Level1_3 : LevelManager
 
         player.state = PlayerState.IDLE;
         camManager.state = CameraState.ROOM_BASED;
-        StartFlowerDecay(currLifeFlower, 0.95f, flowerExclamation);
+        StartFlowerDecay(currLifeFlower, 0.95f);
 
         // begin encounter and timer countdown from 120
         StartCountdown(room2TimeCountdown);

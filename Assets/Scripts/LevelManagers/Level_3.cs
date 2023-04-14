@@ -1,43 +1,19 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExtraLevel_2 : LevelManager
+public class Level_3 : LevelManager
 {
     [Space(10)]
     public bool introComplete;
 
     [Header("Room")]
-    public float roomTimeCountdown = 180;
-    public Totem doorTotem;
-    private MessageEventListener openDoorEvent;
-
-    [Header("Script Lines")]
-    public float messageDelay = 2;
-    public string flowerExclamation = "OW!";
+    public Transform roomCenter;
 
     public void Start()
     {
-        currLifeFlower = lifeFlowers[0];
-        currLifeFlower.console.SetFullFadeDuration(messageDelay * 0.9f); // set the full fade duration of the text to less than message delay
 
 
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-
-        // create open door event
-        try
-        {
-            openDoorEvent.EventUpdate(doorTotem.overflowing);
-        }
-        catch
-        {   // send game console message when the door is opened
-            openDoorEvent = gameConsole.EventMessage(doorTotem.overflowing, true, "the way is open ...", gameConsole.lightColor);
-        }
     }
 
     public override void StartLevelFromPoint(LevelState state)
@@ -50,7 +26,6 @@ public class ExtraLevel_2 : LevelManager
         state = LevelState.INTRO;
         player.state = PlayerState.INACTIVE;
 
-
         uiManager.StartTransitionFadeOut(); // start transition
 
         playerSpawn.StartSpawnRoutine();
@@ -59,57 +34,53 @@ public class ExtraLevel_2 : LevelManager
         yield return new WaitUntil(() => uiManager.transitionFinished);
         yield return new WaitUntil(() => playerSpawn.playerSpawned);
 
+
         // continue to next room
-        StartCoroutine(Room());
+        StartCoroutine(Room1());
     }
 
-    IEnumerator Room()
+    IEnumerator Room1()
     {
         gameConsole.NewMessage("Level 3");
+        gameConsole.NewMessage("[[ The Abyss ]]");
+
         state = LevelState.ROOM1;
-
         player.state = PlayerState.IDLE;
-        camManager.state = CameraState.ROOM_BASED;
+        camManager.state = CameraState.PLAYER;
 
-        // wait until the player gets close
-        while (Vector2.Distance(player.transform.position, currLifeFlower.transform.position) > 40)
+        while (Vector2.Distance(player.transform.position, currLifeFlower.transform.position) > activateRange)
         {
             yield return null;
         }
 
+        // focus on life flower
         player.state = PlayerState.INACTIVE;
         camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
         // << START FLOWER DECAY >>
-        StartFlowerDecay(currLifeFlower, 0.5f);
+        StartFlowerDecay(currLifeFlower, 0.75f);
         currLifeFlower.decayActive = false;
-        yield return new WaitForSeconds(2);
 
         NewDialogue(dialogueManager.witness_start_1_2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
-        // << START GAMEPLAY >>
-        StartCountdown(roomTimeCountdown);
-        countdownStarted = false;
-
         camManager.NewZoomInTarget(player.transform);
-        player.state = PlayerState.IDLE;
-
         yield return new WaitForSeconds(1);
 
-        currLifeFlower.decayActive = true;
-        countdownStarted = true;
+        uiManager.NewEncounterAnnouncement("keep the flower alive");
 
-        camManager.state = CameraState.ROOM_BASED;
+        currLifeFlower.decayActive = true;
+
+        camManager.state = CameraState.PLAYER;
         player.state = PlayerState.IDLE;
 
         // wait until flower is overflowing 
-        yield return new WaitUntil(() => (currLifeFlower.IsOverflowing() || CountdownOver() || currLifeFlower.IsDead()) );
+        yield return new WaitUntil(() => (currLifeFlower.IsOverflowing() || currLifeFlower.IsDead()));
 
         // if dead , exit routine
         if (currLifeFlower.IsDead()) { StartCoroutine(FailedLevelRoutine()); }
-        else { StartCoroutine(CompletedLeveRoutine()); }
+
     }
 
     IEnumerator FailedLevelRoutine()
@@ -153,6 +124,14 @@ public class ExtraLevel_2 : LevelManager
 
         // destroy items
         playerInventory.Destroy();
+        yield return new WaitForSeconds(1);
+
+        // new dialogue
+        NewDialogue(dialogueManager.witness_end_1_2_2);
+        yield return new WaitUntil(() => !uiManager.inDialogue);
+
+        camManager.state = CameraState.PLAYER;
+        player.Idle();
 
         Debug.Log("Finished Level 3");
 
@@ -162,5 +141,4 @@ public class ExtraLevel_2 : LevelManager
         yield return new WaitForSeconds(1);
 
     }
-
 }

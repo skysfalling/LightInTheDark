@@ -118,11 +118,9 @@ public class PlayerAnimator : MonoBehaviour
                 break;
 
             case PlayerState.STUNNED:
-                eyes.sprite = winceEyes;
-                break;
-
+            case PlayerState.SLOWED:
             case PlayerState.PANIC:
-                eyes.sprite = openEyes;
+                eyes.sprite = winceEyes;
 
                 break;
 

@@ -55,7 +55,7 @@ MonoBehaviour:
   zoomOutCamSize: 80
   customZoomSize: 40
   playerCamOffset: 20
-  playerDashCamOffset: 30
+  playerDashCamOffset: 40
   gameplayTipOffset: {x: 0, y: -10}
   activeFocusOffset: 25
   normalCamShakeDuration: 0.2
@@ -644,6 +644,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7588869258874356063}
     m_Modifications:
+    - target: {fileID: 4153450443180941685, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078881113268291932, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338279790559671230, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338279790559671230, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338279790559671230, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338279790559671230, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338279790559671230, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338279790559671230, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338279790559671230, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -500
+      objectReference: {fileID: 0}
     - target: {fileID: 8901056188797869415, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
       propertyPath: m_Pivot.x
       value: 0

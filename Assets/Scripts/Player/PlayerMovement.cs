@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum PlayerState { 
     IDLE , MOVING , THROWING, 
-    STUNNED, GRABBED, PANIC, DASH, SLOWED, INACTIVE }
+    STUNNED, GRABBED, PANIC,
+    DASH, SLOWED, INACTIVE }
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -150,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
 
         };
 
-        // << DASH ACTION >>
+        // << MOVE ACTION >>
         inputManager.bAction.started += ctx =>
         {
             // << STRUGGLE >>
@@ -161,14 +162,15 @@ public class PlayerMovement : MonoBehaviour
 
                 struggleCount++;
             }
+            // << DASH >>
             else if (state != PlayerState.GRABBED)
             {
                 struggleCount = 0;
 
                 // << START DASH >>
-                if (state == PlayerState.IDLE
+                if ( state == PlayerState.IDLE
                     || state == PlayerState.MOVING
-                    || state == PlayerState.THROWING) { Dash(); }
+                    || state == PlayerState.THROWING ) { Dash(); }
             }
         };
         
@@ -221,8 +223,6 @@ public class PlayerMovement : MonoBehaviour
                 break;
 
             case PlayerState.GRABBED:
-
-
                 break;
 
 

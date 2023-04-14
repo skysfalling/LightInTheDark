@@ -11,6 +11,7 @@ public class EffectManager : MonoBehaviour
     public float panic_fullscreenIntensity = 0.05f; // The initial value for the _FullscreenIntensity property of the Panic Shader material
     public float panic_transitionSpeed;
     private Coroutine panicCoroutine;
+    public bool flickerActive;
 
     private void Start()
     {
@@ -29,15 +30,20 @@ public class EffectManager : MonoBehaviour
         if (panicCoroutine == null)
         {
             panicCoroutine = StartCoroutine(LerpPanicFullscreenIntensity(panic_fullscreenIntensity, panic_transitionSpeed));
+
+            StartCoroutine(PanicFlicker(1, 10));
         }
     }
 
     public void DisablePanicShader()
     {
+
+        flickerActive = false;
         if (panicCoroutine == null)
         {
-            panicCoroutine = StartCoroutine(LerpPanicFullscreenIntensity(0, panic_transitionSpeed));
+            panicCoroutine = StartCoroutine(LerpPanicFullscreenIntensity(0, 100));
         }
+
     }
 
     IEnumerator LerpPanicFullscreenIntensity(float targetIntensity, float speed)
@@ -55,5 +61,21 @@ public class EffectManager : MonoBehaviour
         panicShaderMaterial.SetFloat("_FullscreenIntensity", targetIntensity);
 
         panicCoroutine = null;
+    }
+
+    IEnumerator PanicFlicker(float maxIntensity, float speed)
+    {
+        flickerActive = true;
+        while (flickerActive)
+        {
+            StartCoroutine(LerpPanicFullscreenIntensity(0, speed));
+
+            yield return new WaitForSeconds(Random.Range(0.1f, 0.5f));
+
+            float targetIntensity = Random.Range(maxIntensity * 0.5f, maxIntensity);
+            StartCoroutine(LerpPanicFullscreenIntensity(targetIntensity, speed));
+
+            yield return new WaitForSeconds(Random.Range(0.05f, 0.2f));
+        }
     }
 }

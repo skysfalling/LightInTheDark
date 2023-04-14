@@ -31,7 +31,8 @@ public class LevelManager : MonoBehaviour
     [Header("Game Values")]
     public LevelState state = LevelState.INTRO;
 
-    [Space(10)]
+    [Header("Life Flower")]
+    public float activateRange = 50f;
     public LifeFlower currLifeFlower;
     public List<LifeFlower> lifeFlowers;
 
@@ -65,6 +66,11 @@ public class LevelManager : MonoBehaviour
         playerAnim = player.gameObject.GetComponent<PlayerAnimator>();
 
         startTime = Time.time;
+
+        if (currLifeFlower == null)
+        {
+            currLifeFlower = lifeFlowers[0];
+        }
     }
 
     // Update is called once per frame
@@ -164,7 +170,7 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    public void StartFlowerDecay(LifeFlower lifeFlower, float healthPercent = 0.5f, string exclamation = "OW!")
+    public void StartFlowerDecay(LifeFlower lifeFlower, float healthPercent = 0.5f)
     {
         lifeFlower.decayActive = true; // start decay
         lifeFlower.lifeForce = Mathf.FloorToInt(lifeFlower.maxLifeForce * healthPercent);

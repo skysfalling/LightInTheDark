@@ -87,7 +87,7 @@ public class Level_2 : LevelManager
         yield return new WaitForSeconds(2);
 
         // << START FLOWER DECAY >>
-        StartFlowerDecay(currLifeFlower, 0.5f, flowerExclamation);
+        StartFlowerDecay(currLifeFlower, 0.5f);
         currLifeFlower.decayActive = false;
         yield return new WaitForSeconds(2);
 
@@ -217,7 +217,7 @@ public class Level_2 : LevelManager
         yield return new WaitForSeconds(1);
 
         // << START FLOWER DECAY >>
-        StartFlowerDecay(currLifeFlower, 0.75f, flowerExclamation);
+        StartFlowerDecay(currLifeFlower, 0.75f);
         currLifeFlower.decayActive = false;
 
         // continued comment on flower
