@@ -11,7 +11,8 @@ public class UIManager : MonoBehaviour
     public LevelManager levelManager;
 
     [Header("UI")]
-    public TextMeshProUGUI countdown;
+    public TextMeshProUGUI flowerLifeForceTMP;
+    public TextMeshProUGUI countdownTMP;
     public float UI_horzOffset = 100;
     public bool uiMoving;
 
@@ -50,11 +51,19 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        try
+        if (levelManager == null)
         {
-            countdown.text = "" + levelManager.GetCurrentCountdown();
+            levelManager = gameManager.levelManager;
         }
-        catch { Debug.Log("Countdown UI Error"); }
+        else
+        {
+            // << countdown text >>
+            countdownTMP.text = "" + levelManager.GetCurrentCountdown();
+
+            // << life force text >>
+            if (levelManager.currLifeFlower != null) { flowerLifeForceTMP.text = "" + levelManager.currLifeFlower.lifeForce; }
+        }
+
     }
 
     #region LevelTransition
@@ -114,7 +123,6 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region EncounterAnnouncement
-
     public void NewEncounterAnnouncement(string text = "keep your flower alive")
     {
         StartCoroutine(IntenseGameDialogue(encounterAnnounceText, text, 1));
@@ -318,7 +326,6 @@ public class UIManager : MonoBehaviour
         inDialogue = false;
         DisableDialogue();
     }
-
 
     public void DialogueShake(TextMeshProUGUI textComponent)
     {

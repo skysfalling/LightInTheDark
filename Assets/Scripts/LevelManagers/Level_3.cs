@@ -141,4 +141,13 @@ public class Level_3 : LevelManager
         yield return new WaitForSeconds(1);
 
     }
+
+    private void OnDrawGizmos()
+    {
+        if (currLifeFlower != null)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(currLifeFlower.transform.position, activateRange);
+        }
+    }
 }
