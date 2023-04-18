@@ -44,6 +44,7 @@ public class TheManAI : MonoBehaviour
     public float grabSpeed = 0.6f;
 
     [Space(10)]
+    public Transform grabPoint;
     public float timeToGrab = 2;
     private float timeToGrabTimer;
     public float timeToCapture = 5;
@@ -110,7 +111,6 @@ public class TheManAI : MonoBehaviour
                     state = TheManState.CHASE;
                 }
 
-                FlipTowardsPlayer();
 
                 // << IF PLAYER IN INNER TRIGGER, START GRAB SEQUENCE >>
                 if (playerInInnerTrigger)
@@ -195,7 +195,7 @@ public class TheManAI : MonoBehaviour
             rb.velocity = Vector3.zero;
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             player.GetComponentInChildren<Rigidbody2D>().velocity = Vector3.zero;
-            player.transform.position = transform.position;
+            player.transform.position = grabPoint.position;
 
             // PLAYER CAPTURE
             timeToCaptureTimer += Time.deltaTime;
@@ -235,23 +235,6 @@ public class TheManAI : MonoBehaviour
 
     }
 
-    public void FlipTowardsPlayer()
-    {
-        if (player.transform.position.x < transform.position.x) // player is to the left
-        {
-
-            Quaternion flipRotation = Quaternion.Euler(0f, 180f, 0f); // rotate 180 degrees on the y-axis
-
-            spriteParent.transform.rotation = flipRotation;
-
-        }
-        else // player is to the right
-        {
-            Quaternion flipRotation = Quaternion.Euler(0f, 0f, 0f); // rotate back to original rotation
-
-            spriteParent.transform.rotation = flipRotation;
-        }
-    }
 
     public bool IsPlayerInTrigger(float size)
     {
