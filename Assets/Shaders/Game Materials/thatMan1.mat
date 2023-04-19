@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LightGlow2
+  m_Name: thatMan1
   m_Shader: {fileID: -6465566751694194690, guid: 29e2f62332fbb574ab548ea7fb20efa5, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -25,11 +25,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GlowTex:
-        m_Texture: {fileID: 2800000, guid: 3eb4ae6eff5498c44ba67f507ba3f34f, type: 3}
+        m_Texture: {fileID: 2800000, guid: d2984ca93b5db044bb6230f691b565d9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 3eb4ae6eff5498c44ba67f507ba3f34f, type: 3}
+        m_Texture: {fileID: 2800000, guid: d2984ca93b5db044bb6230f691b565d9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -58,6 +58,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _GlowColor: {r: 0.033102304, g: 0.033102304, b: 0.033102304, a: 0}
+    - _GlowColor: {r: 0, g: 191.74902, b: 150.58824, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

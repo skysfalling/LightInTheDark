@@ -11,12 +11,24 @@ public class TheManAnimator : MonoBehaviour
     TheManAI ai;
     public Animator anim;
     public Canvas canvas;
+    public Transform spriteParent;
+
+    [Header("Faces")]
+    public GameObject lightFace;
+    public GameObject darkFace;
+
+    [Header("Particles")]
+    public GameObject suckLifeParticles;
 
     [Header("UI")]
     public TextMeshProUGUI struggleText;
 
     [Header("Light")]
     public Light2D light;
+
+    [Header("Fog")]
+    public Material fogMaterial;
+    public Vector2 fogOpacityRange = new Vector2(0, 1.2f);
 
     // Start is called before the first frame update
     void Start()
@@ -35,17 +47,29 @@ public class TheManAnimator : MonoBehaviour
             playerMovement = ai.playerMovement;
         }
 
+        // fog opacity
+        if (fogMaterial != null)
+        {
+            float fogOpacity = Mathf.Lerp(fogOpacityRange.x, fogOpacityRange.y, ai.distToPlayer / ai.outerTriggerSize);
+
+            fogMaterial.SetFloat("_Opacity", fogOpacity);
+        }
 
         // << ANIM VALUES >>
-        anim.SetBool("Idle", ai.state == TheManState.IDLE || ai.state == TheManState.RETREAT);
+        anim.SetBool("Idle", ai.state == TheManState.IDLE || ai.state == TheManState.RETREAT || ai.state == TheManState.FOLLOW);
         anim.SetBool("Grab", ai.state == TheManState.GRABBED_PLAYER || ai.state == TheManState.PLAYER_CAPTURED);
-        anim.SetBool("Chase", ai.state == TheManState.CHASE || ai.state == TheManState.FOLLOW);
+        anim.SetBool("Chase", ai.state == TheManState.CHASE);
 
 
         switch (ai.state)
         {
             case TheManState.GRABBED_PLAYER:
             case TheManState.PLAYER_CAPTURED:
+
+                lightFace.SetActive(true);
+                darkFace.SetActive(false);
+                suckLifeParticles.SetActive(true);
+
                 // enable vortex particles
 
                 // show struggle count down
@@ -62,57 +86,46 @@ public class TheManAnimator : MonoBehaviour
             case TheManState.RETREAT:
             case TheManState.IDLE:
 
-                if (ai.state == TheManState.CHASE)
-                {
-                    // flip
-                    FlipTowardsPlayer();
-                }
+                darkFace.SetActive(true);
+                lightFace.SetActive(false);
+                suckLifeParticles.SetActive(false);
 
                 // struggle reset
                 struggleText.gameObject.SetActive(false);
+
+                // filp towards player
+                if (ai.state != TheManState.IDLE)
+                {
+                    FlipTowardsPlayer(playerMovement.transform);
+                }
                 break;
+
         }
+
+
 
     }
 
 
-    public void FlipTowardsPlayer()
+    public void FlipTowardsPlayer(Transform target)
     {
-
-        /*
-        if (playerMovement.transform.position.x < transform.position.x) // player is to the left
-        {
-
-            Quaternion flipRotation = Quaternion.Euler(0f, 180f, 0f); // rotate 180 degrees on the y-axis
-
-            transform.rotation = flipRotation;
-
-        }
-        else // player is to the right
-        {
-            Quaternion flipRotation = Quaternion.Euler(0f, 0f, 0f); // rotate back to original rotation
-
-            transform.rotation = flipRotation;
-        }
-        */
-
         // Set the rotation speed and the offset from the player
-        float rotationSpeed = 10f;
+        float rotationSpeed = 20f;
         float flipOffset = 50;
 
         // player is to the left
-        if (playerMovement.transform.position.x < transform.position.x - flipOffset)
+        if (target.position.x > transform.position.x + flipOffset)
         {
             Quaternion flipRotation = Quaternion.Euler(0f, 180f, 0f); // rotate 180 degrees on the y-axis
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, flipRotation, Time.deltaTime * rotationSpeed);
+            spriteParent.rotation = Quaternion.Lerp(transform.rotation, flipRotation, Time.deltaTime * rotationSpeed);
         }
         // player is to the right
-        else if (playerMovement.transform.position.x > transform.position.x + flipOffset) 
+        else if (target.position.x < transform.position.x - flipOffset) 
         {
             Quaternion flipRotation = Quaternion.Euler(0f, 0f, 0f); // rotate back to original rotation
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, flipRotation, Time.deltaTime * rotationSpeed);
+            spriteParent.rotation = Quaternion.Lerp(transform.rotation, flipRotation, Time.deltaTime * rotationSpeed);
         }
     }
 }

@@ -61,7 +61,7 @@ public class TheManAI : MonoBehaviour
 
     [Space(5)]
     int decayAmount = 1;
-    public int lightOrbCountNeeded = 3; // light orbs needed in player inventory to start decay
+    public int retreatLightOrbCount = 3; // light orbs needed in player inventory to start decay
     public float lifeDecayDelay = 1;
 
 
@@ -86,12 +86,12 @@ public class TheManAI : MonoBehaviour
         // << UPDATE LIFE VALUES BASED ON PLAYER DISTANCE AND INVENTORY COUNT >>
         if (!lifeCoroutineStarted)
         {
-            if (player.inventory.Count >= lightOrbCountNeeded )
+            if (player.inventory.Count >= retreatLightOrbCount )
             {
                 // inner trigger decay
                 if (playerInInnerTrigger) { StartCoroutine(DrainLife(lifeDecayDelay)); }
             }
-            else if (player.inventory.Count >= lightOrbCountNeeded * 2)
+            else if (player.inventory.Count >= retreatLightOrbCount * 2)
             {
                 // inner trigger decays twice as fast
                 if (playerInInnerTrigger) { StartCoroutine(DrainLife(lifeDecayDelay * 0.5f)); }
@@ -102,6 +102,8 @@ public class TheManAI : MonoBehaviour
 
         // update dist To Player
         distToPlayer = Vector2.Distance(transform.position, player.transform.position);
+
+
 
         StateMachine();
     }
@@ -121,6 +123,24 @@ public class TheManAI : MonoBehaviour
                 break;
 
             case TheManState.FOLLOW:
+
+
+                // change state
+                if (distToPlayer < outerTriggerSize * 0.75f)
+                {
+                    // determine retreat or chase
+                    if (player.inventory.Count >= retreatLightOrbCount)
+                    {
+                        state = TheManState.RETREAT;
+                        break;
+                    }
+                    else
+                    {
+                        state = TheManState.CHASE;
+                        break;
+                    }
+                }
+
                 // Calculate the direction vector towards the player
                 Vector2 direction = (player.transform.position - transform.position).normalized;
 
@@ -139,42 +159,6 @@ public class TheManAI : MonoBehaviour
             case TheManState.CHASE:
                 // chase player
                 rb.MovePosition(Vector2.MoveTowards(transform.position, player.transform.position, chaseSpeed * Time.deltaTime));
-                break;
-
-            case TheManState.RETREAT:
-                // run away from player
-                Vector3 oppositeDirection = (transform.position - player.transform.position) * -1f;
-                rb.MovePosition(Vector2.MoveTowards(transform.position, transform.position - oppositeDirection, retreatSpeed * Time.deltaTime));
-                break;
-        }
-
-
-        /*
-        // << UPDATE STATES >>
-        // player in trigger and not grabbed
-        if (state != TheManState.GRABBED_PLAYER && state != TheManState.PLAYER_CAPTURED)
-        {
-            // << CHASE GRAB AND RETREAT >>
-            if (playerInOuterTrigger)
-            {
-                // if player is far away in trigger, follow
-                if (distToPlayer >= outerTriggerSize * 0.5f)
-                {
-                    state = TheManState.FOLLOW;
-                }
-                // if player is close in trigger, chase
-                else
-                {
-                    // determine retreat or chase
-                    if (player.inventory.Count >= lightOrbCountNeeded)
-                    {
-                        state = TheManState.RETREAT;
-                    }
-                    else
-                    {
-                        state = TheManState.CHASE;
-                    }
-                }
 
                 // << IF PLAYER IN INNER TRIGGER, START GRAB SEQUENCE >>
                 if (playerInInnerTrigger)
@@ -192,12 +176,24 @@ public class TheManAI : MonoBehaviour
                     }
                 }
                 else { timeToGrabTimer = 0; }
-            }
-            else { state = TheManState.IDLE; }
+
+                break;
+
+            case TheManState.RETREAT:
+                // run away from player
+                Vector3 oppositeDirection = (transform.position - player.transform.position) * -1f;
+                rb.MovePosition(Vector2.MoveTowards(transform.position, transform.position - oppositeDirection, retreatSpeed * Time.deltaTime));
+
+                // change state
+                if (distToPlayer > outerTriggerSize * 0.75f)
+                {
+                    state = TheManState.FOLLOW;
+                    break;
+                }
+
+
+                break;
         }
-
-
-        */
     }
 
     IEnumerator DrainLife(float decayDelay)
@@ -262,8 +258,6 @@ public class TheManAI : MonoBehaviour
         {
             player.transform.parent = null;
             playerMovement.state = PlayerState.IDLE;
-
-            yield return new WaitForSeconds(1);
 
             state = TheManState.RETREAT;
             rb.constraints = RigidbodyConstraints2D.None;

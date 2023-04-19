@@ -15,12 +15,13 @@ public class PlayerAnimator : MonoBehaviour
     [Header("Animation")]
     public Transform parent;
 
-    public SpriteRenderer eyes;
-    public Sprite closedEyes;
-    public Sprite halfClosedEyes;
-    public Sprite openEyes;
-    public Sprite winceEyes;
-    public Sprite xEyes;
+    public GameObject closedEyes;
+    public GameObject halfClosedEyes;
+    public GameObject openEyes;
+    public GameObject xEyes;
+    public GameObject winceEyes;
+    public GameObject deathEyes;
+
 
     [Space(10)]
     public Transform bodySprite;
@@ -43,7 +44,7 @@ public class PlayerAnimator : MonoBehaviour
     private Color currLightColor;
     private float currLightIntensity;
     private float currLightRadius;
-    
+
     [Header("-- Player Light")]
     public float player_defaultLightIntensity = 0.7f;
     public float player_inventoryIntensityAddition = 0.1f; // how much light intensity is added per inventory item
@@ -76,6 +77,11 @@ public class PlayerAnimator : MonoBehaviour
         panicEffect.SetActive(false);
     }
 
+    private void Start()
+    {
+        StartCoroutine(BlinkCoroutine());
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -102,16 +108,18 @@ public class PlayerAnimator : MonoBehaviour
         // play throw anim
         if (movement.inThrow) { PlayAnimationIfNotPlaying("throw"); }
 
+
+
+
+        // states
         switch (movement.state)
         {
             case PlayerState.IDLE:
-                eyes.sprite = closedEyes;
 
                 anim.SetBool("isMoving", false);
                 break;
 
             case PlayerState.MOVING:
-                eyes.sprite = halfClosedEyes;
 
                 anim.SetBool("isMoving", true);
 
@@ -120,7 +128,8 @@ public class PlayerAnimator : MonoBehaviour
             case PlayerState.STUNNED:
             case PlayerState.SLOWED:
             case PlayerState.PANIC:
-                eyes.sprite = winceEyes;
+
+                SetActiveEyes(openEyes);
 
                 break;
 
@@ -128,10 +137,13 @@ public class PlayerAnimator : MonoBehaviour
 
                 // rotate parent and UI towards throw point
                 movement.aimIndicator.transform.eulerAngles = new Vector3(0, 0, rotation);
+                SetActiveEyes(openEyes);
 
                 break;
 
             case PlayerState.DASH:
+
+                SetActiveEyes(xEyes);
 
                 dashEffect.transform.eulerAngles = new Vector3(0, 0, rotation - 180f);
                 anim.SetBool("isMoving", true);
@@ -205,6 +217,37 @@ public class PlayerAnimator : MonoBehaviour
         dashEffect.SetActive(true); 
     }
 
+
+    // <<<< EYES >>>>
+    private void SetActiveEyes(GameObject activeEyes)
+    {
+        closedEyes.SetActive(false);
+        halfClosedEyes.SetActive(false);
+        openEyes.SetActive(false);
+        xEyes.SetActive(false);
+        winceEyes.SetActive(false);
+        deathEyes.SetActive(false);
+
+        activeEyes.SetActive(true);
+    }
+
+    private IEnumerator BlinkCoroutine()
+    {
+        while (true)
+        {
+            float blinkTime = Random.Range(0.5f, 1);
+            yield return new WaitForSeconds(blinkTime);
+
+            if ( movement.state == PlayerState.IDLE || movement.state == PlayerState.MOVING || movement.state == PlayerState.THROWING)
+            {
+                SetActiveEyes(closedEyes);
+                yield return new WaitForSeconds(Random.Range(0.5f, 1));
+
+                SetActiveEyes(halfClosedEyes);
+            }
+        }
+    }
+
     #region <<<< LIGHTING >>>>
     public void LightingStateMachine()
     {
@@ -247,6 +290,6 @@ public class PlayerAnimator : MonoBehaviour
             anim.Play(animationName);
         }
     }
-
     #endregion
+
 }
