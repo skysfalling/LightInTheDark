@@ -33,7 +33,7 @@
 		</relationship>
 		<relationship name="parameters">
 			<destination>{8fa0e6ed-a9c9-4041-87bf-44605e9c23ba}</destination>
-			<destination>{5c42fe51-bf4d-4689-b805-c1a613068ab5}</destination>
+			<destination>{0f32bdf6-a4bb-4b58-9602-1141f73f74ba}</destination>
 		</relationship>
 		<relationship name="banks">
 			<destination>{85d97cde-bf8e-4f90-99be-a65a445a19e6}</destination>
@@ -79,7 +79,7 @@
 			<destination>{3df23c49-3f83-4c1e-a960-f3d9f464128c}</destination>
 		</relationship>
 	</object>
-	<object class="ParameterProxy" id="{5c42fe51-bf4d-4689-b805-c1a613068ab5}">
+	<object class="ParameterProxy" id="{0f32bdf6-a4bb-4b58-9602-1141f73f74ba}">
 		<relationship name="preset">
 			<destination>{e07782bb-34a7-40d5-8bce-7a9bc185fec0}</destination>
 		</relationship>
@@ -108,7 +108,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{736c106f-7ab8-49c7-a57d-d38c07c1b5b6}">
 		<property name="volume">
-			<value>-29</value>
+			<value>-10</value>
 		</property>
 		<property name="name">
 			<value>Child Themes</value>

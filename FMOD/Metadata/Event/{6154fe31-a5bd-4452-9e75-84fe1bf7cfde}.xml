@@ -101,6 +101,7 @@
 			<destination>{c9734bc5-cef4-47cb-9129-efafd81f3bc2}</destination>
 			<destination>{42292789-25e2-4957-8a64-162e30bfa254}</destination>
 			<destination>{cbcd14bb-dfb4-445b-9cdd-534f082e2418}</destination>
+			<destination>{207ec00b-2d53-4d63-a324-4fa342a91706}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{8231068a-00cc-4bd9-b730-395163d842af}">
@@ -265,7 +266,7 @@
 			<value>0</value>
 		</property>
 		<property name="name">
-			<value>Door Rumble</value>
+			<value>Door closes when event is stopped</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{85b378a1-b241-4ccb-ae2f-f7a127aad2bf}</destination>
@@ -312,11 +313,8 @@
 		<property name="length">
 			<value>5</value>
 		</property>
-		<property name="triggerProbabilityEnabled">
-			<value>true</value>
-		</property>
 		<property name="triggerProbability">
-			<value>1.5</value>
+			<value>16.5</value>
 		</property>
 		<property name="quantizationInterval">
 			<value>6</value>
@@ -332,6 +330,23 @@
 		</relationship>
 		<relationship name="destination">
 			<destination>{c9734bc5-cef4-47cb-9129-efafd81f3bc2}</destination>
+		</relationship>
+		<relationship name="triggerConditions">
+			<destination>{47b2b6bf-a75e-4097-8fd0-ac440bf9c6a2}</destination>
+		</relationship>
+	</object>
+	<object class="NamedMarker" id="{207ec00b-2d53-4d63-a324-4fa342a91706}">
+		<property name="position">
+			<value>6</value>
+		</property>
+		<property name="name">
+			<value>Add a "boom" sound in the transition</value>
+		</property>
+		<relationship name="timeline">
+			<destination>{85b378a1-b241-4ccb-ae2f-f7a127aad2bf}</destination>
+		</relationship>
+		<relationship name="markerTrack">
+			<destination>{a608bf6d-3fa3-4922-a33d-6324e7b5ab81}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{b07bfb31-77c7-4810-9707-93f806ac0f8c}">
@@ -432,6 +447,11 @@
 			<destination>{d3628870-ce94-49a2-b52f-2bb419e59752}</destination>
 			<destination>{40a9a7e4-9882-445c-bd39-bd206b7b9734}</destination>
 		</relationship>
+	</object>
+	<object class="EventCondition" id="{47b2b6bf-a75e-4097-8fd0-ac440bf9c6a2}">
+		<property name="eventState">
+			<value>1</value>
+		</property>
 	</object>
 	<object class="MixerBusFader" id="{c9bb3d1b-762e-434b-a499-e582bdbb4cf1}" />
 	<object class="MultibandEqEffect" id="{9caff532-a20a-4d95-88b6-592986a2b178}">

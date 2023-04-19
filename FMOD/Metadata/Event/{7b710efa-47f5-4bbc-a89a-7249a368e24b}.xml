@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{7b710efa-47f5-4bbc-a89a-7249a368e24b}">
 		<property name="name">
-			<value>thatManDrums</value>
+			<value>(old) thatManDrums</value>
 		</property>
 		<property name="outputFormat">
 			<value>2</value>
@@ -227,7 +227,7 @@
 	<object class="MixerBusPanner" id="{ee011d33-933d-441a-b18c-4188e6afc4e9}" />
 	<object class="ParameterCondition" id="{f796d6bd-aaeb-4c0d-9cef-270658026bc2}">
 		<property name="minimum">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<property name="maximum">
 			<value>3</value>
@@ -238,10 +238,10 @@
 	</object>
 	<object class="ParameterCondition" id="{0a281e42-8d9f-4625-960e-bb205857731c}">
 		<property name="minimum">
-			<value>0</value>
+			<value>-1</value>
 		</property>
 		<property name="maximum">
-			<value>1</value>
+			<value>0</value>
 		</property>
 		<relationship name="parameter">
 			<destination>{3a5bd8f8-13f3-4dee-88a5-6d17db0fe282}</destination>
