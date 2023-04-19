@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{93eb6b52-0b43-44d8-8673-9cb245bb25aa}">
 		<property name="name">
-			<value>findInnerChild</value>
+			<value>(old maybe) findInnerChild</value>
 		</property>
 		<property name="outputFormat">
 			<value>2</value>
