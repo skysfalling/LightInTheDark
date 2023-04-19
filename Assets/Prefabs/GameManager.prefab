@@ -289,7 +289,6 @@ GameObject:
   - component: {fileID: 7588869258874356063}
   - component: {fileID: 7588869258874356056}
   - component: {fileID: 2093135815}
-  - component: {fileID: 2093135814}
   - component: {fileID: 7203649971232366683}
   - component: {fileID: 3727975432613735350}
   - component: {fileID: 8605709260974255807}
@@ -370,53 +369,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 597d17087a88a5d4f90bd5564293caa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTransform: {fileID: 0}
+  state: 1
   backgroundEmitter: {fileID: 0}
   backgroundMusicEvent:
-    Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
-  lifeFlowerNearDeath: 0
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  detectionRadius: 40
-  maxEntityCount: 5
-  closestDistance: 0
-  musicIntensity: 0
-  lightPickupSound: event:/SFX/Items/lightOrbPickup
---- !u!114 &2093135814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7588869258874356057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  EventReference:
     Guid:
       Data1: -909266172
       Data2: 1159987350
       Data3: -1600029545
       Data4: -1765030248
     Path: event:/Music/backgroundMusic
-  Event: 
-  PlayEvent: 1
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 20
+  musicIntensity: 0
+  deathMarch: 0
+  lifeFlowerHealed: 0
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  outerDetectionRadius: 50
+  innerDetectionRadius: 25
+  curEntityIntensity: 0
+  maxEntityIntensity: 3
+  closestDistance: 0
+  thatManProximity: 0
+  leviathanProximity: 0
+  lifeFlowerProximity: 0
+  lightPickupSound: event:/SFX/Items/lightOrbPickup
 --- !u!114 &7203649971232366683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,6 +516,7 @@ MonoBehaviour:
   panicShaderMaterial: {fileID: 2100000, guid: 033cb1d100be678499bfbbb1f3438b50, type: 2}
   panic_fullscreenIntensity: 0.05
   panic_transitionSpeed: 2
+  flickerActive: 0
 --- !u!114 &4875732379130781357
 MonoBehaviour:
   m_ObjectHideFlags: 0

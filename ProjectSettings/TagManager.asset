@@ -9,6 +9,10 @@ TagManager:
   - Room
   - LevelManager
   - GameManager
+  - That Man
+  - Leviathan
+  - Life Flower
+  - Gremlin
   layers:
   - Default
   - TransparentFX
