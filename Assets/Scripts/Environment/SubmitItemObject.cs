@@ -12,8 +12,10 @@ public class SubmitItemObject : MonoBehaviour
     public PlayerInventory player;
 
     public Transform triggerParent;
+    public LayerMask playerLayer;
     public bool playerInTrigger = true;
     public float triggerSize = 2f;
+
 
     [Header("Submission")]
     public List<ItemType> submissionTypes;
@@ -120,17 +122,9 @@ public class SubmitItemObject : MonoBehaviour
 
     public bool IsPlayerInTrigger()
     {
-        Collider2D[] overlapColliders = Physics2D.OverlapCircleAll(triggerParent.position, triggerSize);
-        List<Collider2D> collidersInTrigger = new List<Collider2D>(overlapColliders);
-
-        foreach (Collider2D col in collidersInTrigger)
-        {
-            if (col.tag == "Player")
-            {
-                return true;
-            }
-        }
-
+        Collider2D playerCol = Physics2D.OverlapCircle(triggerParent.position, triggerSize, playerLayer);
+        Debug.Log("playerInTrigger " + playerCol);
+        if (playerCol) { return true; }
         return false;
     }
 

@@ -56,7 +56,7 @@ public class Level1_1 : LevelManager
 
         // wait until player moves
         yield return new WaitUntil(() => gameManager.inputManager.moveDirection != Vector2.zero);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(4);
 
         // focus on new light orbs
         player.Inactive();
@@ -75,11 +75,11 @@ public class Level1_1 : LevelManager
         gameConsole.NewMessage("now bring the l(light orb) to the f(flower)");
 
         // wait for submission to flower
-        yield return new WaitUntil(() => currLifeFlower.submissionOverflow.Count > 1);
+        yield return new WaitUntil(() => currLifeFlower.submissionOverflow.Count > 0);
+
         // [[ LINES 2 ]]
         NewDialogue(witnessComment2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
-
 
         // wait for flower to be overflowing
         yield return new WaitUntil(() => currLifeFlower.state == FlowerState.OVERFLOWING);
@@ -91,14 +91,19 @@ public class Level1_1 : LevelManager
         camManager.NewZoomInTarget(currLifeFlower.transform);
         yield return new WaitForSeconds(2);
 
+        Debug.Log("Finished Level 1.1");
+
         // [[ LINES 3 ]]
         NewDialogue(witnessComment3);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
-        yield return new WaitForSeconds(3);
-
         endGrabHand.canAttack = true;
-
         yield return new WaitUntil(() => endGrabHand.state == HandState.PLAYER_CAPTURED);
+        uiManager.StartTransitionFadeIn();
+
+        yield return new WaitUntil(() => uiManager.transitionFinished);
+        yield return new WaitForSeconds(1);
+
+        gameManager.LoadScene(gameManager.level_1_2);
     }
 }

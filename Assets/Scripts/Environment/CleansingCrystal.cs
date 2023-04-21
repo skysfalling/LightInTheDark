@@ -58,6 +58,7 @@ public class CleansingCrystal : SubmitItemObject
         GameObject itemObject = submissionOverflow[0];
         player.inventory.Remove(itemObject);
         itemObject.transform.parent = transform; // set parent
+        itemObject.GetComponent<Item>().state = ItemState.SUBMITTED;
 
         // change color
         SpriteRenderer sprite = itemObject.GetComponent<SpriteRenderer>();
@@ -117,7 +118,7 @@ public class CleansingCrystal : SubmitItemObject
             Vector3 randomPoint = spawnTarget.position + (Vector3)Random.insideUnitCircle * spawnTargetRadius;
 
             // << MOVE NEW ITEM TO CENTER >>
-            while (newItem != null && newItem.transform.position != randomPoint)
+            while (newItem != null && newItem.transform.position != randomPoint && newItem.GetComponent<Item>().state != ItemState.PLAYER_INVENTORY)
             {
                 newItem.transform.position = Vector3.MoveTowards(newItem.transform.position, randomPoint, submitSpeed * Time.deltaTime);
                 yield return null;

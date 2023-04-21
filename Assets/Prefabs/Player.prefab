@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7178267051994153476}
   - component: {fileID: 3367437098991122514}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: xx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2147936841458197091}
   - component: {fileID: 2164323587509534808}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1369172707483523174}
   - component: {fileID: 3718286021023833089}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wince
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 4391140452292946317}
   - component: {fileID: 4391140452292946316}
   - component: {fileID: 134303118561011114}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: StunEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -478,7 +478,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4391140452542395437}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: EffectParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -513,7 +513,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3779496793890040832}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ThrowParent
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -544,7 +544,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3978845800411092400}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -582,7 +582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3358592367882455404}
   - component: {fileID: 2654126162254509430}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: death
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -667,7 +667,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4244174233534543325}
   - component: {fileID: 7487281621868235252}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: closed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -751,7 +751,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7522916275202326525}
   - component: {fileID: 6386684101591839062}
-  m_Layer: 0
+  - component: {fileID: 3710317647454541775}
+  m_Layer: 8
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -795,6 +796,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!70 &3710317647454541775
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7522916275202326524}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.007904052, y: 0}
+  m_Size: {x: 0.19580483, y: 0.3639567}
+  m_Direction: 0
 --- !u!1 &7522916275895387675
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,7 +1181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7522916276428679984}
   - component: {fileID: 7522916276428679985}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1249,7 +1266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7522916276524358719}
   - component: {fileID: 7522916276524358716}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1335,7 +1352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3443630739735348985}
   - component: {fileID: 6284720014673278847}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: OuterLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1446,7 +1463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 738449995286747451}
   - component: {fileID: 1061620340393951913}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: left_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1531,7 +1548,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5824537522588062372}
   - component: {fileID: 8104301169170340014}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: right_arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1615,7 +1632,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6294617752270086392}
   - component: {fileID: 8113505873949094229}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: half eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1699,7 +1716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 731876555902973076}
   - component: {fileID: 7306454866218687861}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: death (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1783,7 +1800,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3649803110008064745}
   - component: {fileID: 8359842642309208232}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: open
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1864,9 +1881,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4391140452542395437}
     m_Modifications:
+    - target: {fileID: 4223856548596549543, guid: 91431dec370a71d4fb1625b64832382d, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7273724711820574522, guid: 91431dec370a71d4fb1625b64832382d, type: 3}
       propertyPath: m_Name
       value: SlowEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273724711820574522, guid: 91431dec370a71d4fb1625b64832382d, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7273724711820574522, guid: 91431dec370a71d4fb1625b64832382d, type: 3}
       propertyPath: m_IsActive
@@ -1900,6 +1925,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8903652410652653901, guid: 91431dec370a71d4fb1625b64832382d, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91431dec370a71d4fb1625b64832382d, type: 3}
 --- !u!4 &8360573038284177338 stripped
@@ -1922,6 +1951,10 @@ PrefabInstance:
     - target: {fileID: 645938661023078498, guid: b985b732086e08544b5c1a4d2aa86446, type: 3}
       propertyPath: m_Name
       value: PanicEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 645938661023078498, guid: b985b732086e08544b5c1a4d2aa86446, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 645938661023078498, guid: b985b732086e08544b5c1a4d2aa86446, type: 3}
       propertyPath: m_IsActive
@@ -1971,6 +2004,10 @@ PrefabInstance:
       value: DashBurst
       objectReference: {fileID: 0}
     - target: {fileID: 2642201847803516359, guid: 8b41ca5911cd1d844a828e5af8918d81, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642201847803516359, guid: 8b41ca5911cd1d844a828e5af8918d81, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -2017,6 +2054,14 @@ PrefabInstance:
     - target: {fileID: 3967054354271955405, guid: 8b41ca5911cd1d844a828e5af8918d81, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4617212799340218900, guid: 8b41ca5911cd1d844a828e5af8918d81, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4915377609176695560, guid: 8b41ca5911cd1d844a828e5af8918d81, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5280043337663974355, guid: 8b41ca5911cd1d844a828e5af8918d81, type: 3}
       propertyPath: ColorModule.gradient.maxGradient.ctime1

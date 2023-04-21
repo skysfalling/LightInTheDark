@@ -15288,6 +15288,9 @@ MonoBehaviour:
   gameConsole: {fileID: 0}
   player: {fileID: 0}
   triggerParent: {fileID: 6605124139147720351}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
   playerInTrigger: 0
   triggerSize: 15
   submissionTypes: 00000000010000000200000003000000
@@ -15350,7 +15353,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flowerLight: {fileID: 6605124139308991184}
   crystalOutline: {fileID: 0}
-  crystalBacking: {fileID: 0}
   innerHex: {fileID: 0}
   pentagram: {fileID: 0}
   petals: {fileID: 0}

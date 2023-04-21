@@ -10,7 +10,6 @@ public class LifeFlowerAnimator : MonoBehaviour
     [Header("Animation")]
     public Light2D flowerLight;
     public SpriteRenderer crystalOutline;
-    public SpriteRenderer crystalBacking;
 
     [Space(5)]
     public SpriteRenderer innerHex;
@@ -115,11 +114,6 @@ public class LifeFlowerAnimator : MonoBehaviour
 
             }
         }
-
-        // << SET SPRITES TO COLOR >>
-        flowerLight.color = currColor;
-        crystalBacking.color = currColor;
-        crystalOutline.color = currColor;
 
     }
 

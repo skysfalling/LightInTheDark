@@ -15,6 +15,7 @@ public class GrabHandAI : MonoBehaviour
     public Transform triggerParent;
     public bool playerInTrigger;
     public float triggerSize = 5;
+    public LayerMask playerLayer;
 
     [Header("Tracking")]
     public bool x_axis;
@@ -182,10 +183,8 @@ public class GrabHandAI : MonoBehaviour
         while (Vector2.Distance(transform.position, attackPoint) > 2)
         {
             transform.position = Vector3.Lerp(transform.position, attackPoint, attackSpeed * Time.deltaTime);
-
             yield return null;
         }
-
 
         // if player in attack point range , grab
         if (Vector2.Distance(player.transform.position, attackPoint) < attackPointRange)
@@ -323,17 +322,9 @@ public class GrabHandAI : MonoBehaviour
 
     public bool IsPlayerInTrigger()
     {
-        Collider2D[] overlapColliders = Physics2D.OverlapCircleAll(triggerParent.position, triggerSize);
-        List<Collider2D> collidersInTrigger = new List<Collider2D>(overlapColliders);
-
-        foreach (Collider2D col in collidersInTrigger)
-        {
-            if (col.tag == "Player")
-            {
-                return true;
-            }
-        }
-
+        Collider2D playerCol = Physics2D.OverlapCircle(triggerParent.position, triggerSize, playerLayer);
+        Debug.Log("playerInTrigger " + playerCol);
+        if (playerCol) { return true; }
         return false;
     }
 

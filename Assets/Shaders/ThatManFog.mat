@@ -55,7 +55,7 @@ Material:
     - _Fog1Size: 20
     - _Fog2Size: 2
     - _FogSize: 100
-    - _Opacity: 0.079926506
+    - _Opacity: 0
     m_Colors:
     - _Color: {r: 0.28687224, g: 0, b: 0.38679248, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
