@@ -80,6 +80,7 @@ public class IntroCutsceneManager : LevelManager
         yield return new WaitForSeconds(1);
         NewDialogue("*enter the mindspace*");
 
+
         // << WITNESS WELCOME >>
         yield return new WaitForSeconds(1);
         NewDialogue(witnessWelcome1);
@@ -88,6 +89,8 @@ public class IntroCutsceneManager : LevelManager
         // TODO : witness vaguely appears
         yield return new WaitForSeconds(1);
         NewDialogue("*the witness' eyes enter the chat*");
+        yield return new WaitUntil(() => !uiManager.inDialogue);
+
 
         // << WITNESS WELCOME 2 >>
         yield return new WaitForSeconds(1);

@@ -420,7 +420,7 @@ MonoBehaviour:
   goldCommand: 103
   goldColor: {r: 1, g: 0.69944656, b: 0.015686274, a: 1}
   purpleCommand: 112
-  purpleColor: {r: 1, g: 0, b: 1, a: 1}
+  purpleColor: {r: 0.3773585, g: 0.21181916, b: 0.3773585, a: 1}
   maxMessages: 1
   line_spacing: 50
   messageMoveSpeed: 5

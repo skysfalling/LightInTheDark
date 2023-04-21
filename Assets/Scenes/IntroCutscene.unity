@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &54261868
 RectTransform:
   m_ObjectHideFlags: 0
@@ -534,7 +534,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 5
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -684,7 +684,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1128220421
-  m_SortingLayer: 7
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_Sprite: {fileID: -906838169, guid: 85f69863e7dab494f94970841c927a01, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -769,7 +769,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1128220421
-  m_SortingLayer: 7
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_Sprite: {fileID: -906838169, guid: 85f69863e7dab494f94970841c927a01, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -794,7 +794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 700bea19ca9391d4e8e6be00351c2ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0}
+  moveDirection: {x: 0, y: 0}
   directionAction:
     m_Name: Direction
     m_Type: 0
@@ -5866,7 +5866,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 43cdbc7104d09ff41b1dafe66c669a25, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5965,7 +5965,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: c6a98392e3bceb7499e007413d1384ec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6064,13 +6064,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 4075609554554600218}
   spriteParent: {fileID: 4075609554554600228}
-  leftEye: {fileID: 609053810439663905}
-  rightEye: {fileID: 1295295902929324188}
-  closedEye: {fileID: -906838169, guid: 85f69863e7dab494f94970841c927a01, type: 3}
-  halfClosedEye: {fileID: 2035512168, guid: 85f69863e7dab494f94970841c927a01, type: 3}
-  openEye: {fileID: -1840859968, guid: 85f69863e7dab494f94970841c927a01, type: 3}
-  winceEye: {fileID: 1455937450, guid: 85f69863e7dab494f94970841c927a01, type: 3}
-  xEye: {fileID: 1940944575, guid: 85f69863e7dab494f94970841c927a01, type: 3}
+  parent: {fileID: 0}
+  closedEyes: {fileID: 0}
+  halfClosedEyes: {fileID: 0}
+  openEyes: {fileID: 0}
+  xEyes: {fileID: 0}
+  winceEyes: {fileID: 0}
+  deathEyes: {fileID: 0}
   bodySprite: {fileID: 4075609553191262439}
   bodyLeanAngle: 10
   leanSpeed: 5
@@ -6235,6 +6235,7 @@ MonoBehaviour:
   circleSpeed: 100
   circleSpacing: 30
   circleRadius: 5
+  itemDropForce: 20
 --- !u!4 &4075609554977915590
 Transform:
   m_ObjectHideFlags: 0
@@ -6277,12 +6278,15 @@ MonoBehaviour:
   slowedTimer: 20
   dashSpeed: 120
   dashDuration: 0.25
-  dashTimer: 0.25
+  dashDelay: 0
+  dashReady: 1
+  aimIndicator: {fileID: 0}
   throwParent: {fileID: 7249323679754053848}
   throwObject: {fileID: 0}
   aimDirection: {x: 0, y: 0}
   throwingMoveSpeed: 10
   throwForce: 80
+  inThrow: 0
   throwSortingLayer: Player
   throwSortingOrder: 6
   chargeFlashActivateDuration: 3
@@ -11313,6 +11317,7 @@ MonoBehaviour:
   dialogueManager: {fileID: 0}
   effectManager: {fileID: 0}
   state: 0
+  activateRange: 50
   currLifeFlower: {fileID: 0}
   lifeFlowers: []
   gameClock: 0
@@ -11324,18 +11329,20 @@ MonoBehaviour:
   unknownMonologue:
   - d(This reality is not for the weak of heart.)
   - d(Not everyone is able to survive.)
-  - d(And most will fail.)
-  - d(The better-abled turn a blind eye to the weak, leaving them to endure such
-    suffering.)
+  - d(In fact, most will fail.)
   - d(They are left ill-equipped to handle the bare minimum to survive.)
   - d(We have progressed past the need for this unending rat race, the endless fight
     for resources. )
   - d(Reality can be changed at our will.)
   - d(Now, we can offer endless peace.)
-  doctorLine: "She\u2019s on her own now Mr. Afters, would you like to say anything
-    to her before it begins?"
+  - d(Endless.)
+  - d(Peace.)
+  doctorLine: I'll be starting the sync now Mr. Afters, would you like to say anything
+    to her before it begins?
   mrAftersMonologue:
+  - p(...)
   - "p(I\u2019m sorry.)"
+  - p(,,,)
   - p(This is all my fault.)
   - "p(You didn\u2019t deserve to be neglected like that, especially by your own
     mother.)"
@@ -11345,22 +11352,25 @@ MonoBehaviour:
   - p(You deserve a second chance, Vi.)
   - p(You deserve a better chance.)
   witnessWelcome1:
-  - 'Welcome, dear soul. '
-  - You are lost, adrift in a sea of your own thoughts and fears. Here, you will
-    find both solace and torment.
-  - But fear not, for I am here to guide you.
+  - d(Welcome, dear soul.)
+  - d(You are lost, adrift in a sea of your own thoughts and fears. Here, you will
+    find both solace and torment.)
+  - d(But fear not, for I am here to guide you.)
   witnessWelcome2:
-  - This mindscape is a product of your subconscious, a delicate balance of memories,
-    emotions, and cognitive processes, all working together in harmony.
+  - '>> Welcome To " VI.//.MINDSCAPE " d(provided by LifeCore) , a product of your
+    subconscious , and a delicate balance of memories, emotions, and cognitive processes,
+    all working together in harmony. '
+  - '>> You have been selected to  partic//
+
+    d(Error 5511)'
   witnessWelcome3:
-  - Within this mindscape, your Life Flowers are a crucial element. They are manifestations
-    of your mental well-being, and they require constant care and attention.
-  - If the Life Flowers wither and die, your mindscape will collapse and everything
+  - //your f(life flower) requires constant care and attention.
+  - If the f(life flowers) wither and die, your mindscape will collapse and everything
     within it, including myself, will cease to exist..
   witnessWelcome4:
-  - 'It is your responsibility to tend to the Life Flowers and ensure their survival. '
+  - 'It is your responsibility to tend to thef(life flowers) and ensure their survival. '
   - It is your responsibility to maintain the stability of this mindscape and foster
-    healing within yourself.
+    healing within yourself. d(// 68 65 6C 70 //)
   - It is your responsibility to maintain the stability of this mindscape and foster
     healing within yourself.
 --- !u!1 &4825097722367312755
@@ -11420,7 +11430,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 6
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -16348,7 +16358,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 5
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -16419,7 +16429,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
@@ -16483,6 +16493,9 @@ MonoBehaviour:
   triggerParent: {fileID: 5759178636496546819}
   playerInTrigger: 0
   triggerSize: 100
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
   x_axis: 0
   y_axis: 1
   trackingStarted: 0
@@ -16497,8 +16510,11 @@ MonoBehaviour:
   grabStarted: 0
   grab_pullBackSpeed: 3
   breakFree_struggleCount: 200
-  playerCaptured: 0
+  captureStarted: 0
   capturePoint: {fileID: 6494196427379388158}
+  isTravelHand: 0
+  travelStarted: 0
+  travelDestination: {fileID: 0}
   idleSprite: {fileID: 5759178637090516373}
   trackingSprite: {fileID: 5759178637090516373}
   attackSprite: {fileID: 5759178637090516373}
@@ -21762,7 +21778,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 4
   m_Sprite: {fileID: -6598857455131789522, guid: 03ba53e07f615b74cbbdb813b457a5ef, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -21925,7 +21941,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 5
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -26828,7 +26844,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1082940373
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 5
   m_RenderMode: 0
   m_MeshDistribution: 0
