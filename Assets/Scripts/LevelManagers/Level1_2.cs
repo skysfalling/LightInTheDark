@@ -261,7 +261,7 @@ public class Level1_2 : LevelManager
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
         endGrabHand.canAttack = true;
-        camManager.state = CameraState.ROOM_BASED;
+        camManager.state = CameraState.PLAYER;
         yield return new WaitUntil(() => endGrabHand.state == HandState.GRAB);
 
         uiManager.StartTransitionFadeIn();
@@ -298,20 +298,10 @@ public class Level1_2 : LevelManager
         NewDialogue(dialogueManager.witness_end_1_2_2);
         yield return new WaitUntil(() => !uiManager.inDialogue);
 
-        // open exit door
-        levelExitDoor.locked = false;
-        camManager.NewZoomInTarget(levelExitDoor.transform);
-        yield return new WaitForSeconds(2);
-
-        camManager.state = CameraState.ROOM_BASED;
-        player.Idle();
-
-        yield return new WaitUntil(() => levelExitDoor.playerInTrigger);
-
-        Debug.Log("Finished Level 1.2");
+        endGrabHand.canAttack = true;
+        yield return new WaitUntil(() => endGrabHand.state == HandState.PLAYER_CAPTURED);
 
         uiManager.StartTransitionFadeIn();
-
         yield return new WaitUntil(() => uiManager.transitionFinished);
         yield return new WaitForSeconds(1);
 

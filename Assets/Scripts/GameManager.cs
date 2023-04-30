@@ -99,13 +99,23 @@ public class GameManager : MonoBehaviour
         // get new level manager
         while (levelManager == null)
         {
-            levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
-
-            // check for cutscene
-            if (levelManager == null)
+            try
             {
-                levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<IntroCutsceneManager>();
+                // check for level manager
+                levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+
+                if (levelManager == null)
+                {
+                    // check for cutscene
+                    levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<IntroCutsceneManager>();
+                }
             }
+            catch
+            {
+
+            }
+
+
 
             yield return null;
         }
@@ -137,6 +147,13 @@ public class GameManager : MonoBehaviour
         levelManager.StartLevelFromPoint(levelSavePoint);
     }
 
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(menuScene);
+        soundManager.backgroundMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        Destroy(this.gameObject);
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene(introCutscene);
@@ -145,6 +162,21 @@ public class GameManager : MonoBehaviour
     public void LoadScene(SceneObject scene)
     {
         SceneManager.LoadScene(scene);
+    }
+
+    public void LoadLevel(int level)
+    {
+        if (level == 2)
+        {
+            SceneManager.LoadScene(level_2);
+
+        }
+
+        if (level == 3)
+        {
+            SceneManager.LoadScene(level_3);
+
+        }
     }
 
     public void RestartLevelFromSavePoint()

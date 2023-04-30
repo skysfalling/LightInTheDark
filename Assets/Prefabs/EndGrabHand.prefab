@@ -51,6 +51,9 @@ MonoBehaviour:
   triggerParent: {fileID: 2984231551249690248}
   playerInTrigger: 0
   triggerSize: 250
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
   x_axis: 0
   y_axis: 1
   trackingStarted: 0
@@ -65,8 +68,11 @@ MonoBehaviour:
   grabStarted: 0
   grab_pullBackSpeed: 3
   breakFree_struggleCount: 200
-  playerCaptured: 0
+  captureStarted: 0
   capturePoint: {fileID: 4370371262437534837}
+  isTravelHand: 0
+  travelStarted: 0
+  travelDestination: {fileID: 0}
   idleSprite: {fileID: 2984231550723911454}
   trackingSprite: {fileID: 2984231550723911454}
   attackSprite: {fileID: 2984231550723911454}

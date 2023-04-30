@@ -60,10 +60,14 @@ public class LevelManager : MonoBehaviour
         dialogueManager = gameManager.dialogueManager;
         effectManager = gameManager.effectManager;
 
+        try
+        {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+            playerInventory = player.gameObject.GetComponent<PlayerInventory>();
+            playerAnim = player.gameObject.GetComponent<PlayerAnimator>();
+        }
+        catch { Debug.Log("Level Manager could not find player"); }
 
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
-        playerInventory = player.gameObject.GetComponent<PlayerInventory>();
-        playerAnim = player.gameObject.GetComponent<PlayerAnimator>();
 
         startTime = Time.time;
 
@@ -91,7 +95,10 @@ public class LevelManager : MonoBehaviour
     public virtual IEnumerator Intro()
     {
         state = LevelState.INTRO;
-        player.state = PlayerState.INACTIVE;
+        if (player)
+        {
+            player.state = PlayerState.INACTIVE;
+        }
 
         uiManager.StartTransitionFadeOut(); // start transition
 

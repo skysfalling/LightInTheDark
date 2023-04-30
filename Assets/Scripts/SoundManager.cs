@@ -20,7 +20,7 @@ public class SoundManager : MonoBehaviour
     [Header("Background Music Event")]
 	public StudioEventEmitter backgroundEmitter;
 	public EventReference backgroundMusicEvent;
-    private EventInstance backgroundMusicInstance;
+    public EventInstance backgroundMusicInstance;
 
     [Header("Game State")]
     public int musicIntensity;      // the current music intensity
@@ -51,7 +51,8 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        playerTransform = gameManager.levelManager.player.transform;
+
+
 
 
         backgroundMusicInstance = RuntimeManager.CreateInstance(backgroundMusicEvent);
@@ -61,41 +62,55 @@ public class SoundManager : MonoBehaviour
 
     private void Update()
     {
-        // use an overlap sphere to check all colliders in the detection radius
-        outerDetectionOverlap = new List<Collider2D>(Physics2D.OverlapCircleAll(playerTransform.position, outerDetectionRadius, enemyLayer));
-        innerDetectionOverlap = new List<Collider2D>(Physics2D.OverlapCircleAll(playerTransform.position, innerDetectionRadius, enemyLayer));
-        
-        // remove all extra colliders from outer detection
-        for (int i = outerDetectionOverlap.Count - 1; i >= 0; i--)
+        if (playerTransform)
         {
-            Collider2D col = outerDetectionOverlap[i];
-            if (innerDetectionOverlap.Contains(col))
+            // use an overlap sphere to check all colliders in the detection radius
+            outerDetectionOverlap = new List<Collider2D>(Physics2D.OverlapCircleAll(playerTransform.position, outerDetectionRadius, enemyLayer));
+            innerDetectionOverlap = new List<Collider2D>(Physics2D.OverlapCircleAll(playerTransform.position, innerDetectionRadius, enemyLayer));
+
+            // remove all extra colliders from outer detection
+            for (int i = outerDetectionOverlap.Count - 1; i >= 0; i--)
             {
-                outerDetectionOverlap.RemoveAt(i);
+                Collider2D col = outerDetectionOverlap[i];
+                if (innerDetectionOverlap.Contains(col))
+                {
+                    outerDetectionOverlap.RemoveAt(i);
+                }
             }
-        }
 
-        // << MUSIC INTENSITY >>
-        SetMusicIntensity();
-        backgroundMusicInstance.setParameterByName("musicIntensity", musicIntensity);
 
-        // << ENTITY PROXIMITY >>
-        List<Collider2D> proximityOverlap = new List<Collider2D>(Physics2D.OverlapCircleAll(playerTransform.position, outerDetectionRadius, enemyLayer));
-        if (proximityOverlap.Count > 0)
-        {
-            Collider2D closestMan = GetClosestColliderWithTag(proximityOverlap, "That Man");
-            thatManProximity = GetProximityFloat(closestMan.transform);
-            backgroundMusicInstance.setParameterByName("thatManProximity", thatManProximity);
+            // << MUSIC INTENSITY >>
+            SetMusicIntensity();
+            backgroundMusicInstance.setParameterByName("musicIntensity", musicIntensity);
 
+            // << ENTITY PROXIMITY >>
+            List<Collider2D> proximityOverlap = new List<Collider2D>(Physics2D.OverlapCircleAll(playerTransform.position, outerDetectionRadius, enemyLayer));
+            if (proximityOverlap.Count > 0)
+            {
+                Collider2D closestMan = GetClosestColliderWithTag(proximityOverlap, "That Man");
+                thatManProximity = GetProximityFloat(closestMan.transform);
+                backgroundMusicInstance.setParameterByName("thatManProximity", thatManProximity);
+
+            }
+            else
+            {
+                backgroundMusicInstance.setParameterByName("thatManProximity", -1);
+
+            }
+
+
+            LogParameters(backgroundMusicInstance);
         }
         else
         {
-            backgroundMusicInstance.setParameterByName("thatManProximity", -1);
-
+            try
+            {
+                playerTransform = gameManager.levelManager.player.transform;
+            }
+            catch { Debug.LogWarning("SoundManager cannot find Player"); }
         }
 
 
-        LogParameters(backgroundMusicInstance);
 
     }
 

@@ -50,10 +50,15 @@ public class CameraManager : MonoBehaviour
 
     public void NewSceneReset()
     {
-        // get new level manager
-        levelManager = gameManager.levelManager;
-        player = levelManager.player.transform;
-        rooms = new List<GameObject>(GameObject.FindGameObjectsWithTag("Room"));
+        try
+        {
+            // get new level manager
+            levelManager = gameManager.levelManager;
+            player = levelManager.player.transform;
+            rooms = new List<GameObject>(GameObject.FindGameObjectsWithTag("Room"));
+        }
+        catch { }
+
 
         state = CameraState.START;
     }
