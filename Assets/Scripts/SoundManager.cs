@@ -53,8 +53,6 @@ public class SoundManager : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
 
-
-
         backgroundMusicInstance = RuntimeManager.CreateInstance(backgroundMusicEvent);
         backgroundMusicInstance.start();
 

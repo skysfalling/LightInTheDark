@@ -751,6 +751,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaafaad037feead44b57f23e46559358, type: 3}
+--- !u!1001 &984484604
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7588869258874356057, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588869258874356063, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1c4bd68eeb2774efeb5b1f3ec5c7d909, type: 3}
 --- !u!1 &1046501009
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1046501010
 RectTransform:
   m_ObjectHideFlags: 0
@@ -943,7 +1000,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start Game
+  m_text: Start Demo
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0644afeaa13ebae42a77c96e0a45bb76, type: 2}
   m_sharedMaterial: {fileID: -2587483368408331818, guid: 0644afeaa13ebae42a77c96e0a45bb76, type: 2}
@@ -1105,8 +1162,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1375,7 +1432,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: skysfalling /// optimalystic
+  m_text: 'skysfalling
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0644afeaa13ebae42a77c96e0a45bb76, type: 2}
   m_sharedMaterial: {fileID: -2587483368408331818, guid: 0644afeaa13ebae42a77c96e0a45bb76, type: 2}
@@ -1402,8 +1461,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1465,7 +1524,7 @@ GameObject:
   - component: {fileID: 1947161133}
   - component: {fileID: 1947161132}
   m_Layer: 5
-  m_Name: Start Game
+  m_Name: Start DEMO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1604,7 +1663,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1991027381
 RectTransform:
   m_ObjectHideFlags: 0

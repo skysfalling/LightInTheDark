@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<PlayerAnimator>();
         inventory = GetComponent<PlayerInventory>();
-        inputManager = gameManager.inputManager;
+        inputManager = gameManager.GetComponentInChildren<InputManager>();
 
 
         moveTarget = transform.position;

@@ -305,9 +305,7 @@ public class Level1_2 : LevelManager
         yield return new WaitUntil(() => uiManager.transitionFinished);
         yield return new WaitForSeconds(1);
 
-        gameManager.LoadScene(gameManager.level_1_3);
-
-
+        gameManager.LoadScene(gameManager.menuScene);
 
     }
 

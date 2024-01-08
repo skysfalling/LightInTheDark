@@ -27,13 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1159354729833526093}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7588869258874356063}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1159354729833526192
 MonoBehaviour:
@@ -76,9 +76,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -135,9 +143,20 @@ MonoBehaviour:
   m_Dithering: 0
   m_ClearDepth: 1
   m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!114 &-5034140437531142693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +181,7 @@ GameObject:
   - component: {fileID: 9039115144020082360}
   - component: {fileID: 7143268617418744631}
   - component: {fileID: 2315960249049277821}
+  - component: {fileID: 4179622784561518547}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -176,13 +196,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1781897744882183185}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7588869258874356063}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7143268617418744631
 MonoBehaviour:
@@ -197,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!114 &2315960249049277821
 MonoBehaviour:
@@ -229,6 +249,145 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+--- !u!114 &4179622784561518547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781897744882183185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700bea19ca9391d4e8e6be00351c2ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactParticles: {fileID: 2642201847803516359, guid: 8b41ca5911cd1d844a828e5af8918d81, type: 3}
+  moveDirection: {x: 0, y: 0}
+  directionAction:
+    m_Name: Direction
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 4f2a9937-5d6a-4fd7-9938-bacf94a8c7dd
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 2D Vector
+      m_Id: 1e7e4f48-01ac-4163-96d8-70eb14f5c69e
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 370cb1fd-e32f-4763-9732-7ae6cb50cb08
+      m_Path: <Keyboard>/w
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 10979009-9b9c-4ce0-bd13-2fef100b1dc1
+      m_Path: <Keyboard>/s
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 358bc0fc-18c8-46a8-8c30-679963ee6e29
+      m_Path: <Keyboard>/a
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: right
+      m_Id: ba4f4bad-b533-4459-a430-a60088ae3371
+      m_Path: <Keyboard>/d
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: Mobile Movement
+      m_Id: c0b5d459-7eb9-499e-9df5-2097af83c624
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 4
+    - m_Name: up
+      m_Id: aaafdfe6-22e9-473b-8c23-230cfcde1db1
+      m_Path: 
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 18ca683b-d796-4141-b992-a1766bd730b6
+      m_Path: 
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 83bc1c96-94d9-4ad0-a59b-6d7ba375554f
+      m_Path: 
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    - m_Name: right
+      m_Id: fa933e5d-a374-4cd0-b6c0-dec6e73c4dc2
+      m_Path: 
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Direction
+      m_Flags: 8
+    m_Flags: 0
+  aInput: 0
+  aAction:
+    m_Name: A
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 33b0ca49-68ac-4cd6-bb10-bc5f30500f3c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: b8a697b0-83f4-490d-9f28-841fc47b7cb6
+      m_Path: <Keyboard>/j
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: A
+      m_Flags: 0
+    m_Flags: 0
+  bInput: 0
+  bAction:
+    m_Name: B
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1f3c4958-bfb2-4493-9a91-f40b7631f0a3
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 61b703c3-451c-4bc8-a946-ca55e5cac99c
+      m_Path: <Keyboard>/k
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: B
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1 &3224662144040212216
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,13 +412,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3224662144040212216}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -636.91644, y: 64.22319, z: 146.2924}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7588869258874356063}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4914860479889589433
 MonoBehaviour:
@@ -292,7 +451,6 @@ GameObject:
   - component: {fileID: 7203649971232366683}
   - component: {fileID: 3727975432613735350}
   - component: {fileID: 8605709260974255807}
-  - component: {fileID: 4875732379130781357}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -307,6 +465,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7588869258874356057}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -317,7 +476,6 @@ Transform:
   - {fileID: 3528194235007182632}
   - {fileID: 1720485367082315432}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7588869258874356056
 MonoBehaviour:
@@ -517,115 +675,26 @@ MonoBehaviour:
   panic_fullscreenIntensity: 0.05
   panic_transitionSpeed: 2
   flickerActive: 0
---- !u!114 &4875732379130781357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7588869258874356057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 700bea19ca9391d4e8e6be00351c2ec9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveDirection: {x: 0, y: 0}
-  directionAction:
-    m_Name: Direction
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 4f2a9937-5d6a-4fd7-9938-bacf94a8c7dd
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 2D Vector
-      m_Id: 1e7e4f48-01ac-4163-96d8-70eb14f5c69e
-      m_Path: 2DVector
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Direction
-      m_Flags: 4
-    - m_Name: up
-      m_Id: 370cb1fd-e32f-4763-9732-7ae6cb50cb08
-      m_Path: <Keyboard>/w
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Direction
-      m_Flags: 8
-    - m_Name: down
-      m_Id: 10979009-9b9c-4ce0-bd13-2fef100b1dc1
-      m_Path: <Keyboard>/s
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Direction
-      m_Flags: 8
-    - m_Name: left
-      m_Id: 358bc0fc-18c8-46a8-8c30-679963ee6e29
-      m_Path: <Keyboard>/a
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Direction
-      m_Flags: 8
-    - m_Name: right
-      m_Id: ba4f4bad-b533-4459-a430-a60088ae3371
-      m_Path: <Keyboard>/d
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Direction
-      m_Flags: 8
-    m_Flags: 0
-  aInput: 0
-  aAction:
-    m_Name: A
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 33b0ca49-68ac-4cd6-bb10-bc5f30500f3c
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: b8a697b0-83f4-490d-9f28-841fc47b7cb6
-      m_Path: <Keyboard>/j
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: A
-      m_Flags: 0
-    m_Flags: 0
-  bInput: 0
-  bAction:
-    m_Name: B
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 1f3c4958-bfb2-4493-9a91-f40b7631f0a3
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 61b703c3-451c-4bc8-a946-ca55e5cac99c
-      m_Path: <Keyboard>/k
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: B
-      m_Flags: 0
-    m_Flags: 0
 --- !u!1001 &5435931092219198031
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7588869258874356063}
     m_Modifications:
     - target: {fileID: 1006405002269405614, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 7588869258874356056}
+    - target: {fileID: 3400071456641157476, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+    - target: {fileID: 3400071456641157476, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
+      propertyPath: m_Name
+      value: GameConsoleParent
+      objectReference: {fileID: 0}
     - target: {fileID: 4153450443180941685, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -751,6 +820,9 @@ PrefabInstance:
       value: __ UI Canvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ce4754297cf48c4682daabd842c5fd8, type: 3}
 --- !u!224 &3528194235007182632 stripped
 RectTransform:
