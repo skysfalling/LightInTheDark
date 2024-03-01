@@ -62,7 +62,7 @@
 			<destination>{c08ad76d-5c1d-4abc-85b3-c2f14d33f064}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{e710a336-dcf1-40f2-9160-861f53f433a4}</destination>
+			<destination>{f502e79c-58af-43e0-874d-533f44637a02}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{ec76ab20-9dff-43d2-90c7-4f8604f614a1}" />
@@ -302,6 +302,9 @@
 	</object>
 	<object class="MixerBusFader" id="{47e819ed-74e6-44c0-9804-148ed75ac89c}" />
 	<object class="MultibandEqEffect" id="{13eed18b-6d44-4b0f-932e-fa4c284977eb}">
+		<property name="bypass">
+			<value>true</value>
+		</property>
 		<property name="frequencyA">
 			<value>800</value>
 		</property>

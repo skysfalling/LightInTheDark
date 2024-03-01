@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{82560086-b1ae-40c4-a1cf-2d2cd2551cc3}">
 		<property name="name">
-			<value>gremlinStun &amp; Theme</value>
+			<value>gremlinTheme</value>
 		</property>
 		<property name="outputFormat">
 			<value>2</value>
@@ -60,7 +60,7 @@
 			<destination>{bf552259-285d-4c05-9d30-c2657c144372}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{e710a336-dcf1-40f2-9160-861f53f433a4}</destination>
+			<destination>{9c6da495-d97b-4943-84da-d2be1fa8840f}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{05ccf534-37da-40c8-ab03-ddb09a3b495e}" />

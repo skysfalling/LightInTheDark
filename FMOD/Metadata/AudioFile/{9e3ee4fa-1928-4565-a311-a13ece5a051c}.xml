@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{9e3ee4fa-1928-4565-a311-a13ece5a051c}">
 		<property name="assetPath">
-			<value>grabTheme_mindscape-lightinthedark.aif</value>
+			<value>Music/grabTheme/grabTheme_mindscape-lightinthedark.aif</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{49def22c-d24c-4c60-8d8b-55dccee9367b}">
 		<property name="assetPath">
-			<value>lifeFlowerAmbience - lightinthedark.aif</value>
+			<value>SFX/Flower/lifeFlowerAmbience - lightinthedark.aif</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

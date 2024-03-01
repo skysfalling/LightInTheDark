@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EncodableAsset" id="{d158e204-c111-40a1-94be-b5f9b032ca93}">
+		<property name="assetPath">
+			<value>Music/gremlinTheme/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{781442bd-2b40-48e9-8d22-441b37061442}</destination>
+		</relationship>
+	</object>
+</objects>

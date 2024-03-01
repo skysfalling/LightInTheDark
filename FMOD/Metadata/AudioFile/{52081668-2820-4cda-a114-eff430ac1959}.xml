@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{52081668-2820-4cda-a114-eff430ac1959}">
 		<property name="assetPath">
-			<value>death march - lightinthedark.wav</value>
+			<value>Music/backgroundMusic/death march - lightinthedark.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

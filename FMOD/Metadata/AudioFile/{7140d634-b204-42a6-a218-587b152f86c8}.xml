@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{7140d634-b204-42a6-a218-587b152f86c8}">
 		<property name="assetPath">
-			<value>lifeFlowerSubmission4 - lightinthedark.aif</value>
+			<value>SFX/Flower/lifeFlowerSubmission4 - lightinthedark.aif</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>48</value>

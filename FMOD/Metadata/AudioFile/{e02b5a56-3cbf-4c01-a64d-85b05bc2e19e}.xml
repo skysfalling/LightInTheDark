@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{e02b5a56-3cbf-4c01-a64d-85b05bc2e19e}">
 		<property name="assetPath">
-			<value>pickup06-lightinthedark.wav</value>
+			<value>Unused/pickup06-lightinthedark.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>44.0999985</value>

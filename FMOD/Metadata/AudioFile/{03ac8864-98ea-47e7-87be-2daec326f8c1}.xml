@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{03ac8864-98ea-47e7-87be-2daec326f8c1}">
 		<property name="assetPath">
-			<value>GremlinTheme_mindscape-lightinthedark.aif</value>
+			<value>Music/gremlinTheme/GremlinTheme_mindscape-lightinthedark.aif</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

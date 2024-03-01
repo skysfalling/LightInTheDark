@@ -53,7 +53,7 @@
 			<destination>{8658b3ce-8010-4859-bd53-98db115c7956}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{e710a336-dcf1-40f2-9160-861f53f433a4}</destination>
+			<destination>{9c6da495-d97b-4943-84da-d2be1fa8840f}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{08f40c83-1ae1-46bc-813c-ac2e93335058}" />
@@ -147,7 +147,7 @@
 			<value>0</value>
 		</property>
 		<property name="name">
-			<value>sidechain the grab stab to this how???</value>
+			<value>sidechain the grab stab in mixer window</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{47c0df1e-0145-48b3-af14-f127b5cd3976}</destination>

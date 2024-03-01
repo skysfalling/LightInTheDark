@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{7f08711b-35cf-457e-b2ff-2a371e620559}">
 		<property name="assetPath">
-			<value>InnerChildTheme-lightinthedark.aif</value>
+			<value>Music/innerChildTheme/InnerChildTheme-lightinthedark.aif</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

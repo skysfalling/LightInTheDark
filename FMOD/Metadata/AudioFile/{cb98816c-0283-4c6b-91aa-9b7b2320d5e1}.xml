@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{cb98816c-0283-4c6b-91aa-9b7b2320d5e1}">
 		<property name="assetPath">
-			<value>intensity2_mindscape_background-lightinthedark.aif</value>
+			<value>Music/backgroundMusic/intensity2_mindscape_background-lightinthedark.aif</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

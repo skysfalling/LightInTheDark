@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{61b35c5c-3992-4314-aff9-e27f01926fd2}">
 		<property name="assetPath">
-			<value>dark theme - lightinthedark.wav</value>
+			<value>Unused/dark theme - lightinthedark.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

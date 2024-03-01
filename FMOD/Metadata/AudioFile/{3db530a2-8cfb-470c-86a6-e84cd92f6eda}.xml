@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{3db530a2-8cfb-470c-86a6-e84cd92f6eda}">
 		<property name="assetPath">
-			<value>doorRumble - Trimmed - Trimmed.wav</value>
+			<value>SFX/doorRumble - Trimmed - Trimmed.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>48</value>

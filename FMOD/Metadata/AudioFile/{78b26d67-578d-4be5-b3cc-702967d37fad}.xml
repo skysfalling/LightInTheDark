@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{78b26d67-578d-4be5-b3cc-702967d37fad}">
 		<property name="assetPath">
-			<value>moodLiftSynths_mindscape_background-lightinthedark.aif</value>
+			<value>SFX/Flower/moodLiftSynths_mindscape_background-lightinthedark.aif</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{34904154-1828-40cf-bb6c-3bd98aeeb221}">
 		<property name="assetPath">
-			<value>leviathan_calls_mindscape-lightinthedark.aif</value>
+			<value>Ambient/leviathan_calls_mindscape-lightinthedark.aif</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

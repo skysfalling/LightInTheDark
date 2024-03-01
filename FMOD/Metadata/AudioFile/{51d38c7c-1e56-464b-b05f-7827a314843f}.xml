@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{51d38c7c-1e56-464b-b05f-7827a314843f}">
 		<property name="assetPath">
-			<value>mudFlats_effect_mindscape-lightinthedark.aif</value>
+			<value>Unused/mudFlats_effect_mindscape-lightinthedark.aif</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>
